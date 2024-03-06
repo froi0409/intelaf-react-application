@@ -207,7 +207,7 @@ const LoginPage = () => {
               sx={{ marginBottom: 7 }}
               onClick={() => router.push('/')}
             >
-              Login
+              Log in
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
               <Typography variant='body2' sx={{ marginRight: 2 }}>

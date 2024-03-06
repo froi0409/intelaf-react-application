@@ -1,1 +1,12 @@
-node_modules
+# Next.js
+/.next
+/out
+
+# Dependencias
+/node_modules
+
+# Archivos de construcción
+/.npm
+/.yarn
+/.pnp.*
+.pnp.js
