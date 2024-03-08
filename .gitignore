@@ -1,9 +1,12 @@
-# Next.js
-/.next
-/out
-
 # Dependencias
 /node_modules
+
+# Next.js
+.next/
+/.next/
+/out
+.swc/
+.*.env
 
 # Archivos de construcción
 /.npm
