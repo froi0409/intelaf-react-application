@@ -9,6 +9,9 @@ import CreditCardOutline from 'mdi-material-ui/CreditCardOutline'
 import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
+import InvoicePlus from 'mdi-material-ui/InvoicePlus'
+import ListBoxOutline from 'mdi-material-ui/ListBoxOutline'
+
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
@@ -73,6 +76,22 @@ const navigation = (): VerticalNavItemsType => {
       icon: CubeOutline,
       title: 'Form Layouts',
       path: '/form-layouts'
+    },
+    {
+      sectionTitle: 'Invoice'
+    },
+    {
+      title: 'Make a sale',
+      path: '/sales/add-invoice',
+      icon: InvoicePlus
+    },
+    {
+      sectionTitle: 'Customers'
+    },
+    {
+      title: 'All customers',
+      path: '/customers/list-all-customers',
+      icon: ListBoxOutline
     }
   ]
 }

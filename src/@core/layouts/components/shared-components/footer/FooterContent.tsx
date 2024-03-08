@@ -12,16 +12,16 @@ const FooterContent = () => {
   return (
     <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', justifyContent: 'space-between' }}>
       <Typography sx={{ mr: 2 }}>
-        {`© ${new Date().getFullYear()}, Made with `}
+        {`© ${new Date().getFullYear()}, Hecho con `}
         <Box component='span' sx={{ color: 'error.main' }}>
           ❤️
         </Box>
-        {` by `}
-        <Link target='_blank' href='https://themeselection.com/'>
-          ThemeSelection
+        {` por `}
+        <Link target='_blank' href='https://github.com/froi0409/intelaf-react-application'>
+          Grupo E
         </Link>
       </Typography>
-      {hidden ? null : (
+      {/* {hidden ? null : (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', '& :not(:last-child)': { mr: 4 } }}>
           <Link
             target='_blank'
@@ -45,7 +45,7 @@ const FooterContent = () => {
             Support
           </Link>
         </Box>
-      )}
+      )} */}
     </Box>
   )
 }
