@@ -22,32 +22,35 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { visuallyHidden } from '@mui/utils';
 
 interface Data {
-  id_user: number;
+  userIdUser: number;
   nit: number;
   name: string;
   phone: number;
   dpi: number;
   email: string;
   address : string;
+  credit: number;
 }
 
 function createData(
-    id_user: number,
+    userIdUser: number,
     nit: number,
     name: string,
     phone: number,
     dpi: number,
     email: string,
-    address : string
+    address : string,
+    credit: number
 ): Data {
   return {
-    id_user,
+    userIdUser,
     nit,
     name,
     phone,
     dpi,
     email,
-    address
+    address,
+    credit
   };
 }
 
@@ -105,7 +108,7 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
     {
-    id: 'id_user',
+    id: 'userIdUser',
     numeric: true,
     disablePadding: true,
     label: 'Codigo del usuario',
@@ -145,6 +148,12 @@ const headCells: readonly HeadCell[] = [
     numeric: false,
     disablePadding: false,
     label: 'Direccion',
+  },
+  {
+    id: 'credit',
+    numeric: false,
+    disablePadding: false,
+    label: 'Credito disponible',
   },
 ];
 
@@ -262,17 +271,18 @@ export default function EnhancedTable(props: any) {
     // console.log(props.dataServer);
     const rows = props.dataServer.map((customer:Data) => {
         return createData(
-          customer.id_user,
+          customer.userIdUser,
           customer.nit,
           customer.name,
           customer.phone,
           customer.dpi,
           customer.email,
-          customer.address
+          customer.address,
+          customer.credit
         );
     });
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Data>('id_user');
+  const [orderBy, setOrderBy] = React.useState<keyof Data>('userIdUser');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -365,7 +375,7 @@ export default function EnhancedTable(props: any) {
               {visibleRows.map((row, index) => {
                 // if (typeof row.id_user === 'number') {
                 // }
-                const row_id_user: number = row.id_user as number;
+                const row_id_user: number = row.userIdUser as number;
                 const isItemSelected = isSelected(row_id_user);
                 const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -376,7 +386,7 @@ export default function EnhancedTable(props: any) {
                     role="checkbox"
                     aria-checked={isItemSelected}
                     tabIndex={-1}
-                    key={row.id_user}
+                    key={row.userIdUser}
                     selected={isItemSelected}
                     sx={{ cursor: 'pointer' }}
                   >
@@ -395,7 +405,7 @@ export default function EnhancedTable(props: any) {
                       scope="row"
                       padding="none"
                     >
-                      {row.id_user}
+                      {row.userIdUser}
                     </TableCell>
                     <TableCell align="right">{row.nit}</TableCell>
                     <TableCell align="right">{row.name}</TableCell>
@@ -403,6 +413,7 @@ export default function EnhancedTable(props: any) {
                     <TableCell align="right">{row.dpi}</TableCell>
                     <TableCell align="right">{row.email}</TableCell>
                     <TableCell align="right">{row.address}</TableCell>
+                    <TableCell align="right">{row.credit}</TableCell>
                   </TableRow>
                 );
               })}

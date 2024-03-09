@@ -29,33 +29,35 @@ const ListAllCustomer = ({ data }: any) => {
 
 
 export async function getServerSideProps(context: any) {
-  //fetch de my server de spring
-  // const response  =  await fetch('https://pokeapi.co/api/v2/pokemon/ditto')
-  // const data  = await response.json()
-  // console.log(data)
+  //fetch my server de spring
+  const response  =  await fetch('http://localhost:8080/v1/customer/all')
+  const data  = await response.json()
 
   return {
     props: {
-      data : [
-        {
-          id_user: 1,
-          nit: 123456789,
-          name: 'Juan',
-          phone: 12345678,
-          dpi: 1234567890123,
-          email: 'user1@example.com',
-          address : '543 Plaza Trail'
-        },
-        {
-          "id_user": 2,
-          "nit": 123456799,
-          "name": "Gilberto",
-          "phone": 55891123,
-          "dpi": 1234567890333,
-          "email": "user2@example.com",
-          "address": "789 Turkey jhonson"
-        }
-      ]
+      data : data
+      // data : [
+      //   {
+      //     userIdUser: 1,
+      //     nit: 123456789,
+      //     name: 'Juan',
+      //     phone: 12345678,
+      //     dpi: 1234567890123,
+      //     email: 'user1@example.com',
+      //     address : '543 Plaza Trail',
+      //     credit: 0
+      //   },
+      //   {
+      //     "userIdUser": 2,
+      //     "nit": 123456799,
+      //     "name": "Gilberto",
+      //     "phone": 55891123,
+      //     "dpi": 1234567890333,
+      //     "email": "user2@example.com",
+      //     "address": "789 Turkey jhonson",
+      //     "credit" : 500
+      //   }
+      // ]
     }
   }
 }
