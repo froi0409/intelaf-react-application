@@ -1,4 +1,7 @@
+// ** React Imports
 import * as React from 'react';
+
+// ** MUI Components
 import { alpha } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -17,9 +20,11 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
+import { visuallyHidden } from '@mui/utils';
+
+// ** Icons Imports
 import EditIcon from '@mui/icons-material/Edit';
 import FilterListIcon from '@mui/icons-material/FilterList';
-import { visuallyHidden } from '@mui/utils';
 
 interface Data {
   userIdUser: number;
@@ -53,11 +58,6 @@ function createData(
     credit
   };
 }
-
-// const rows = [
-//   createData(1,123456789, 'Juan',12345678, 1234567890123, 'user1@example.com', '543 Plaza Trail'),
-//   createData(2,123456799, 'Gilberto',55891123, 1234567890333, 'user2@example.com', '789 Turkey jhonson'),
-// ];
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
   if (b[orderBy] < a[orderBy]) {

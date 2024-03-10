@@ -4,8 +4,8 @@ import Link from '@mui/material/Link'
 import Card from '@mui/material/Card'
 import Typography from '@mui/material/Typography'
 
-// ** Demo Components Imports
-import EnhancedTable from './components/TableCustomer'
+// ** Table for customers
+import EnhancedTable from 'src/components/customers/list-all-customers/TableCustomer'
 
 const ListAllCustomer = ({ data }: any) => {
   return (
