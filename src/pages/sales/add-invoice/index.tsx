@@ -15,6 +15,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import { FormInvoicePay } from "src/components/sales/invoice/FormInvoicePay";
 import { RegisterSale } from "src/components/sales/invoice/RegisterSale";
 import { useState } from "react";
+import { SaleData, registerSale } from "src/utils/apiUtils/sale/invoice/registerSale";
 
 
 export interface Product {
@@ -101,32 +102,21 @@ const AddInvoice = () => {
   }
 
   const handleConfirmationRegisterSale = async () => {
-    console.log(date,nit,total);
     try {
-      const saleData: any = {
-        date,
-        nit,
-        total,
+      const saleData: SaleData = {
+        date: date, // Si date es undefined o null, asigna una cadena vacía ''
+        nit: nit.toString(), // Convierte nit a cadena usando .toString()
+        total: total || 0, // Si total es undefined o null, asigna 0
       };
-  
-      const response = await fetch('http://localhost:8080/v1/sale/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(saleData),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Error registering sale');
-      }
-  
-      const data = await response.json();
+
+      const data = await registerSale(saleData);
       console.log('Sale registered successfully:', data);
       // Handle success, e.g., display a confirmation message
     } catch (error) {
       console.error('Error registering sale:', error);
       // Handle errors, e.g., display an error message
     }
-  }
+  };
 
   return (
     <DatePickerWrapper>

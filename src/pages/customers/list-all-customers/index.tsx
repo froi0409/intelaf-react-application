@@ -6,8 +6,10 @@ import Typography from '@mui/material/Typography'
 
 // ** Table for customers
 import EnhancedTable from 'src/components/customers/list-all-customers/TableCustomer'
+import { getAllCustomerPath } from 'src/utils/apiUtils/customer/allCustomer'
 
-const ListAllCustomer = ({ data }: any) => {
+const ListAllCustomer = ({data} : any) => {
+
   return (
     <Grid container spacing={6}>
       <Grid item xs={12}>
@@ -29,36 +31,33 @@ const ListAllCustomer = ({ data }: any) => {
 
 
 export async function getServerSideProps(context: any) {
-  //fetch my server de spring
-  const response  =  await fetch('http://localhost:8080/v1/customer/all')
-  const data  = await response.json()
+  // localhost:3000
+  const domain = context.req.headers.host
 
-  return {
-    props: {
-      data : data
-      // data : [
-      //   {
-      //     userIdUser: 1,
-      //     nit: 123456789,
-      //     name: 'Juan',
-      //     phone: 12345678,
-      //     dpi: 1234567890123,
-      //     email: 'user1@example.com',
-      //     address : '543 Plaza Trail',
-      //     credit: 0
-      //   },
-      //   {
-      //     "userIdUser": 2,
-      //     "nit": 123456799,
-      //     "name": "Gilberto",
-      //     "phone": 55891123,
-      //     "dpi": 1234567890333,
-      //     "email": "user2@example.com",
-      //     "address": "789 Turkey jhonson",
-      //     "credit" : 500
-      //   }
-      // ]
-    }
+  // /blog/3
+  // const path = context.req.url
+
+  //localhost:3000/blob/3
+  // const fullAddress = domain + path
+  
+  try {
+    const data = await getAllCustomerPath(domain)
+    // Retorna los datos como props
+    return {
+      props: {
+        data: data
+      }
+    };
+  } catch (error) {
+    // Maneja cualquier error
+    console.error('Error fetching data:', error);
+    
+    // Retorna un objeto vacío si hay un error
+    return {
+      props: {
+        data: []
+      }
+    };
   }
 }
 
