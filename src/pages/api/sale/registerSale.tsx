@@ -25,7 +25,7 @@ export async function handlePost(req: NextRequest, res: NextApiResponse) {
   // Implementa la lógica para registrar la venta en el backend
   try {
     // Realiza una solicitud POST a la ruta de registro de ventas en el backend
-    const response = await axios.post('http://192.168.0.17:8080/v1/sale/register', {
+    const response = await axios.post(`${process.env.URL_API_BACKEND}/v1/sale/register`, {
       date,
       nit,
       total,

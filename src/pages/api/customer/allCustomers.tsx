@@ -7,7 +7,7 @@ import axios from "axios";
 export async function handleGet(req: NextRequest, res: NextApiResponse) {
 
     try {
-        const response  =  await axios.get('http://192.168.0.17:8080/v1/customer/all')
+        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/customer/all`)
         const data  = await response.data
         return res.status(200).json(data);
     }catch (err) {
