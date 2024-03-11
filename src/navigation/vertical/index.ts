@@ -73,7 +73,37 @@ const navigation = (): VerticalNavItemsType => {
       icon: CubeOutline,
       title: 'Form Layouts',
       path: '/form-layouts'
-    }
+    },
+    {
+      icon: CubeOutline,
+      title: 'CreateProduct',
+      path: '/pages/product/create-product'
+    },
+    {
+      icon: CubeOutline,
+      title: 'ListProducts',
+      path: '/pages/product/list-products'
+    },
+    {
+      icon: CubeOutline,
+      title: 'UpdateProduct',
+      path: '/pages/product/update-product'
+    },
+    {
+      icon: CubeOutline,
+      title: 'CreateEmployee',
+      path: '/pages/employee/create-employee'
+    },
+    {
+      icon: CubeOutline,
+      title: 'UpdateEmployee',
+      path: '/pages/employee/update-employee'
+    },
+    {
+      icon: CubeOutline,
+      title: 'ListEmployees',
+      path: '/pages/employee/list-employees'
+    },
   ]
 }
 
