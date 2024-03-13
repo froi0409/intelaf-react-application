@@ -19,71 +19,104 @@ import TableContainer from '@mui/material/TableContainer'
 import Table from '@mui/material/Table'
 import { IconButton, InputAdornment, OutlinedInput, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import { AccountOutline, BadgeAccountOutline, EmailOutline, EyeOffOutline, EyeOutline, FormTextboxPassword, MapMarker, MapMarkerOutline, Numeric, PhoneOutline } from 'mdi-material-ui'
+import { postCreateEmployeePath } from 'src/utils/apiUtils/employee/createEmployeeUtil'
 
-
-interface StoreInfo {
-    store: string;
-    quantity: number;
-}
 interface StatePass {
   password: string
   showPassword: boolean
 }
 
+interface FormData {
+  username: string;
+  nit: string;
+  name: string;
+  phone: string;
+  dpi: string;
+  email: string;
+  address: string;
+  role: string;
+  password: string;
+}
+
 const FormCreateEmployee = () => {
   // ** States
-  const [storeInfo, setStoreInfo] = useState<StoreInfo[]>([]);
-  const [selectedStore, setSelectedStore] = useState('');
-  const [quantity, setQuantity] = useState('');
 
 
-  //Handle Store Info
-  const handleAddStoreInfo = () => {
-    if (selectedStore && quantity) {
-      // Verify the existence of the store in the storeInfo
-      const isStoreExists = storeInfo.some(info => info.store === selectedStore);
-      if (!isStoreExists) {
-        const newStoreInfo: StoreInfo[] = [...storeInfo, { store: selectedStore, quantity: parseInt(quantity) }];
-        setStoreInfo(newStoreInfo);
-        setSelectedStore('');
-        setQuantity('');
-      } else {
-        alert('¡La tienda ya ha sido agregada!');
-      }
-    }
-  };
-
-  const handleQuantityChange = (index:any, newQuantity:any) => {
-    const updatedStoreInfo = [...storeInfo];
-    updatedStoreInfo[index].quantity = parseInt(newQuantity);
-    if (parseInt(newQuantity) === 0) {
-      // If quantity is 0 delete from the table
-      updatedStoreInfo.splice(index, 1);
-    }
-    setStoreInfo(updatedStoreInfo);
-  };
-
-  const [values, setValues] = useState<StatePass>({
+  const [valuesPass, setValuesPass] = useState<StatePass>({
     password: '',
     showPassword: false
   })
 
+  const [values, setValues] = useState<FormData>({
+    username: '',
+    nit: '',
+    name: '',
+    phone: '',
+    dpi: '',
+    email: '',
+    address: '',
+    role: '',
+    password: '',
+  });
+
+  const handleChange = (prop: keyof FormData) => (event: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
+    setValues({ ...values, [prop]: event.target.value as string });
+  };
+
   const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword })
+    setValuesPass({ ...valuesPass, showPassword: !valuesPass.showPassword })
   }
 
   const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
   }
 
-  const handleChange = (prop: keyof StatePass) => (event: ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...values, [prop]: event.target.value })
+  const handleChangePass = (prop: keyof StatePass) => (event: ChangeEvent<HTMLInputElement>) => {
+    setValues({ ...values, password: event.target.value });
+    setValuesPass({ ...valuesPass, [prop]: event.target.value })
   }
+
+  const handleRoleChange = (event: React.ChangeEvent<{ value: unknown }>) => {    
+    console.log(event.target.value)
+    setValues({ ...values, role: event.target.value as string });
+  };
+
+  const realizarPost = async () => {
+    const url = '/api/user/createEmployee/';
+
+    try {
+      console.log('valores a enviar');
+      console.log(values);
+      const respuesta = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (respuesta.ok) {
+        const datosRespuesta = await respuesta.json();
+        console.log('Respuesta del servidor:', datosRespuesta);
+      } else {
+        console.error('Error en la solicitud:', respuesta.statusText);
+      }
+    } catch (error) {
+      console.error('Error al realizar la solicitud:', error);
+    }
+  };
+
+  const handleSubmit = (e:any) => {
+    console.log('valores sumit');
+    e.preventDefault();
+    realizarPost();
+  };
+
   return (
     <Card>
       <CardHeader title='Ingreso de nuevo empleado a tienda' titleTypographyProps={{ variant: 'h6' }} />
       <Divider sx={{ margin: 0 }} />
-      <form onSubmit={e => e.preventDefault()}>
+      <form onSubmit={handleSubmit}>
         <CardContent>
           <Grid container spacing={5}>
             <Grid item xs={12}>
@@ -92,7 +125,7 @@ const FormCreateEmployee = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Codigo Empleado' placeholder='EM-1' InputProps={{
+              <TextField fullWidth label='Codigo Empleado' placeholder='EM-1' value={values.username} onChange={handleChange('username')} InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
                       <BadgeAccountOutline />
@@ -101,7 +134,7 @@ const FormCreateEmployee = () => {
                 }}/>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='NIT' placeholder='703022589' InputProps={{
+              <TextField fullWidth label='NIT' placeholder='703022589' value={values.nit} onChange={handleChange('nit')} InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
                       <Numeric />
@@ -110,7 +143,7 @@ const FormCreateEmployee = () => {
                 }}/>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Nombre' placeholder='Peter Zimbabwe' InputProps={{
+              <TextField fullWidth label='Nombre' placeholder='Peter Zimbabwe' value={values.name} onChange={handleChange('name')} InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
                       <AccountOutline />
@@ -119,7 +152,7 @@ const FormCreateEmployee = () => {
                 }}/>
             </Grid>
             <Grid item xs={12} sm={6}>
-            <TextField type='number' fullWidth label='Telefono' placeholder='30303030' 
+            <TextField type='number' fullWidth label='Telefono' value={values.phone} onChange={handleChange('phone')} placeholder='30303030' 
               InputProps={{ 
                 inputProps: { min: 10000000, max: 99999999},
                 startAdornment: (
@@ -131,7 +164,7 @@ const FormCreateEmployee = () => {
             />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField type='number' fullWidth label='DPI' placeholder='1234567891234' 
+              <TextField type='number' fullWidth label='DPI' placeholder='1234567891234' value={values.dpi} onChange={handleChange('dpi')}
                 InputProps={{ 
                   inputProps: { min: 1000000000000, max: 9999999999999},
                   startAdornment: (
@@ -143,7 +176,8 @@ const FormCreateEmployee = () => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField type='email' fullWidth label='Correo Electronico' placeholder='empleado1@gmail.com' InputProps={{
+              <TextField type='email' fullWidth label='Correo Electronico' placeholder='empleado1@gmail.com' value={values.email} onChange={handleChange('email')} 
+                InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
                       <EmailOutline />
@@ -152,7 +186,8 @@ const FormCreateEmployee = () => {
                 }}/>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Direccion' placeholder='Calle A Z.12 Quetzaltenango' InputProps={{
+              <TextField fullWidth label='Direccion' placeholder='Calle A Z.12 Quetzaltenango' value={values.address} onChange={handleChange('address')} 
+                InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
                       <MapMarkerOutline />
@@ -167,6 +202,8 @@ const FormCreateEmployee = () => {
                   label='Rol'
                   defaultValue=''
                   labelId='role-select-label'
+                  value={values.role}
+                  onChange={handleRoleChange}
                 >
                   <MenuItem value='admin'>Administrador</MenuItem>
                   <MenuItem value='employee'>Empleado</MenuItem>
@@ -178,10 +215,10 @@ const FormCreateEmployee = () => {
                 <InputLabel htmlFor='form-layouts-basic-password'>Password</InputLabel>
                 <OutlinedInput
                   label='Contrasena'
-                  value={values.password}
+                  value={valuesPass.password}
                   id='form-layouts-basic-password'
-                  onChange={handleChange('password')}
-                  type={values.showPassword ? 'text' : 'password'}                  
+                  onChange={handleChangePass('password')}                  
+                  type={valuesPass.showPassword ? 'text' : 'password'}                  
                   endAdornment={
                     <InputAdornment position='end'>
                       <IconButton
@@ -190,7 +227,7 @@ const FormCreateEmployee = () => {
                         onMouseDown={handleMouseDownPassword}
                         aria-label='toggle password visibility'
                       >
-                        {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
+                        {valuesPass.showPassword ? <EyeOutline /> : <EyeOffOutline />}
                       </IconButton>
                     </InputAdornment>
                   }

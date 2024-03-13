@@ -15,16 +15,6 @@
     "static/development/_middlewareManifest.js"
   ],
   "pages": {
-    "/": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/index.js"
-    ],
-    "/404": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/404.js"
-    ],
     "/_app": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
@@ -35,10 +25,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/pages/product/create-product": [
+    "/pages/employee/create-employee": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
-      "static/chunks/pages/pages/product/create-product.js"
+      "static/chunks/pages/pages/employee/create-employee.js"
+    ],
+    "/pages/employee/list-employees": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/pages/employee/list-employees.js"
     ]
   },
   "ampFirstPages": []
