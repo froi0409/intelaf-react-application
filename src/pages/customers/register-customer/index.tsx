@@ -8,7 +8,7 @@ import DatePickerWrapper from "src/@core/styles/libs/react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FormRegisterCustomer } from "src/components/customers/register-customer/FormRegisterCustomer";
 
-export const RegisterCustomer = (props:any) => {
+const RegisterCustomer = (props:any) => {
     return (
     <DatePickerWrapper>
       <Grid container spacing={6}>
@@ -19,3 +19,5 @@ export const RegisterCustomer = (props:any) => {
     </DatePickerWrapper>
       )
 }
+
+export default RegisterCustomer;

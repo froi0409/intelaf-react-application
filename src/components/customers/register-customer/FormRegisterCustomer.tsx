@@ -1,7 +1,7 @@
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
 import { CardContent, CardHeader, Divider, TextField } from '@mui/material'
-import React, { useState } from 'react'
+import { useState } from 'react'
 
 // Interfaz para definir los tipos de datos del formulario
 interface FormCustomer {
