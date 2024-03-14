@@ -48,6 +48,7 @@ export const FormRegisterCustomer = (props: any) => {
                                 name='nit'
                                 value={formData.nit}
                                 onChange={handleChange}
+                                inputProps={{ maxLength: 9 }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6} >
@@ -58,19 +59,21 @@ export const FormRegisterCustomer = (props: any) => {
                                 name='dpi'
                                 value={formData.dpi}
                                 onChange={handleChange}
+                                inputProps={{ maxLength: 13 }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={12} >
                             <TextField fullWidth
-                                label='Email'
-                                placeholder='Juan@email.com'
-                                type="email"
-                                id="email"
-                                name='email'
-                                value={formData.email}
+                                label='UserName'
+                                placeholder='Juan#000'
+                                id="username"
+                                name='username'
+                                value={formData.username}
                                 onChange={handleChange}
+                                inputProps={{ maxLength: 45 }}
                             />
                         </Grid>
+                        
                         <Grid item xs={12}>
                             <Divider sx={{ marginBottom: 0 }} />
                         </Grid>
@@ -86,11 +89,12 @@ export const FormRegisterCustomer = (props: any) => {
                         </Grid>
                         <Grid item xs={12} sm={6} >
                             <TextField fullWidth
-                                label='UserName'
-                                placeholder='Juan#000'
-                                id="username"
-                                name='username'
-                                value={formData.username}
+                                label='Email'
+                                placeholder='Juan@email.com'
+                                type="email"
+                                id="email"
+                                name='email'
+                                value={formData.email}
                                 onChange={handleChange}
                             />
                         </Grid>
@@ -102,6 +106,7 @@ export const FormRegisterCustomer = (props: any) => {
                                 name='phone'
                                 value={formData.phone}
                                 onChange={handleChange}
+                                inputProps={{ maxLength: 8 }}
                             />
                         </Grid>
                         <Grid item xs={12} sm={6} >

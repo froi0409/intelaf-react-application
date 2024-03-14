@@ -10,6 +10,7 @@ import { FormRegisterCustomer } from "src/components/customers/register-customer
 import { RegisterSale } from "src/components/sales/invoice/RegisterSale";
 import { useState } from "react";
 import { registerCustomer } from "src/utils/apiUtils/customer/registercustomer";
+import { errorNotification, successNotification } from "src/utils/helpers/notification";
 
 // Interfaz para definir los tipos de datos del formulario
 export interface FormCustomer {
@@ -52,9 +53,11 @@ const RegisterCustomer = (props: any) => {
     try {
       const data = await registerCustomer(formData)
       console.log('Customer registered successfully:', data);
+      successNotification('Se ha registrado el comprador')
       // Handle success, e.g., display a confirmation message
     } catch (error:any) {
       console.error(error.message);
+      errorNotification(error.message);
       // Handle errors, e.g., display an error message
     }
   }
