@@ -1,5 +1,5 @@
 // ** React Imports
-import {ReactNode} from 'react'
+import {ReactNode, useEffect, useState} from 'react'
 
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
@@ -16,16 +16,56 @@ import FormUpdateEmployee from 'src/views/crud-employee/FormUpdateEmployee'
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
 
-const CreateEmployeePage = () => {
+import {getEmployeeByUsernamePath} from 'src/utils/apiUtils/employee/findEmployeeUtil'
+
+import { useRouter } from 'next/router';
+
+
+interface Employee {
+  idUser: number;
+  nit: string;
+  name: string;
+  phone: string;
+  dpi: string;
+  email: string;
+  address: string;
+  username: string;
+  password: string;
+  role: string;
+}
+
+const UpdateEmployeePage = () => {
+  const router = useRouter();
+  const { username } = router.query;
+
+  const [employee, setEmployee] = useState(null);  
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const employeeData = await getEmployeeByUsernamePath(username as string);
+        setEmployee(employeeData);
+      } catch (error) {
+        console.log(error);
+        // Aquí puedes manejar el error si es necesario
+      }
+    };
+
+    fetchData();
+  }, [username]);
+  
+
   return (
     <DatePickerWrapper>
       <Grid container spacing={6}>
         <Grid item xs={12} >
-          <FormUpdateEmployee />
+          <FormUpdateEmployee employee={employee}/>
         </Grid>
       </Grid>
     </DatePickerWrapper>
   )
 }
 
-export default CreateEmployeePage
+
+
+export default UpdateEmployeePage

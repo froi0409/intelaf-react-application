@@ -25,15 +25,15 @@
       "static/chunks/main.js",
       "static/chunks/pages/_error.js"
     ],
-    "/pages/employee/create-employee": [
-      "static/chunks/webpack.js",
-      "static/chunks/main.js",
-      "static/chunks/pages/pages/employee/create-employee.js"
-    ],
     "/pages/employee/list-employees": [
       "static/chunks/webpack.js",
       "static/chunks/main.js",
       "static/chunks/pages/pages/employee/list-employees.js"
+    ],
+    "/pages/employee/update-employee": [
+      "static/chunks/webpack.js",
+      "static/chunks/main.js",
+      "static/chunks/pages/pages/employee/update-employee.js"
     ]
   },
   "ampFirstPages": []

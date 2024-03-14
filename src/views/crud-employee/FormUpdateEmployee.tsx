@@ -1,4 +1,5 @@
 // ** React Imports
+import React, { useEffect } from 'react';
 import { ChangeEvent, forwardRef, MouseEvent, useState } from 'react'
 
 // ** MUI Imports
@@ -17,73 +18,120 @@ import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import { IconButton, InputAdornment, OutlinedInput } from '@mui/material'
 import { AccountOutline, BadgeAccountOutline, EmailOutline, EyeOffOutline, EyeOutline, FormTextboxPassword, MapMarker, MapMarkerOutline, Numeric, PhoneOutline } from 'mdi-material-ui'
+import { putUpdateEmployee } from 'src/utils/apiUtils/employee/updateEmployeeUtil';
 
-
-interface StoreInfo {
-    store: string;
-    quantity: number;
-}
 
 interface StatePass {
   password: string
   showPassword: boolean
 }
 
-const FormCreateEmployee = () => {
-  // ** States
-  const [storeInfo, setStoreInfo] = useState<StoreInfo[]>([]);
-  const [selectedStore, setSelectedStore] = useState('');
-  const [quantity, setQuantity] = useState('');
+interface FormData {
+  username: string;
+  nit: string;
+  name: string;
+  phone: string;
+  dpi: string;
+  email: string;
+  address: string;
+  role: string;
+  password: string;
+}
 
+interface FormUpdateEmployeeProps {
+  employee: FormData;
+}
 
-  //Handle Store Info
-  const handleAddStoreInfo = () => {
-    if (selectedStore && quantity) {
-      // Verify the existence of the store in the storeInfo
-      const isStoreExists = storeInfo.some(info => info.store === selectedStore);
-      if (!isStoreExists) {
-        const newStoreInfo: StoreInfo[] = [...storeInfo, { store: selectedStore, quantity: parseInt(quantity) }];
-        setStoreInfo(newStoreInfo);
-        setSelectedStore('');
-        setQuantity('');
-      } else {
-        alert('¡La tienda ya ha sido agregada!');
+const FormUpdateEmployee : React.FC<FormUpdateEmployeeProps> = ({ employee }) => {
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { username, nit, name, phone, dpi, email, address, password, role } = employee; 
+        setValues({ 
+          ...values, 
+          username: username,
+          nit: nit,
+          name: name,
+          phone: phone,
+          dpi: dpi,
+          email: email,
+          address: address,
+          password: password,
+          role: role 
+        });
+        setValuesPass({ ...valuesPass, password: password });
+      } catch (error) {
+        console.log(error);
+        // Aquí puedes manejar el error si es necesario
       }
-    }
-  };
+    };
 
-  const handleQuantityChange = (index:any, newQuantity:any) => {
-    const updatedStoreInfo = [...storeInfo];
-    updatedStoreInfo[index].quantity = parseInt(newQuantity);
-    if (parseInt(newQuantity) === 0) {
-      // If quantity is 0 delete from the table
-      updatedStoreInfo.splice(index, 1);
+    if (employee) {
+      fetchData();
     }
-    setStoreInfo(updatedStoreInfo);
-  };
+  }, [employee]);
 
-  const [values, setValues] = useState<StatePass>({
+  const [valuesPass, setValuesPass] = useState<StatePass>({
     password: '',
     showPassword: false
   })
 
+  const [values, setValues] = useState<FormData>({
+    username: '',
+    nit: '',
+    name: '',
+    phone: '',
+    dpi: '',
+    email: '',
+    address: '',
+    role: '',
+    password: '',
+  });
+
+  const handleChange = (prop: keyof FormData) => (event: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
+    setValues({ ...values, [prop]: event.target.value as string });
+  };
+
   const handleClickShowPassword = () => {
-    setValues({ ...values, showPassword: !values.showPassword })
+    setValuesPass({ ...valuesPass, showPassword: !valuesPass.showPassword })
   }
 
   const handleMouseDownPassword = (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
   }
 
-  const handleChange = (prop: keyof StatePass) => (event: ChangeEvent<HTMLInputElement>) => {
-    setValues({ ...values, [prop]: event.target.value })
+  const handleChangePass = (prop: keyof StatePass) => (event: ChangeEvent<HTMLInputElement>) => {
+    setValues({ ...values, password: event.target.value });
+    setValuesPass({ ...valuesPass, [prop]: event.target.value })
   }
+
+  const handleRoleChange = (event: React.ChangeEvent<{ value: unknown }>) => {    
+    console.log(event.target.value)
+    setValues({ ...values, role: event.target.value as string });
+  };
+
+  const handlePut = async () => {
+    try {
+      const employeeData = await putUpdateEmployee(values);      
+    } catch (error) {
+      console.log(error);
+      // Aquí puedes manejar el error si es necesario
+    }
+    console.log(values);
+  };
+
+  const handleSubmit = (e:any) => {
+    console.log('valores sumit');
+    e.preventDefault();
+    handlePut();
+  };
 
   return (
     <Card>
-      <CardHeader title='Ingreso de nuevo empleado a tienda' titleTypographyProps={{ variant: 'h6' }} />
+      <CardHeader title='Actualizacion de empleado' titleTypographyProps={{ variant: 'h6' }} />
       <Divider sx={{ margin: 0 }} />
-      <form onSubmit={e => e.preventDefault()}>
+      <form onSubmit={handleSubmit}>
         <CardContent>
           <Grid container spacing={5}>
             <Grid item xs={12}>
@@ -92,16 +140,16 @@ const FormCreateEmployee = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Codigo Empleado' placeholder='EM-1' InputProps={{
+              <TextField fullWidth label='Codigo Empleado' placeholder='EM-1' value={values.username} onChange={handleChange('username')} disabled={true} InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
                       <BadgeAccountOutline />
                     </InputAdornment>
                   )
-                }} disabled={true}/>
+                }}/>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='NIT' placeholder='703022589' InputProps={{
+              <TextField fullWidth label='NIT' placeholder='703022589' value={values.nit} onChange={handleChange('nit')} InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
                       <Numeric />
@@ -110,7 +158,7 @@ const FormCreateEmployee = () => {
                 }}/>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Nombre' placeholder='Peter Zimbabwe' InputProps={{
+              <TextField fullWidth label='Nombre' placeholder='Peter Zimbabwe' value={values.name} onChange={handleChange('name')} InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
                       <AccountOutline />
@@ -119,7 +167,7 @@ const FormCreateEmployee = () => {
                 }}/>
             </Grid>
             <Grid item xs={12} sm={6}>
-            <TextField type='number' fullWidth label='Telefono' placeholder='30303030' 
+            <TextField type='number' fullWidth label='Telefono' value={values.phone} onChange={handleChange('phone')} placeholder='30303030' 
               InputProps={{ 
                 inputProps: { min: 10000000, max: 99999999},
                 startAdornment: (
@@ -131,7 +179,7 @@ const FormCreateEmployee = () => {
             />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField type='number' fullWidth label='DPI' placeholder='1234567891234' 
+              <TextField type='number' fullWidth label='DPI' placeholder='1234567891234' value={values.dpi} onChange={handleChange('dpi')}
                 InputProps={{ 
                   inputProps: { min: 1000000000000, max: 9999999999999},
                   startAdornment: (
@@ -143,7 +191,8 @@ const FormCreateEmployee = () => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField type='email' fullWidth label='Correo Electronico' placeholder='empleado1@gmail.com' InputProps={{
+              <TextField type='email' fullWidth label='Correo Electronico' placeholder='empleado1@gmail.com' value={values.email} onChange={handleChange('email')} 
+                InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
                       <EmailOutline />
@@ -152,7 +201,8 @@ const FormCreateEmployee = () => {
                 }}/>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Direccion' placeholder='Calle A Z.12 Quetzaltenango' InputProps={{
+              <TextField fullWidth label='Direccion' placeholder='Calle A Z.12 Quetzaltenango' value={values.address} onChange={handleChange('address')} 
+                InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
                       <MapMarkerOutline />
@@ -167,6 +217,8 @@ const FormCreateEmployee = () => {
                   label='Rol'
                   defaultValue=''
                   labelId='role-select-label'
+                  value={values.role}
+                  onChange={handleRoleChange}
                 >
                   <MenuItem value='admin'>Administrador</MenuItem>
                   <MenuItem value='employee'>Empleado</MenuItem>
@@ -178,10 +230,10 @@ const FormCreateEmployee = () => {
                 <InputLabel htmlFor='form-layouts-basic-password'>Password</InputLabel>
                 <OutlinedInput
                   label='Contrasena'
-                  value={values.password}
+                  value={valuesPass.password}
                   id='form-layouts-basic-password'
-                  onChange={handleChange('password')}
-                  type={values.showPassword ? 'text' : 'password'}                  
+                  onChange={handleChangePass('password')}                  
+                  type={valuesPass.showPassword ? 'text' : 'password'}                  
                   endAdornment={
                     <InputAdornment position='end'>
                       <IconButton
@@ -190,7 +242,7 @@ const FormCreateEmployee = () => {
                         onMouseDown={handleMouseDownPassword}
                         aria-label='toggle password visibility'
                       >
-                        {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
+                        {valuesPass.showPassword ? <EyeOutline /> : <EyeOffOutline />}
                       </IconButton>
                     </InputAdornment>
                   }
@@ -210,4 +262,4 @@ const FormCreateEmployee = () => {
   )
 }
 
-export default FormCreateEmployee
+export default FormUpdateEmployee

@@ -81,7 +81,7 @@ const FormCreateEmployee = () => {
     setValues({ ...values, role: event.target.value as string });
   };
 
-  const realizarPost = async () => {
+  const handlePost = async () => {
     const url = '/api/user/createEmployee/';
 
     try {
@@ -106,10 +106,9 @@ const FormCreateEmployee = () => {
     }
   };
 
-  const handleSubmit = (e:any) => {
-    console.log('valores sumit');
+  const handleSubmit = (e:any) => {    
     e.preventDefault();
-    realizarPost();
+    handlePost();
   };
 
   return (

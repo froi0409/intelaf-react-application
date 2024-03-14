@@ -15,6 +15,7 @@ import { Box, Checkbox, FormControlLabel, IconButton, Switch, TableSortLabel, To
 import { alpha } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
 import { FileEdit, Filter } from 'mdi-material-ui';
+import Link from 'next/link';
 
 
 interface Column {
@@ -208,10 +209,12 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
+  employeeSelected: readonly number[];
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected } = props;
+  const { numSelected } = props;  
+  const { employeeSelected } = props;  
 
   return (
     <Toolbar
@@ -243,11 +246,13 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           Datos de los Empleados
         </Typography>
       )}
-      {numSelected > 0 ? (
-        <Tooltip title="Editar">
-          <IconButton>
-            <FileEdit />
-          </IconButton>
+      {numSelected == 1 ? (
+        <Tooltip title="Editar">          
+          <Link href={{ pathname: '/pages/employee/update-employee', query: { username: employeeSelected } }}>
+            <IconButton>
+              <FileEdit />
+            </IconButton>
+          </Link>
         </Tooltip>
       ) : (
         <Tooltip title="filtrar">
@@ -348,7 +353,7 @@ export default function TableListEmployees(props: any) {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+        <EnhancedTableToolbar numSelected={selected.length} employeeSelected={selected}/>
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
