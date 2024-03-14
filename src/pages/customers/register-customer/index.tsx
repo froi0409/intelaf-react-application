@@ -40,6 +40,20 @@ const RegisterCustomer = (props: any) => {
     credit: 0.0,
   });
 
+  const clearFormData = () => {
+    setFormData({
+      nit: '',
+      name: '',
+      phone: '',
+      dpi: '',
+      email: '',
+      address: '',
+      password: '',
+      username: '',
+      credit: 0.0,
+    });
+  };
+
   // Manejador de cambio genérico para actualizar los datos del formulario
   const handleChange = (name: string, value: string) => {
     setFormData(prevState => ({
@@ -49,16 +63,22 @@ const RegisterCustomer = (props: any) => {
   };
 
   const handleRegistrationCustomer = async () => {
-    //send to the backend
-    try {
-      const data = await registerCustomer(formData)
-      console.log('Customer registered successfully:', data);
-      successNotification('Se ha registrado el comprador')
-      // Handle success, e.g., display a confirmation message
-    } catch (error:any) {
-      console.error(error.message);
-      errorNotification(error.message);
-      // Handle errors, e.g., display an error message
+    const isFormFilled = Object.values(formData).every(value => value !== '');
+    if (isFormFilled) {
+      //send to the backend
+      try {
+        const data = await registerCustomer(formData)
+        console.log('Customer registered successfully:', data);
+        successNotification('Se ha registrado el comprador')
+        clearFormData();
+        // Handle success, e.g., display a confirmation message
+      } catch (error: any) {
+        console.error(error.message);
+        errorNotification(error.message);
+        // Handle errors, e.g., display an error message
+      }
+    } else {
+      errorNotification('Llene todos los campos primero');
     }
   }
 
