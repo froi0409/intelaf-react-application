@@ -11,6 +11,7 @@ import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
 import InvoicePlus from 'mdi-material-ui/InvoicePlus'
 import ListBoxOutline from 'mdi-material-ui/ListBoxOutline'
+import AccountPlus from 'mdi-material-ui/AccountPlus'
 
 
 // ** Type import
@@ -78,21 +79,26 @@ const navigation = (): VerticalNavItemsType => {
       path: '/form-layouts'
     },
     {
-      sectionTitle: 'Invoice'
+      sectionTitle: 'Ventas'
     },
     {
-      title: 'Make a sale',
+      title: 'Realizar una Factura',
       path: '/sales/add-invoice',
       icon: InvoicePlus
     },
     {
-      sectionTitle: 'Customers'
+      sectionTitle: 'Compradores'
     },
     {
-      title: 'All customers',
+      title: 'Listado de compradores',
       path: '/customers/list-all-customers',
       icon: ListBoxOutline
-    }
+    },
+    {
+      title: 'Agregar un comprador',
+      path: '/customers/register-customer/',
+      icon: AccountPlus
+    },
   ]
 }
 

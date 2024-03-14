@@ -6,7 +6,6 @@ import { useState, MouseEvent } from 'react'
 // ** Icons Imports
 import EyeOutline from 'mdi-material-ui/EyeOutline'
 import EyeOffOutline from 'mdi-material-ui/EyeOffOutline'
-import { FormCustomer } from 'src/pages/customers/register-customer'
 
 export const FormRegisterCustomer = (props: any) => {
     const formData = props.formData;
