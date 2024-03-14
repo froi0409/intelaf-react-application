@@ -7,17 +7,70 @@ import DatePickerWrapper from "src/@core/styles/libs/react-datepicker";
 // ** Third Party Styles Imports
 import "react-datepicker/dist/react-datepicker.css";
 import { FormRegisterCustomer } from "src/components/customers/register-customer/FormRegisterCustomer";
+import { RegisterSale } from "src/components/sales/invoice/RegisterSale";
+import { useState } from "react";
+import { registerCustomer } from "src/utils/apiUtils/customer/registercustomer";
 
-const RegisterCustomer = (props:any) => {
-    return (
+// Interfaz para definir los tipos de datos del formulario
+export interface FormCustomer {
+  nit: string;
+  name: string;
+  phone: string;
+  dpi: string;
+  email: string;
+  address: string;
+  password: string;
+  username: string;
+  credit: number;
+}
+
+const RegisterCustomer = (props: any) => {
+
+  // Estado para almacenar los datos del formulario
+  const [formData, setFormData] = useState<FormCustomer>({
+    nit: '',
+    name: '',
+    phone: '',
+    dpi: '',
+    email: '',
+    address: '',
+    password: '',
+    username: '',
+    credit: 0.0,
+  });
+
+  // Manejador de cambio genérico para actualizar los datos del formulario
+  const handleChange = (name: string, value: string) => {
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
+  };
+
+  const handleRegistrationCustomer = async () => {
+    //send to the backend
+    try {
+      const data = await registerCustomer(formData)
+      console.log('Customer registered successfully:', data);
+      // Handle success, e.g., display a confirmation message
+    } catch (error:any) {
+      console.error(error.message);
+      // Handle errors, e.g., display an error message
+    }
+  }
+
+  return (
     <DatePickerWrapper>
       <Grid container spacing={6}>
         <Grid item xs={12} md={12}>
-            <FormRegisterCustomer />
+          <FormRegisterCustomer formData={formData} handleChange={handleChange} />
+        </Grid>
+        <Grid item xs={12} md={12}>
+          <RegisterSale handleConfirmationRegisterSale={handleRegistrationCustomer} />
         </Grid>
       </Grid>
     </DatePickerWrapper>
-      )
+  )
 }
 
 export default RegisterCustomer;
