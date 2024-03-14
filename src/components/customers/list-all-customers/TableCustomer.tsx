@@ -25,6 +25,7 @@ import { visuallyHidden } from '@mui/utils';
 // ** Icons Imports
 import EditIcon from '@mui/icons-material/Edit';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import { useRouter } from 'next/router';
 
 interface Data {
   userIdUser: number;
@@ -178,15 +179,15 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     <TableHead>
       <TableRow>
         <TableCell padding="checkbox">
-          <Checkbox
+          {/* <Checkbox
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
             onChange={onSelectAllClick}
             inputProps={{
-              'aria-label': 'select all desserts',
+              'aria-label': 'selecciona todos los usuarios',
             }}
-          />
+          /> */}
         </TableCell>
         {headCells.map((headCell) => (
           <TableCell
@@ -216,10 +217,18 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
   numSelected: number;
+  handleEdit: () => void; // Function to handle edit button click
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-  const { numSelected } = props;
+  const { numSelected, handleEdit } = props;
+
+  const handleClickEdit = () => {
+    if (numSelected !== null) {
+      // Only trigger edit if a row is selected
+      handleEdit();
+    }
+  };
 
   return (
     <Toolbar
@@ -239,7 +248,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
           variant="subtitle1"
           component="div"
         >
-          {numSelected} selected
+          Usuario {numSelected}
         </Typography>
       ) : (
         <Typography
@@ -253,10 +262,10 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
       )}
       {numSelected > 0 ? (
         <Tooltip title="Editar">
-          <IconButton>
-            <EditIcon />
-          </IconButton>
-        </Tooltip>
+        <IconButton onClick={handleClickEdit} disabled={numSelected === null}>
+          <EditIcon />
+        </IconButton>
+      </Tooltip>
       ) : (
         <Tooltip title="filtrar">
           <IconButton>
@@ -268,7 +277,6 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
   );
 }
 export default function EnhancedTable(props: any) {
-    // console.log(props.dataServer);
     const rows = props.dataServer.map((customer:Data) => {
         return createData(
           customer.userIdUser,
@@ -287,6 +295,7 @@ export default function EnhancedTable(props: any) {
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const router = useRouter();
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -310,17 +319,21 @@ export default function EnhancedTable(props: any) {
     const selectedIndex = selected.indexOf(id);
     let newSelected: readonly number[] = [];
 
+    // if (selectedIndex === -1) {
+    //   newSelected = newSelected.concat(selected, id);
+    // } else if (selectedIndex === 0) {
+    //   newSelected = newSelected.concat(selected.slice(1));
+    // } else if (selectedIndex === selected.length - 1) {
+    //   newSelected = newSelected.concat(selected.slice(0, -1));
+    // } else if (selectedIndex > 0) {
+    //   newSelected = newSelected.concat(
+    //     selected.slice(0, selectedIndex),
+    //     selected.slice(selectedIndex + 1),
+    //   );
+    // }
+
     if (selectedIndex === -1) {
-      newSelected = newSelected.concat(selected, id);
-    } else if (selectedIndex === 0) {
-      newSelected = newSelected.concat(selected.slice(1));
-    } else if (selectedIndex === selected.length - 1) {
-      newSelected = newSelected.concat(selected.slice(0, -1));
-    } else if (selectedIndex > 0) {
-      newSelected = newSelected.concat(
-        selected.slice(0, selectedIndex),
-        selected.slice(selectedIndex + 1),
-      );
+      newSelected = [id]; // Clear existing selection (optional)
     }
     setSelected(newSelected);
   };
@@ -337,6 +350,11 @@ export default function EnhancedTable(props: any) {
   const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
     setDense(event.target.checked);
   };
+
+  const handleEdit = () => {
+    console.log('user id', selected[0])
+    router.push(`/customers/update-customer/${selected[0]}`);
+  }
 
   const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
@@ -356,7 +374,7 @@ export default function EnhancedTable(props: any) {
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length} />
+      <EnhancedTableToolbar numSelected={selected.length > 0 ? selected[0] : 0} handleEdit={handleEdit} />
         <TableContainer>
           <Table
             sx={{ minWidth: 750 }}
