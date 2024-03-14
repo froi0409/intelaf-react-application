@@ -1,47 +1,27 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextApiResponse } from "next/types";
+import { NextRequest } from 'next/server';
+import axios from "axios";
 
-interface Product {
-  idProduct: string;
-  name: string;
-  manufacturer: string;
-  price: number;
-  description: string;
-  guarantyMonths: number;
-  stores: Store[];
-}
 
-interface Store {
-  storeCode: string;
-  stock: number;
-}
+// Maneja las solicitudes POST
+export async function handlePost(req: NextRequest, res: NextApiResponse) {
 
-export default async function handler(req: NextRequest, res: NextResponse) {
-  // Check request method (should be POST)
-  if (req.method !== 'POST') {
-    return NextResponse.json({ message: 'Method Not Allowed' }, { status: 405 });
-  }
+    try {        
+        const requestData = req.body;
+        const response  =  await axios.post(`${process.env.URL_API_BACKEND}/v1/products/create-product`,requestData) 
+        const data  = await response.data
+        return res.status(200).json(data);
+    }catch (err) {
+        console.error(err);
+        return res.status(500).json({ message: 'Error creating the product' });
+    }    
+}  
 
-  // Type cast request body to Product
-  const body = req.body as unknown as Product;
-
-  // Extract data from typed request body
-  const { idProduct,name,manufacturer,price,description,guarantyMonths,stores } = body;
-
-  try {
-    const response = await fetch('http://localhost:8080/v1/products/create-product', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ idProduct,name,manufacturer,price,description,guarantyMonths,stores }),
-    });
-
-    if (!response.ok) {
-      throw new Error(`Error creating the product: ${response.statusText}`);
-    }
-
-    const data = await response.json();
-    return NextResponse.json({ message: 'Product created successfully', data }, { status: 200 }); // Send any response data
-  } catch (error) {
-    console.error(error);
-    return NextResponse.json({ message: 'Error creating the product' }, { status: 500 });
-  }
+export default async function handler(req: NextRequest, res: NextApiResponse) {
+    if (req.method === 'POST') {
+        return handlePost(req, res);
+    } else {
+        // Si es otro método de solicitud, devuelve un error de método no permitido
+        return res.status(405).json({ message: 'Method Not Allowed' });
+      }
 }
