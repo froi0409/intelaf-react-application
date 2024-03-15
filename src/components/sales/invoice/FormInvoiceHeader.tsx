@@ -17,7 +17,7 @@ const CustomInput = forwardRef((props, ref) => {
 })
 
 const FormInvoiceHeader = (props : any) => {
-
+  const store = props.store
     // Use useEffect to set the date on component mount
     useEffect(() => {
         const currentDate = new Date();
@@ -26,7 +26,7 @@ const FormInvoiceHeader = (props : any) => {
 
   return (
     <Card>
-      <CardHeader title='TIENDA X' titleTypographyProps={{ variant: 'h6' }} />
+      <CardHeader title={`TIENDA ${store}`} titleTypographyProps={{ variant: 'h6' }} />
       <Divider sx={{ margin: 0 }} />
         <CardContent>
           <Grid container spacing={5}>

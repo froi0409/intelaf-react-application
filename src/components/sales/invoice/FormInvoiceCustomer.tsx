@@ -26,6 +26,7 @@ const FormInvoiceCustomer = (props: any) => {
       setName(data.name);
       setAddress(data.address);
       setFieldsDisabled(true);
+      props.getcredits(data.credit)
     } catch (err) {
       console.log('error to find customer by nit', err)
       setName('');

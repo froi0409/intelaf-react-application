@@ -1,13 +1,49 @@
 import axios from 'axios';
 import { NextRequest } from 'next/server';
 import { NextApiResponse } from "next/types";
+import { InvoiceProduct, SaleData } from 'src/utils/apiUtils/sale/invoice/registerSale';
+
+
+ interface Product {
+  idProduct : string; // Assuming a unique identifier for each product
+  quantity: number;
+}
+
+// Define una interfaz para describir la información de pago
+ interface PaymentInfo {
+  type: string;
+  amount: number;
+}
 
 // Define la interfaz SaleData
-interface SaleData {
+interface SaleDataBackend {
   date: Date | undefined | null;
   nit: string;
   total: number;
+  payments: PaymentInfo[];
+  products: Product[];
 }
+
+// Función para transformar InvoiceProduct a Product
+function transformInvoiceProduct(product: InvoiceProduct): Product {
+  return {
+    idProduct: product.id_product,
+    quantity: product.quantity
+  };
+}
+
+// Función para transformar SaleData
+function transformSaleData(saleData: SaleData): SaleDataBackend {
+  const transformedProducts = saleData.products.map(transformInvoiceProduct);
+  return {
+    date: saleData.date,
+    nit: saleData.nit,
+    total: saleData.total,
+    payments: saleData.payments,
+    products: transformedProducts
+  };
+}
+
 
 // Maneja las solicitudes GET
 export function handleGet(req: NextRequest, res: NextApiResponse) {
@@ -19,24 +55,30 @@ export async function handlePost(req: NextRequest, res: NextApiResponse) {
   // Convierte el cuerpo de la solicitud a SaleData
   const body = req.body as unknown as SaleData;
 
-  // Extrae los datos del cuerpo de la solicitud
-  const { date, nit, total } = body;
+  // Transforma los datos de venta
+  const transformedSaleData = transformSaleData(body);
+
+  // // Extrae los datos del cuerpo de la solicitud
+  // const { date, nit, total,payments,products } = body;
 
   // Implementa la lógica para registrar la venta en el backend
   try {
     // Realiza una solicitud POST a la ruta de registro de ventas en el backend
-    const response = await axios.post(`${process.env.URL_API_BACKEND}/v1/sale/register`, {
-      date,
-      nit,
-      total,
-    });
+    // const response = await axios.post(`${process.env.URL_API_BACKEND}/v1/sale/register`, {
+    //   date,
+    //   nit,
+    //   total,
+    //   payments,
+    //   products
+    // });
+
+    const response = await axios.post(`${process.env.URL_API_BACKEND}/v1/sale/register`, transformedSaleData);
 
     // Devuelve una respuesta JSON con el mensaje de éxito y los datos de respuesta
-    return res.status(200).json({ message: 'Sale registered successfully', data: response.data });
-  } catch (error) {
+    return res.status(response.status).json({ message: 'Venta Registrada satisfactoriamente', data: response.data });
+  } catch (error: any) {
     // Maneja cualquier error y devuelve una respuesta de error
-    console.error(error);
-    return res.status(500).json({ message: 'Error registering sale' });
+    return res.status(error.response.status).json({ message: error.response.data });
   }
 }
 
