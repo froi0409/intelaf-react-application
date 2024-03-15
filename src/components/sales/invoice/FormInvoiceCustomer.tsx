@@ -13,14 +13,14 @@ import { autocompleteFieldscustomer } from 'src/utils/apiUtils/sale/invoice/auto
 
 
 const FormInvoiceCustomer = (props: any) => {
-
-  const [nit, setNit] = useState('');
+  const nit = props.nit
+  // const [nit, setNit] = useState('');
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [fieldsDisabled, setFieldsDisabled] = useState(false); // Estado para habilitar/deshabilitar los campos
 
   const handleVerificationNit = async () => {
-    props.reciveNit(nit);
+    // props.reciveNit(nit);
     try {
       const data = await autocompleteFieldscustomer(nit);
       setName(data.name);
@@ -36,7 +36,7 @@ const FormInvoiceCustomer = (props: any) => {
   }
 
   const handleNitChange = (e: any) => {
-    setNit(e.target.value);
+    props.reciveNit(e.target.value);
   }
 
   const handleNameChange = (e: any) => {

@@ -43,18 +43,29 @@ const AddInvoice = () => {
   const [stillPay, setStillPay] = useState(0);
   const [total, setTotal] = useState(0);
 
-  useEffect( () => {
-    const fetch = async () => {
-      try {
-        const data = await getAllProductsStockByStore();
-        // const products = data as unknown as products_stock;
-        setProducts(data);
-      } catch (error) {
-        console.error(error)
-      }
+  const fetchProducts = async () => {
+    try {
+      const data = await getAllProductsStockByStore();
+      // const products = data as unknown as products_stock;
+      setProducts(data);
+    } catch (error) {
+      console.error(error)
     }
-    fetch();
+  }
+
+  useEffect( () => {
+    fetchProducts();
   }, [])
+
+  const ClearData =() => {
+    setNit('')
+    setcredits(0)
+    setInvoiceProducts([])
+    setPayments([])
+    fetchProducts();
+    setStillPay(0);
+    setTotal(0);
+  }
 
 
   const addProduct = (product: Products_Stock, quantity: number, maxStock: number) => {
@@ -155,7 +166,9 @@ const AddInvoice = () => {
   
     return true;
   };
-
+  const handleCancelSale = () => {
+    ClearData();
+  }
   const handleConfirmationRegisterSale = async () => {
     //Validations first, Nit, total <> 0, stillPay == 0
     if (!isValid()) {
@@ -177,6 +190,7 @@ const AddInvoice = () => {
       const data = await registerSale(saleData);
       console.log('Sale registered successfully:', data);
       successNotification('Venta Registrada satisfactoriamente')
+      ClearData();
       // Handle success, e.g., display a confirmation message
     } catch (error) {
       errorNotification('Error registering sale');
@@ -191,7 +205,7 @@ const AddInvoice = () => {
           <FormInvoiceHeader updateDate={updateDate} getDate={getDate} store={store} />
         </Grid>
         <Grid item xs={12} md={12}>
-          <FormInvoiceCustomer reciveNit={reciveNit} getcredits={getcredits} />
+          <FormInvoiceCustomer nit={nit} reciveNit={reciveNit} getcredits={getcredits} />
         </Grid>
         <Grid item xs={12} md={12}>
           <FormInvoiceProduct addProduct={addProduct} products={products} store={store} />
@@ -206,7 +220,7 @@ const AddInvoice = () => {
           <TableInvoicePayments payments={payments} />
         </Grid>
         <Grid item xs={12} md={12}>
-          <RegisterSale handleConfirmationRegisterSale={handleConfirmationRegisterSale} />
+          <RegisterSale handleConfirmationRegisterSale={handleConfirmationRegisterSale} handleCancelSale={handleCancelSale} />
         </Grid>
       </Grid>
     </DatePickerWrapper>

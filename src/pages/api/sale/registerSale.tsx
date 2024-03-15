@@ -5,7 +5,7 @@ import { InvoiceProduct, SaleData } from 'src/utils/apiUtils/sale/invoice/regist
 
 
  interface Product {
-  idProduct : string; // Assuming a unique identifier for each product
+  productId : string; // Assuming a unique identifier for each product
   quantity: number;
 }
 
@@ -27,7 +27,7 @@ interface SaleDataBackend {
 // Función para transformar InvoiceProduct a Product
 function transformInvoiceProduct(product: InvoiceProduct): Product {
   return {
-    idProduct: product.id_product,
+    productId: product.id_product,
     quantity: product.quantity
   };
 }
