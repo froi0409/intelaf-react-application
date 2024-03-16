@@ -38,7 +38,7 @@ const UpdateEmployeePage = () => {
   const router = useRouter();
   const { username } = router.query;
 
-  const [employee, setEmployee] = useState(null);  
+  const [employee, setEmployee] = useState(null as any);  
 
   useEffect(() => {
     const fetchData = async () => {

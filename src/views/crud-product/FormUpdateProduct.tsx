@@ -1,5 +1,5 @@
 // ** React Imports
-import { ChangeEvent, forwardRef, MouseEvent, useState } from 'react'
+import { ChangeEvent, forwardRef, MouseEvent, useEffect, useState } from 'react'
 
 // ** MUI Imports
 import Card from '@mui/material/Card'
@@ -19,28 +19,95 @@ import TableContainer from '@mui/material/TableContainer'
 import Table from '@mui/material/Table'
 import { InputAdornment,TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import { AccountHardHat, BadgeAccountOutline, Cash, LabelOutline, Numeric, PencilOutline, ShieldLockOutline, Text } from 'mdi-material-ui'
+import { putUpdateProduct } from 'src/utils/apiUtils/product/updateProductUtil'
 
 
 interface StoreInfo {
-    store: string;
-    quantity: number;
+  storeCode: string;
+  stock: number;
+}
+  
+interface Product{
+  idProduct: string;
+  name: string;
+  manufacturer: string;
+  price: number;
+  description: string;
+  guarantyMonths: number;
+  stores:StoreInfo[];
 }
 
-const FormUpdateProduct = () => {
+interface Store {
+  idStore: string;
+  name: string;
+  address: string;
+  phone1: string;
+  phone2: string;
+  email: string;
+  storeHours: string | null;
+}
+
+interface FormUpdateProductProps {
+  product: Product;
+  stores: Store[];
+}
+
+const FormUpdateProduct : React.FC<FormUpdateProductProps> = ({ product,stores }) => {
   // ** States
   const [storeInfo, setStoreInfo] = useState<StoreInfo[]>([]);
   const [selectedStore, setSelectedStore] = useState('');
   const [quantity, setQuantity] = useState('');
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { idProduct, name, manufacturer, price, description, guarantyMonths, stores } = product; 
+        setStoreInfo(stores);
+        setValues({ 
+          ...values, 
+          idProduct: idProduct,
+          name: name,
+          manufacturer: manufacturer,
+          price: price,
+          description: description,
+          guarantyMonths: guarantyMonths,
+          stores:stores     
+        });     
+      } catch (error) {
+        console.log(error);
+        // Aquí puedes manejar el error si es necesario
+      }
+    };
+
+    if (product) {
+      fetchData();
+    }
+  }, [product]);
+
+  const [values, setValues] = useState<Product>({
+    idProduct: '',
+    name: '',
+    manufacturer: '',
+    price: 0,
+    description: '',
+    guarantyMonths: 0,
+    stores:storeInfo
+  });
+
+  const handleChange = (prop: keyof Product) => (event: React.ChangeEvent<HTMLInputElement | { name?: string; value: unknown }>) => {
+    setValues({ ...values, [prop]: event.target.value as string });
+  };
 
 
   //Handle Store Info
   const handleAddStoreInfo = () => {
     if (selectedStore && quantity) {
       // Verify the existence of the store in the storeInfo
-      const isStoreExists = storeInfo.some(info => info.store === selectedStore);
+      const isStoreExists = storeInfo.some(info => info.storeCode === selectedStore);
       if (!isStoreExists) {
-        const newStoreInfo: StoreInfo[] = [...storeInfo, { store: selectedStore, quantity: parseInt(quantity) }];
+        const newStoreInfo: StoreInfo[] = [...storeInfo, { storeCode: selectedStore, stock: parseInt(quantity) }];
         setStoreInfo(newStoreInfo);
+        setValues({ ...values, stores: newStoreInfo });
         setSelectedStore('');
         setQuantity('');
       } else {
@@ -51,7 +118,7 @@ const FormUpdateProduct = () => {
 
   const handleQuantityChange = (index:any, newQuantity:any) => {
     const updatedStoreInfo = [...storeInfo];
-    updatedStoreInfo[index].quantity = parseInt(newQuantity);
+    updatedStoreInfo[index].stock = parseInt(newQuantity);
     if (parseInt(newQuantity) === 0) {
       // If quantity is 0 delete from the table
       updatedStoreInfo.splice(index, 1);
@@ -59,9 +126,23 @@ const FormUpdateProduct = () => {
     setStoreInfo(updatedStoreInfo);
   };
 
+  const handlePut = async () => {
+    try {
+      const productData = await putUpdateProduct(values);      
+    } catch (error) {
+      console.log(error);      
+    }
+    //console.log(productData);
+  };
+
+  const handleSubmit = (e:any) => {    
+    e.preventDefault();
+    handlePut();
+  };
+
   return (
     <Card>
-      <CardHeader title='Actualizacion de producto existente' titleTypographyProps={{ variant: 'h6' }} />
+      <CardHeader title='Ingreso de nuevo producto a tiendas' titleTypographyProps={{ variant: 'h6' }} />
       <Divider sx={{ margin: 0 }} />
       <form onSubmit={e => e.preventDefault()}>
         <CardContent>
@@ -72,7 +153,7 @@ const FormUpdateProduct = () => {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Codigo' placeholder='PR-1' InputProps={{
+              <TextField fullWidth label='Codigo' placeholder='PR-1' value={values.idProduct} onChange={handleChange('idProduct')} InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
                       <LabelOutline />
@@ -81,7 +162,7 @@ const FormUpdateProduct = () => {
                 }}/>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Nombre' placeholder='Jabon' InputProps={{
+              <TextField fullWidth label='Nombre' placeholder='Jabon' value={values.name} onChange={handleChange('name')} InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
                       <PencilOutline />
@@ -90,7 +171,7 @@ const FormUpdateProduct = () => {
                 }}/>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Fabricante' placeholder='Zote' InputProps={{
+              <TextField fullWidth label='Fabricante' placeholder='Zote' value={values.manufacturer} onChange={handleChange('manufacturer')} InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
                       <AccountHardHat />
@@ -99,7 +180,7 @@ const FormUpdateProduct = () => {
                 }}/>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth label='Descripcion' placeholder='Descripcion del producto' InputProps={{
+              <TextField fullWidth label='Descripcion' placeholder='Descripcion del producto' value={values.description} onChange={handleChange('description')} InputProps={{
                   startAdornment: (
                     <InputAdornment position='start'>
                       <Text />
@@ -108,7 +189,7 @@ const FormUpdateProduct = () => {
                 }}/>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField type='number' fullWidth label='Garantia' placeholder='12' InputProps={{ 
+              <TextField type='number' fullWidth label='Garantia' placeholder='12' value={values.guarantyMonths} onChange={handleChange('guarantyMonths')} InputProps={{ 
                 inputProps: { min: 0},                
                 startAdornment: (
                   <InputAdornment position='start'>
@@ -119,7 +200,7 @@ const FormUpdateProduct = () => {
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <TextField type='number' fullWidth label='Precio' placeholder='10.00' InputProps={{ 
+              <TextField type='number' fullWidth label='Precio' placeholder='10.00' value={values.price} onChange={handleChange('price')} InputProps={{ 
                 inputProps: { step:"any",min: 0.00},                
                 startAdornment: (
                   <InputAdornment position='start'>
@@ -146,7 +227,12 @@ const FormUpdateProduct = () => {
                   onChange={(e) => setSelectedStore(e.target.value)}
                   labelId='store-select-label'
                 >
-                  <MenuItem value='UK'>UK</MenuItem>
+                  {stores.map((store, index) => (
+                    <MenuItem key={index} value={store.idStore}>
+                      {store.idStore},
+                      {store.name}
+                    </MenuItem>
+                  ))}
                 </Select>
               </FormControl>
             </Grid>
@@ -179,11 +265,11 @@ const FormUpdateProduct = () => {
                   <TableBody>
                     {storeInfo.map((info, index) => (
                       <TableRow key={index}>
-                        <TableCell>{info.store}</TableCell>
+                        <TableCell>{info.storeCode}</TableCell>
                         <TableCell>
                           <TextField
                             type='number'
-                            value={info.quantity}
+                            value={info.stock}
                             onChange={(e) => handleQuantityChange(index, e.target.value)}
                             InputProps={{ inputProps: { min: 0 } }}
                           />
@@ -198,7 +284,7 @@ const FormUpdateProduct = () => {
         </CardContent>
         <Divider sx={{ margin: 0 }} />
         <CardActions>
-          <Button size='large' type='submit' sx={{ mr: 2 }} variant='contained'>
+          <Button size='large' type='submit' sx={{ mr: 2 }} variant='contained' onClick={handleSubmit}>
             Agregar Producto
           </Button>
         </CardActions>
