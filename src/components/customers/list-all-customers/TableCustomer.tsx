@@ -276,19 +276,8 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     </Toolbar>
   );
 }
-export default function EnhancedTable(props: any) {
-    const rows = props.dataServer.map((customer:Data) => {
-        return createData(
-          customer.userIdUser,
-          customer.nit,
-          customer.name,
-          customer.phone,
-          customer.dpi,
-          customer.email,
-          customer.address,
-          customer.credit
-        );
-    });
+export default function EnhancedTable({dataServer}: any) {
+  const rows = dataServer;
   const [order, setOrder] = React.useState<Order>('asc');
   const [orderBy, setOrderBy] = React.useState<keyof Data>('userIdUser');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
@@ -368,7 +357,7 @@ export default function EnhancedTable(props: any) {
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage,
       ),
-    [order, orderBy, page, rowsPerPage],
+    [rows,order, orderBy, page, rowsPerPage],
   );
 
   return (

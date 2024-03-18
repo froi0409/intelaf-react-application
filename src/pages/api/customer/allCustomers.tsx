@@ -3,6 +3,17 @@ import { NextRequest } from 'next/server';
 import axios from "axios";
 
 
+export interface CustomerData {
+    userIdUser: number;
+    credit: number,
+    nit: string,
+    name: string,
+    phone: string,
+    dpi: string,
+    email: string,
+    address: string
+}
+
 // Maneja las solicitudes GET
 export async function handleGet(req: NextRequest, res: NextApiResponse) {
 
