@@ -106,7 +106,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       icon: CubeOutline,
       title: 'ListEmployees',
-      path: '/pages/employee/list-employees'
+      path: '/pages/employee/list-employees',
       sectionTitle: 'Ventas'
     },
     {
