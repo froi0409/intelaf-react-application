@@ -7,7 +7,7 @@ import axios from "axios";
 export async function handleGet(req: NextRequest, res: NextApiResponse) {
 
     try {        
-        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/user/list-all-employees`)
+        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/employee/list-all-employees`)
         const data  = await response.data
         return res.status(200).json(data);
     }catch (err) {

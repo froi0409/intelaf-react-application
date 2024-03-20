@@ -8,7 +8,7 @@ export async function handlePost(req: NextRequest, res: NextApiResponse) {
 
     try {        
         const requestData = req.body;
-        const response  =  await axios.post(`${process.env.URL_API_BACKEND}/v1/user/create-employee`,requestData)
+        const response  =  await axios.post(`${process.env.URL_API_BACKEND}/v1/employee/create-employee`,requestData)
         const data  = await response.data
         return res.status(200).json(data);
     }catch (err) {

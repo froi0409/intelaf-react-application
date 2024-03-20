@@ -9,7 +9,7 @@ export async function handlePut(req: NextRequest, res: NextApiResponse) {
     try {          
         const requestData = req.body;
         const username = requestData.username;
-        const response  =  await axios.put(`${process.env.URL_API_BACKEND}/v1/user/update-employee/${username}`,requestData)
+        const response  =  await axios.put(`${process.env.URL_API_BACKEND}/v1/employee/update-employee/${username}`,requestData)
         const data  = await response.data
         return res.status(200).json(data);
     }catch (err) {

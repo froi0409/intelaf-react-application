@@ -9,7 +9,7 @@ export async function handleGet(req: NextApiRequest, res: NextApiResponse) {
 
     try {        
         const { username } = req.query;
-        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/user/employee-by-username/${username}`)
+        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/employee/employee-by-username/${username}`)
         const data  = await response.data
         return res.status(200).json(data);
     }catch (err) {
