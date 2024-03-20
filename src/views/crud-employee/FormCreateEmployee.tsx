@@ -45,7 +45,7 @@ const FormCreateEmployee = () => {
   const [valuesPass, setValuesPass] = useState<StatePass>({
     password: '',
     showPassword: false
-  })
+  })  
 
   const [values, setValues] = useState<FormData>({
     username: '',
@@ -76,14 +76,16 @@ const FormCreateEmployee = () => {
     setValuesPass({ ...valuesPass, [prop]: event.target.value })
   }
 
-  const handleRoleChange = (event: React.ChangeEvent<{ value: unknown }>) => {    
-    console.log(event.target.value)
-    setValues({ ...values, role: event.target.value as string });
+  const handleSelectChange = (event: SelectChangeEvent<string>) => {
+    const { name, value } = event.target;
+    setValues(prevState => ({
+      ...prevState,
+      [name as string]: value
+    }));
   };
 
   const handlePost = async () => {
     const url = '/api/user/createEmployee/';
-
     try {
       console.log('valores a enviar');
       console.log(values);
@@ -104,6 +106,7 @@ const FormCreateEmployee = () => {
     } catch (error) {
       console.error('Error al realizar la solicitud:', error);
     }
+    console.log(values);
   };
 
   const handleSubmit = (e:any) => {    
@@ -202,7 +205,8 @@ const FormCreateEmployee = () => {
                   defaultValue=''
                   labelId='role-select-label'
                   value={values.role}
-                  onChange={handleRoleChange}
+                  name='role'
+                  onChange={handleSelectChange}
                 >
                   <MenuItem value='admin'>Administrador</MenuItem>
                   <MenuItem value='employee'>Empleado</MenuItem>

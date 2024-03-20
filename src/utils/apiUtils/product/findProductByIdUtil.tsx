@@ -5,7 +5,7 @@ export async function getProductById(idProduct: string): Promise<any> {
     const response = await axios.get(url);
     return response.data;
   } catch (error) {
-    console.log(error);
-    throw new Error('Error al obtener el empleado desde el dominio especificado');
+    //console.log(error);
+    throw new Error('Error al obtener el producto con el id: ' + idProduct);
   }
 }

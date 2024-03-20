@@ -19,6 +19,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import {getEmployeeByUsernamePath} from 'src/utils/apiUtils/employee/findEmployeeUtil'
 
 import { useRouter } from 'next/router';
+import Error404Edited from 'src/pages/404Edited'
 
 
 interface Employee {
@@ -40,6 +41,9 @@ const UpdateEmployeePage = () => {
 
   const [employee, setEmployee] = useState(null as any);  
 
+  const [errorFind, setErrorFind] = useState(false);
+  const [errorStr, setErrorStr] = useState('');
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -47,11 +51,18 @@ const UpdateEmployeePage = () => {
         setEmployee(employeeData);
       } catch (error) {
         console.log(error);
-        // Aquí puedes manejar el error si es necesario
+        if (error instanceof Error) {
+          setErrorStr(error.message);
+          setErrorFind(true);
+        } else {
+          setErrorStr("An unknown error occurred.");
+        }
       }
     };
 
-    fetchData();
+    if(username != undefined){
+      fetchData();
+    }
   }, [username]);
   
 
@@ -59,7 +70,14 @@ const UpdateEmployeePage = () => {
     <DatePickerWrapper>
       <Grid container spacing={6}>
         <Grid item xs={12} >
+          
+          {errorFind === true ? (
+          <div>
+              <Error404Edited errorStr={errorStr}/>
+          </div>
+        ) : (
           <FormUpdateEmployee employee={employee}/>
+        )}
         </Grid>
       </Grid>
     </DatePickerWrapper>

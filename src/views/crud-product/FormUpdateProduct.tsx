@@ -17,7 +17,7 @@ import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import TableContainer from '@mui/material/TableContainer'
 import Table from '@mui/material/Table'
-import { InputAdornment,TableBody, TableCell, TableHead, TableRow } from '@mui/material'
+import { Alert, InputAdornment,TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import { AccountHardHat, BadgeAccountOutline, Cash, LabelOutline, Numeric, PencilOutline, ShieldLockOutline, Text } from 'mdi-material-ui'
 import { putUpdateProduct } from 'src/utils/apiUtils/product/updateProductUtil'
 
@@ -57,6 +57,9 @@ const FormUpdateProduct : React.FC<FormUpdateProductProps> = ({ product,stores }
   const [storeInfo, setStoreInfo] = useState<StoreInfo[]>([]);
   const [selectedStore, setSelectedStore] = useState('');
   const [quantity, setQuantity] = useState('');
+  const [messageType, setMessageType] = useState('')
+  const [messageResponse, setMessageResponse] = useState('')
+  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -129,6 +132,14 @@ const FormUpdateProduct : React.FC<FormUpdateProductProps> = ({ product,stores }
   const handlePut = async () => {
     try {
       const productData = await putUpdateProduct(values);      
+      setSubmitted(true);
+      if(productData instanceof Error){
+        setMessageType('ERR')
+        setMessageResponse(productData.message);
+      }else{
+        setMessageType('OK')
+        setMessageResponse('Producto Actualizado con exito');
+      }
     } catch (error) {
       console.log(error);      
     }
@@ -146,6 +157,18 @@ const FormUpdateProduct : React.FC<FormUpdateProductProps> = ({ product,stores }
       <Divider sx={{ margin: 0 }} />
       <form onSubmit={e => e.preventDefault()}>
         <CardContent>
+          <Grid>
+              {submitted && messageResponse != '' && (
+                <div>
+                    {messageType === 'OK' ? (
+                        <Alert severity="success">{messageResponse}</Alert>
+                    ) : (
+                        <Alert severity="error">{messageResponse}</Alert>
+                    )
+                    }
+                </div>
+              )}
+          </Grid>
           <Grid container spacing={5}>
             <Grid item xs={12}>
               <Typography variant='body2' sx={{ fontWeight: 600 }}>
@@ -159,7 +182,7 @@ const FormUpdateProduct : React.FC<FormUpdateProductProps> = ({ product,stores }
                       <LabelOutline />
                     </InputAdornment>
                   )
-                }}/>
+                }} disabled={true}/>
             </Grid>
             <Grid item xs={12} sm={6}>
               <TextField fullWidth label='Nombre' placeholder='Jabon' value={values.name} onChange={handleChange('name')} InputProps={{
@@ -285,7 +308,7 @@ const FormUpdateProduct : React.FC<FormUpdateProductProps> = ({ product,stores }
         <Divider sx={{ margin: 0 }} />
         <CardActions>
           <Button size='large' type='submit' sx={{ mr: 2 }} variant='contained' onClick={handleSubmit}>
-            Agregar Producto
+            Actualizar Producto
           </Button>
         </CardActions>
       </form>

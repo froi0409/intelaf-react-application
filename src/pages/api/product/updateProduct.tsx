@@ -19,7 +19,7 @@ export async function handlePut(req: NextRequest, res: NextApiResponse) {
         return res.status(200).json(data);
       } catch (err) {
         console.error(err);
-        return res.status(500).json({ message: 'Error update the product' });
+        return res.status(400).json({ message: 'Error update the product' });
       }   
 }  
 

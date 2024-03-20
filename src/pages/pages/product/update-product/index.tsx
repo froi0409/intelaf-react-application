@@ -18,6 +18,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { useRouter } from 'next/router'
 import { getProductById } from 'src/utils/apiUtils/product/findProductByIdUtil'
 import { getAllStores } from 'src/utils/apiUtils/store/allStoresUtil'
+import Error404Edited from 'src/pages/404Edited'
 
 const UpdateProductPage = () => {
   const router = useRouter();
@@ -25,6 +26,9 @@ const UpdateProductPage = () => {
 
   const [product, setProduct] = useState(null as any);  
   const [stores, setStores] = useState([]);  
+  const [errorFind, setErrorFind] = useState(false);
+  const [errorStr, setErrorStr] = useState('');
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -34,11 +38,18 @@ const UpdateProductPage = () => {
         setStores(storesData);     
         setProduct(productData);
       } catch (error) {
-        console.log(error);        
+        console.log(error);
+        if (error instanceof Error) {
+          setErrorStr(error.message);
+          setErrorFind(true);
+        } else {
+          setErrorStr("An unknown error occurred.");
+        }
       }
     };
-
-    fetchData();
+    if(idProduct != undefined){
+      fetchData();
+    }
   }, [idProduct]);
 
 
@@ -46,7 +57,13 @@ const UpdateProductPage = () => {
     <DatePickerWrapper>
       <Grid container spacing={6}>
         <Grid item xs={12} >
-          <FormUpdateProduct product={product} stores={stores}/>
+        {errorFind === true ? (
+          <div>
+              <Error404Edited errorStr={errorStr}/>
+          </div>
+        ) : (
+          <FormUpdateProduct product={product} stores={stores} />
+        )}
         </Grid>
       </Grid>
     </DatePickerWrapper>

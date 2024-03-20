@@ -13,7 +13,10 @@ export async function handlePost(req: NextRequest, res: NextApiResponse) {
         return res.status(200).json(data);
     }catch (err) {
         console.error(err);
-        return res.status(500).json({ message: 'Error creating the product' });
+        if(err instanceof Error){
+            return res.status(409).json({ message: err });            
+        }
+        return res.status(409).json({ message:err });
     }    
 }  
 

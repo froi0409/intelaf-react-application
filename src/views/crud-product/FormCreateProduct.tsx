@@ -17,7 +17,7 @@ import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import TableContainer from '@mui/material/TableContainer'
 import Table from '@mui/material/Table'
-import { InputAdornment, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
+import { Alert, InputAdornment, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import { AccountHardHat, BadgeAccountOutline, Cash, LabelOutline, Numeric, PencilOutline, ShieldLockOutline, Text } from 'mdi-material-ui'
 import React from 'react'
 import { postCreateProduct } from 'src/utils/apiUtils/product/createProductUtil'
@@ -59,6 +59,10 @@ const FormCreateProduct:React.FC<Props> = ({ stores }) => {
   const [selectedStore, setSelectedStore] = useState('');
   const [quantity, setQuantity] = useState('');
 
+  const [messageType, setMessageType] = useState('')
+  const [messageResponse, setMessageResponse] = useState('')
+  const [submitted, setSubmitted] = useState(false);
+
   const [values, setValues] = useState<Product>({
     idProduct: '',
     name: '',
@@ -78,15 +82,16 @@ const FormCreateProduct:React.FC<Props> = ({ stores }) => {
   const handleAddStoreInfo = () => {
     if (selectedStore && quantity) {
       // Verify the existence of the store in the storeInfo
-      const isStoreExists = storeInfo.some(info => info.storeCode === selectedStore);
+      const isStoreExists = storeInfo.some(info => info.storeCode === selectedStore);      
       if (!isStoreExists) {
         const newStoreInfo: StoreInfo[] = [...storeInfo, { storeCode: selectedStore, stock: parseInt(quantity) }];
         setStoreInfo(newStoreInfo);
         setValues({ ...values, stores: newStoreInfo });
         setSelectedStore('');
         setQuantity('');
+        
       } else {
-        alert('¡La tienda ya ha sido agregada!');
+        alert('¡La tienda ya ha sido agregada!');        
       }
     }
   };
@@ -102,10 +107,15 @@ const FormCreateProduct:React.FC<Props> = ({ stores }) => {
   };
 
   const handlePost = async () => {
+    setSubmitted(true);
     try {
-      const productData = await postCreateProduct(values);      
+      const productData = await postCreateProduct(values);  
+      setMessageType('OK')    
+      setMessageResponse('Producto agregado con exito');
     } catch (error) {
       console.log(error);      
+      setMessageType('ERR')    
+      setMessageResponse('Producto no agregado ya existe un producto con Codigo: '+ values.idProduct);
     }
     console.log(values);
   };
@@ -121,6 +131,18 @@ const FormCreateProduct:React.FC<Props> = ({ stores }) => {
       <Divider sx={{ margin: 0 }} />
       <form onSubmit={e => e.preventDefault()}>
         <CardContent>
+          <Grid>
+              {submitted && messageResponse != '' && (
+                <div>
+                    {messageType === 'OK' ? (
+                        <Alert severity="success">{messageResponse}</Alert>
+                    ) : (
+                        <Alert severity="error">{messageResponse}</Alert>
+                    )
+                    }
+                </div>
+              )}
+          </Grid>
           <Grid container spacing={5}>
             <Grid item xs={12}>
               <Typography variant='body2' sx={{ fontWeight: 600 }}>
