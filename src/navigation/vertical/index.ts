@@ -9,6 +9,10 @@ import CreditCardOutline from 'mdi-material-ui/CreditCardOutline'
 import AccountPlusOutline from 'mdi-material-ui/AccountPlusOutline'
 import AlertCircleOutline from 'mdi-material-ui/AlertCircleOutline'
 import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
+import InvoicePlus from 'mdi-material-ui/InvoicePlus'
+import ListBoxOutline from 'mdi-material-ui/ListBoxOutline'
+import AccountPlus from 'mdi-material-ui/AccountPlus'
+
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
@@ -103,6 +107,25 @@ const navigation = (): VerticalNavItemsType => {
       icon: CubeOutline,
       title: 'ListEmployees',
       path: '/pages/employee/list-employees'
+      sectionTitle: 'Ventas'
+    },
+    {
+      title: 'Realizar una Factura',
+      path: '/sales/add-invoice',
+      icon: InvoicePlus
+    },
+    {
+      sectionTitle: 'Compradores'
+    },
+    {
+      title: 'Listado de compradores',
+      path: '/customers/list-all-customers',
+      icon: ListBoxOutline
+    },
+    {
+      title: 'Agregar un comprador',
+      path: '/customers/register-customer/',
+      icon: AccountPlus
     },
   ]
 }
