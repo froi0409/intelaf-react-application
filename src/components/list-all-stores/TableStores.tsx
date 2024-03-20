@@ -366,7 +366,7 @@ export default function TableStores(props: any) {
             page * rowsPerPage,
             page * rowsPerPage + rowsPerPage,
         ),
-        [order, orderBy, page, rowsPerPage],
+        [order, rows, orderBy, page, rowsPerPage],
     );
 
     return (

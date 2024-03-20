@@ -2,6 +2,7 @@ import React, { Fragment, useEffect, useState } from 'react';
 import TableStores from 'src/components/list-all-stores/TableStores';
 
 import axios from 'axios';
+import { getAllStores } from 'src/utils/apiUtils/store/allStores';
 
 const AllStoresTable = () => {
     const [data, setData] = useState([]);
@@ -10,9 +11,9 @@ const AllStoresTable = () => {
         const fetchData = async () => {
             try {
                 console.log(process.env.URL_API_BACKEND_COMPLETE);
-                const response = await axios.get(`http://localhost:8080/v1/store/getAll`);
-                const result = response.data;
-                setData(result);
+                const response = await getAllStores();
+                
+                setData(response.data);
             } catch (error) {
                 console.error(`Error: ${error}`);
             }

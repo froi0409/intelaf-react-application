@@ -1,8 +1,9 @@
 import axios from 'axios';
 export async function getAllStores(): Promise<any> {
     try {
-        const response = await axios.get('/v1/store/getAll/')
-        return response.data;
+        const response = await axios.get('/api/store/allStores')
+        console.log(response);
+        return response;
     } catch (error) {
         console.error(error);
         throw new Error('Error to get all stores')

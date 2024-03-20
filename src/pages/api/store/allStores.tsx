@@ -6,10 +6,10 @@ export async function handleGet(req: NextRequest, res: NextApiResponse) {
     try {
         const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/store/getAll`);
         const data = await response.data;
-        return res.status(data.status).json(data);
+        return res.status(response.status).json(data);
     } catch (error) {
         console.error(error);
-        return res.status(500).json({ message: 'Error to get all stores' });
+        return res.status(501).json({ message: 'Error to get all stores' });
     }
 }
 
