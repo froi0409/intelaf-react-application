@@ -8,13 +8,14 @@ import Grid from '@mui/material/Grid'
 import themeConfig from 'src/configs/themeConfig'
 
 // ** Layout Import
-import TableListProducts from 'src/views/crud-product/TableListProducts'
+import CustomerCatalog from 'src/views/customer-dashboard/CustomerCatalog'
 
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
 import { Card, CardHeader, Link, Typography } from '@mui/material'
 import { getAllProducts } from 'src/utils/apiUtils/product/allProductsUtil'
 import { SearchBarProduct } from 'src/components/products/SearchBarProduct'
+
 
 
 interface StoreInfo {
@@ -33,7 +34,7 @@ interface Product{
 }
 
 
-const ListProductsPage = () => {
+const DashboardConsumer = () => {
 
   const [productsData, setProductsData] = useState([]);  
   const [products, setProducts] = useState([]);  
@@ -45,7 +46,7 @@ const ListProductsPage = () => {
         return (
           product.idProduct.toLowerCase().includes(lowerCaseSearchValue) ||
           product.name.toLowerCase().includes(lowerCaseSearchValue) ||
-          product.stores.some(store => store.storeCode.toLowerCase().includes(lowerCaseSearchValue))
+          product.manufacturer.toLowerCase().includes(lowerCaseSearchValue)
         );
       } else {
         return true;
@@ -85,11 +86,11 @@ const ListProductsPage = () => {
     </Grid>
     <Grid item xs={12}>
       <Card>
-      <TableListProducts products={productsData}/>
+      <CustomerCatalog products={productsData}/>
       </Card>
     </Grid>
     </Grid>
   )
 }
 
-export default ListProductsPage
+export default DashboardConsumer

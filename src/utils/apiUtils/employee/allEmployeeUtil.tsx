@@ -1,7 +1,7 @@
 import axios from 'axios';
-export async function getAllEmployeePath(path: string): Promise<any> {
+export async function getAllEmployeePath(): Promise<any> {
     try {
-      const url = 'http://' + path + '/api/user/allEmployees/'
+      const url = 'http://localhost:3000/api/user/allEmployees/'
       const response = await axios.get(url);
       return response.data;
     } catch (error) {
