@@ -4,15 +4,6 @@ import {ReactNode, useEffect, useState} from 'react'
 // ** MUI Imports
 import Grid from '@mui/material/Grid'
 
-// ** Styled Component
-import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
-
-// ** Configs
-import themeConfig from 'src/configs/themeConfig'
-
-// ** Layout Import
-import FormUpdateProduct from 'src/views/crud-product/FormUpdateProduct' 
-
 // ** Third Party Styles Imports
 import 'react-datepicker/dist/react-datepicker.css'
 import { useRouter } from 'next/router'
@@ -20,6 +11,8 @@ import { getProductById } from 'src/utils/apiUtils/product/findProductByIdUtil'
 import { getAllStores } from 'src/utils/apiUtils/store/allStoresUtil'
 import Error404Edited from 'src/pages/404Edited'
 import ProductDetailCard from 'src/views/customer-dashboard/ProductDetailCard'
+import { Link, Typography } from '@mui/material'
+import ProductStoreStock from 'src/views/customer-dashboard/ProductStoreStock'
 
 const ProductDetail: React.FC = () => {
   const router = useRouter();  
@@ -34,6 +27,7 @@ const ProductDetail: React.FC = () => {
   }, [router.query]);
 
   const [product, setProduct] = useState(null as any);  
+  const [stores, setStores] = useState(null as any);  
 
   const [errorFind, setErrorFind] = useState(false);
   const [errorStr, setErrorStr] = useState('');
@@ -43,7 +37,9 @@ const ProductDetail: React.FC = () => {
     const fetchData = async () => {
       try {
         const productData = await getProductById(idProduct as string);        
+        const storesData = await getAllStores();
         setProduct(productData);        
+        setStores(storesData);
       } catch (error) {
         console.log(error);
         if (error instanceof Error) {
@@ -60,26 +56,39 @@ const ProductDetail: React.FC = () => {
   }, [idProduct]);
 
 
-  return (
-    <DatePickerWrapper>
-      <Grid container spacing={6}>
-        {errorFind === true ? (
+  return (    
+    <div>
+      {errorFind === true ? (
+        <Grid item xs={12}>
+            <Error404Edited errorStr={errorStr}/>
+        </Grid>
+      ) : (
+        product == null ? (
           <Grid item xs={12}>
-              <Error404Edited errorStr={errorStr}/>
+              Producto vacio
           </Grid>
         ) : (
-          product == null ? (
-            <Grid item xs={12}>
-                Producto vacio
+          <Grid spacing={6}>
+            <Grid item xs={12} md={12}>
+              <Typography variant='h5'>
+                <Link target='_blank'>
+                  Detalles del producto
+                </Link>
+              </Typography>
+              <Typography variant='body2'>Listado de detalles del producto</Typography>
             </Grid>
-          ) : (
-            <Grid item xs={12} sm={8}>
-              <ProductDetailCard product={product}/>
+            <Grid container spacing={6} xs={12} md={12}>
+              <Grid item sm={8}>
+                <ProductDetailCard product={product}/>
+              </Grid>
+              <Grid item sm={4}>
+                <ProductStoreStock stores={product.stores} allStores={stores}/>
+              </Grid>
             </Grid>
-          )
-        )}
-      </Grid>
-    </DatePickerWrapper>
+          </Grid>
+        )
+      )}
+    </div>
   )
 }
 
