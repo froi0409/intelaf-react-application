@@ -12,6 +12,7 @@ import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
 import InvoicePlus from 'mdi-material-ui/InvoicePlus'
 import ListBoxOutline from 'mdi-material-ui/ListBoxOutline'
 import AccountPlus from 'mdi-material-ui/AccountPlus'
+import FileDocumentPlusOutline from 'mdi-material-ui/FileDocumentPlusOutline'
 
 
 // ** Type import
@@ -121,6 +122,14 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Realizar una Factura',
       path: '/sales/add-invoice',
       icon: InvoicePlus
+    },
+    {
+      sectionTitle: 'Ordenes'
+    },
+    {
+      title: 'Nueva orden',
+      path: '/orders/new-order',
+      icon: FileDocumentPlusOutline
     },
     {
       sectionTitle: 'Compradores'

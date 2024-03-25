@@ -22,11 +22,11 @@ import { errorNotification, successNotification } from "src/utils/helpers/notifi
 import TableInvoicePayments from "src/components/sales/invoice/TableInvoicePayments";
 
 
-function priceInvoiceProduct(qty: number, unit: number) {
+export function priceInvoiceProduct(qty: number, unit: number) {
   return qty * unit;
 }
 
-function createInvoiceProduct(id_product: string, name:string, quantity: number, unit_price: number) {
+export function createInvoiceProduct(id_product: string, name:string, quantity: number, unit_price: number) {
   const price = priceInvoiceProduct(quantity, unit_price);
   return { id_product, name, quantity,unit_price, price };
 }

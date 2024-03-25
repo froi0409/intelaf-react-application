@@ -16,7 +16,8 @@ import {
   Typography,
 } from "@mui/material";
 import { SyntheticEvent } from "react";
-import { InvoiceProduct } from "src/pages/sales/add-invoice";
+import { InvoiceProduct } from "src/utils/apiUtils/sale/invoice/registerSale";
+
 
 const TAX_RATE = 0.12;
 
