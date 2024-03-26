@@ -10,7 +10,6 @@ const AllStoresTable = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                console.log(process.env.URL_API_BACKEND_COMPLETE);
                 const response = await getAllStores();
                 
                 setData(response.data);

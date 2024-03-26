@@ -8,6 +8,7 @@
 .swc/
 .*.env
 .env
+.env.local
 
 # Archivos de construcción
 /.npm

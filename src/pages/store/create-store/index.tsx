@@ -6,10 +6,7 @@ import Alert from '@mui/material/Alert';
 
 import axios from 'axios';
 
-interface State {
-    password: string
-    showPassword: boolean
-}
+
 
 // Styled component for the form
 const Form = styled('form')(({ theme }) => ({
@@ -49,6 +46,8 @@ const CreateStoreLayout = () => {
         
         try {
             const res = await axios.post('http://localhost:8080/v1/store', formData);
+
+            console.log(res);
 
             setSubmitted(true);
 
