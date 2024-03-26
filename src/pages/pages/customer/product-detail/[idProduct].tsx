@@ -63,7 +63,7 @@ const ProductDetail: React.FC = () => {
             <Error404Edited errorStr={errorStr}/>
         </Grid>
       ) : (
-        product == null ? (
+        product == null || stores == null ? (
           <Grid item xs={12}>
               Producto vacio
           </Grid>

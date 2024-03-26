@@ -11,12 +11,9 @@ import { Divider } from '@mui/material'
 import GppGoodOutlinedIcon from '@mui/icons-material/GppGoodOutlined';
 import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import FactoryOutlinedIcon from '@mui/icons-material/FactoryOutlined';
+import ImageComponentDetail from 'src/components/customers/dashboard/ImageComponent'
 
-// Styled component for the image
-const Img = styled('img')(({ theme }) => ({
-  height: '14rem',
-  borderRadius: theme.shape.borderRadius
-}))
+
 
 interface StoreInfo {
   storeCode: string;
@@ -36,14 +33,14 @@ interface Product{
 interface ProductDetailCardProps {
   product: Product;  
 }
-
+//<Img alt='Stumptown Roasters' src='/images/cards/analog-clock.jpg' />
 const ProductDetailCard : React.FC<ProductDetailCardProps> = ({ product }) => {
   return (
     <Card>
       <Grid container spacing={6}>
         <Grid item xs={12} md={4}>
           <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Img alt='Stumptown Roasters' src='/images/cards/analog-clock.jpg' />
+            <ImageComponentDetail idProduct={product.idProduct}/>
           </CardContent>
         </Grid>
         <Grid item xs={12} md={8}>
