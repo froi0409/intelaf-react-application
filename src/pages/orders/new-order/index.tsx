@@ -33,6 +33,7 @@ const NewOrder = () => {
   const [invoiceProducts, setInvoiceProducts] = useState<InvoiceProduct[]>([]);
 
   //payments
+  const [minimumPay, setMinimumPay] = useState<number>(0);
   const [payments, setPayments] = useState<PaymentInfo[]>([]);
   const [stillPay, setStillPay] = useState(0);
   const [total, setTotal] = useState(0);
@@ -101,6 +102,7 @@ const NewOrder = () => {
     const leftPay = total - currentTotalPayments;
     setStillPay(Number(leftPay))
     setTotal(total);
+    setMinimumPay((Number(total) * 0.25))
   }
 
   const addPayment = (selectedPayment: string, paymentAmount: number) => {
@@ -188,6 +190,7 @@ const NewOrder = () => {
     fetch();
     setStillPay(0);
     setTotal(0);
+    setMinimumPay(0)
     setSelectedStore(null)
   }
 
@@ -223,7 +226,7 @@ const NewOrder = () => {
         </GridItemForm>
         <GridItemForm md={12}>
           {total > 0 && 
-          <FormInvoicePay credits={credits} addPayment={addPayment} stillPay={stillPay} />}
+          <FormInvoicePay minimumPay={minimumPay} credits={credits} addPayment={addPayment} stillPay={stillPay} />}
         </GridItemForm>
         <GridItemForm md={12}>
             <TableInvoicePayments payments={payments} />

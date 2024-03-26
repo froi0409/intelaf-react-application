@@ -101,6 +101,11 @@ export const FormInvoicePay = (props: any) => {
                 startAdornment={<InputAdornment position="start">Q.</InputAdornment>}
               />
             </FormControl>
+            {props.minimumPay !== undefined && (
+              <FormHelperText id="form-invoice-pay-adornment-helper">
+                Minimo por pagar : Q.{props.minimumPay}
+              </FormHelperText>
+            )}
           </Grid>
         </Grid>}
 
