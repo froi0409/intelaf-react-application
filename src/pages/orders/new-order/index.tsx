@@ -12,10 +12,11 @@ import SpanningInvoiceTable from 'src/components/sales/invoice/SpanningInvoiceTa
 import TableInvoicePayments from 'src/components/sales/invoice/TableInvoicePayments';
 import { Products_Stock } from 'src/pages/api/sale/stockProducts';
 import { createInvoiceProduct, priceInvoiceProduct } from 'src/pages/sales/add-invoice';
+import { OrderData, registerOrder } from 'src/utils/apiUtils/order/addOrder';
 import { getAllProductsStockByStore } from 'src/utils/apiUtils/sale/invoice/products';
 import { InvoiceProduct, PaymentInfo } from 'src/utils/apiUtils/sale/invoice/registerSale';
 import { getAllStores } from 'src/utils/apiUtils/store/allStores';
-import { errorNotification } from 'src/utils/helpers/notification';
+import { errorNotification, successNotification } from 'src/utils/helpers/notification';
 
 const NewOrder = () => {
   const currentStore = 'STR-1'
@@ -158,6 +159,24 @@ const NewOrder = () => {
   const handleConfirmationRegisterSale = async () => {
     if (!isValid()) {
       return
+    }
+
+    try {
+      const orderData: OrderData = {
+        nit,
+        idStoreShipping : selectedStore as string,
+        idStoreReceive: currentStore,
+        dateDeparture : date,
+        total,
+        status : 'in process',
+        payments,
+        products : invoiceProducts
+      }
+      const data = await registerOrder(orderData);
+      successNotification(data.message)
+      ClearData();
+    } catch (error: any) {
+      errorNotification(error.message);
     }
   }
 
