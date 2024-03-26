@@ -61,10 +61,11 @@ const AddInvoice = () => {
     setNit('')
     setcredits(0)
     setInvoiceProducts([])
+    setProducts([])
     setPayments([])
-    fetchProducts();
     setStillPay(0);
     setTotal(0);
+    fetchProducts();
   }
 
 
@@ -182,7 +183,8 @@ const AddInvoice = () => {
         nit: nit.toString(), // Convierte nit a cadena usando .toString()
         total: total || 0, // Si total es undefined o null, asigna 0
         payments: payments,
-        products : invoiceProducts
+        products : invoiceProducts,
+        storeCode : store
       };
 
       // console.log(saleData, invoiceProducts, payments)
