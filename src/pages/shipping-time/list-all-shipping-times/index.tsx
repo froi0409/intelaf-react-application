@@ -1,5 +1,4 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import TableStores from 'src/components/store/list-all-stores/TableStores';
 import TableShippingTimes from 'src/components/shipping-time/TableShippingTimes';
 import { getAllShippingTimes } from 'src/utils/apiUtils/shipping-time/allShippingTimesUtil';
 

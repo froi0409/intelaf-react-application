@@ -229,7 +229,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     );
 }
 
-export default function TableStores(props: any) {
+export default function TableShippingTimes(props: any) {
     const rows = props.dataServer.map((store:Data) => {
         return createData(
         store.idStore1,
