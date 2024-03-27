@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-export async function addShippingTime(data: any): Promise<any> {
+export async function editShippingTime(data: any): Promise<any> {
     try {
-        const response = await axios.post('/api/shipping-time/addShippingTime', data);
-        return response;    
+        const response = await axios.put('/api/shipping-time/editShippingTime', data);
+        return response;
     } catch (error: any) {
         if (error.response) {
             return error.response;
