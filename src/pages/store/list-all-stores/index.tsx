@@ -1,5 +1,5 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import TableStores from 'src/components/list-all-stores/TableStores';
+import TableStores from 'src/components/store/list-all-stores/TableStores';
 
 import axios from 'axios';
 import { getAllStores } from 'src/utils/apiUtils/store/allStores';
