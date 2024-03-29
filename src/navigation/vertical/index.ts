@@ -132,6 +132,16 @@ const navigation = (): VerticalNavItemsType => {
       icon: FileDocumentPlusOutline
     },
     {
+      title: 'Ordenes enviadas',
+      path: '/orders/orders-shipping',
+      icon: FileDocumentPlusOutline
+    },
+    {
+      title: 'Ordenes para recibir',
+      path: '/orders/orders-receive',
+      icon: FileDocumentPlusOutline
+    },
+    {
       sectionTitle: 'Compradores'
     },
     {

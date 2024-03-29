@@ -6,9 +6,10 @@ import React, { ChangeEvent, useState } from 'react'
 
 interface CDefault {
     handleSearch : (searchvalue: string | null) => void
+    placeholdershow : string;
 }
 
-export const SearchBarCustomer = ({handleSearch}: CDefault) => {
+export const SearchBarCustomer = ({handleSearch, placeholdershow}: CDefault) => {
     //Traping the value
     const [inputValue, setValue] = useState('');
     const handleChange = (e : ChangeEvent<HTMLInputElement>) => {
@@ -29,7 +30,7 @@ export const SearchBarCustomer = ({handleSearch}: CDefault) => {
                     value={inputValue ?? ""}
                     onChange={handleChange}
                     onKeyDown={handleEnterKey}
-                    placeholder='Buscar por nombre o nit'
+                    placeholder={placeholdershow}
                     size='small'
                     sx={{ '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
                     InputProps={{

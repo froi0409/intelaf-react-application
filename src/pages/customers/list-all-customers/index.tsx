@@ -57,7 +57,7 @@ const ListAllCustomer = () => {
         <Typography variant='body2'>Listado general de todos los compradores</Typography>
       </Grid>
       <Grid item xs={12} md={6} >
-        <SearchBarCustomer handleSearch={handleSearch} />
+        <SearchBarCustomer handleSearch={handleSearch} placeholdershow={'Buscar por nombre o nit'} />
       </Grid>
       <Grid item xs={12}>
         <Card>
