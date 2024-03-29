@@ -5,13 +5,14 @@ import { CardForm } from 'src/components/generic/forms/CardForm'
 import { GridItemForm } from 'src/components/generic/forms/GridItemForm'
 import { FormInvoicePay } from 'src/components/sales/invoice/FormInvoicePay'
 import { InvoiceProduct, PaymentInfo } from 'src/utils/apiUtils/sale/invoice/registerSale'
-import { errorNotification, successNotification } from 'src/utils/helpers/notification'
+import { errorNotification, successNotification, successNotificationWithAction } from 'src/utils/helpers/notification'
 import { FormOrderHeader } from '../order/FormOrderHeader'
 import SpanningInvoiceTable from 'src/components/sales/invoice/SpanningInvoiceTable'
 import TableInvoicePayments from 'src/components/sales/invoice/TableInvoicePayments'
 import { FormOrderToSaleCustomer } from './updateForms/FormOrderToSaleCustomer'
 import { RegisterSale } from 'src/components/sales/invoice/RegisterSale'
 import { SaleDataBackend, registerOrderToSale } from 'src/utils/apiUtils/sale/order/registerOrderToSale'
+import { StatusOrderDateData, updateStatusOrder } from 'src/utils/apiUtils/order/updateStatusOrder'
 
 
 interface GetProduct {
@@ -162,7 +163,13 @@ export const UpdateOrderToSale = (props: any) => {
               };
 
             const data = await registerOrderToSale(saleData);
-            successNotification(data.message)
+            const orderData : StatusOrderDateData = {
+                idOrder: props.order.idOrder,
+                status: 'customer_delivered',
+                dateEntry: null
+            }
+            const dataStatus = await updateStatusOrder(orderData);
+            successNotificationWithAction(data.message, props.handleCancelFormButtons)
         } catch (error: any) {
             errorNotification(error.message);
         }
@@ -170,7 +177,7 @@ export const UpdateOrderToSale = (props: any) => {
     }
 
     const handleCancelOrder = () => {
-
+        props.handleCancelFormButtons()
     }
     return (
         <DatePickerWrapper>

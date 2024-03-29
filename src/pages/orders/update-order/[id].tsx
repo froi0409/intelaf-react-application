@@ -1,7 +1,7 @@
 import { Divider, Grid } from '@mui/material'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import DatePickerWrapper from 'src/@core/styles/libs/react-datepicker'
 import { FormButtons } from 'src/components/customers/update-customer/FormButtons'
 import { GridItemForm } from 'src/components/generic/forms/GridItemForm'
@@ -11,16 +11,17 @@ import AddInvoice from 'src/pages/sales/add-invoice'
 import { errorNotification, successNotificationWithAction } from 'src/utils/helpers/notification'
 
 const UpdateOrder = ({ order }: any) => {
-    // console.log(order)
+    const currentStore = 'STR-1';
+    
+    //verificar por el estatus
+    const [selectedStatus, setSelectedStatus] = useState(order.status.toLocaleLowerCase());
+    const isOrderAlreadySale = order.status === 'customer_delivered'
+
     const router = useRouter();
     const [formData, setFormData] = useState({});
 
-    // Manejador de cambio genérico para actualizar los datos del formulario
-    const handleChange = (name: string, value: string) => {
-        setFormData(prevState => ({
-            ...prevState,
-            [name]: value
-        }));
+    const handleStatusChange = (status : string) => {
+        setSelectedStatus(status);
     };
 
     const handleConfirmationFormButtons = async () => {
@@ -41,19 +42,44 @@ const UpdateOrder = ({ order }: any) => {
     }
 
     const handleCancelFormButtons = () => {
-        router.push(`/orders/list-orders-receive/`);
+        router.back();
     }
 
+    const validateTheOrder = (): boolean => { // defining a function that returns boolean
+        if (selectedStatus === 'customer_delivered' && 
+                order.status.toLocaleLowerCase() !== 'customer_delivered' &&
+                order.idStoreShipping !== currentStore &&
+                order.dateEntry !== null) {
+            return true;
+        }
+        return false;
+    };
+    
+    // Usage
+    const result: boolean = validateTheOrder(); // calling the function to get the boolean value
+    
 
     return (
         <DatePickerWrapper>
             <Grid container spacing={6}>
                 <Grid item xs={12} md={12}>
-                    <UpdateOrderStatus status={order.status} idOrder={order.idOrder} dateEntry={order.dateEntry} />
+                    <UpdateOrderStatus 
+                    status={order.status} 
+                    idOrder={order.idOrder} 
+                    dateEntry={order.dateEntry}
+                    selectedStatus = {selectedStatus}
+                    handleStatusChange = {handleStatusChange}
+                    handleCancelFormButtons = {handleCancelFormButtons}
+                    isOrderAlreadySale = {isOrderAlreadySale}
+                     />
                 </Grid>
             </Grid>
-            <Divider sx={{ margin: '1em' }} />
-            <UpdateOrderToSale order={order} />
+            { validateTheOrder()  &&
+            <Fragment>
+                <Divider sx={{ margin: '1em' }} />
+                <UpdateOrderToSale order={order} handleCancelFormButtons={handleCancelFormButtons} />
+            </Fragment>
+            }
         </DatePickerWrapper>
     )
 }

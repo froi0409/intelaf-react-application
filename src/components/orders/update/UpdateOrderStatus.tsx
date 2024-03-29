@@ -6,27 +6,31 @@ import { StatusOrderDateData, updateStatusOrder } from 'src/utils/apiUtils/order
 
 // ** Third Party Imports
 import DatePicker from 'react-datepicker'
-import { errorNotification, successNotification } from 'src/utils/helpers/notification'
+import { errorNotification, successNotification, successNotificationWithAction } from 'src/utils/helpers/notification'
 
 const CustomInput = forwardRef((props, ref) => {
     return <TextField fullWidth {...props} inputRef={ref} label='Fecha de Arrivo' autoComplete='off' />
 })
 
-interface StatusOrderDateDataA {
+export interface StatusOrderDateDataA {
     idOrder: number;
     status: string;
     dateEntry : Date | null;
+    selectedStatus : string;
+    handleStatusChange: (status: string) => void;
+    handleCancelFormButtons: () => void;
+    isOrderAlreadySale : boolean;
 }
 
 
 export const UpdateOrderStatus = (props: StatusOrderDateDataA) => {
 
-    const [selectedStatus, setSelectedStatus] = useState(props.status.toLocaleLowerCase());
+    const selectedStatus = props.selectedStatus
     const [date, setDate] = useState(props.dateEntry);
 
     /*handles */
     const handleStatusChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
-        setSelectedStatus(event.target.value as string);
+        props.handleStatusChange(event.target.value as string);
     };
 
     const handleDateOnChange = (event: any) => {
@@ -57,7 +61,7 @@ export const UpdateOrderStatus = (props: StatusOrderDateDataA) => {
                 dateEntry : dateEntry,
             }
             const data = await updateStatusOrder(orderData);
-            successNotification(data.message)
+            successNotificationWithAction(data.message, props.handleCancelFormButtons)
         } catch (error:any) {
             errorNotification(error.message);
         }
@@ -69,6 +73,7 @@ export const UpdateOrderStatus = (props: StatusOrderDateDataA) => {
                 <FormControl fullWidth>
                     <InputLabel id="update-order-status-select-label">Estado</InputLabel>
                     <Select
+                        disabled = {props.isOrderAlreadySale}
                         label="type_status"
                         value={selectedStatus}
                         onChange={handleStatusChange}
