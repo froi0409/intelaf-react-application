@@ -238,7 +238,7 @@ export default function TableShippingTimes(props: any) {
         );
     });
 const [order, setOrder] = React.useState<Order>('asc');
-const [orderBy, setOrderBy] = React.useState<keyof Data>('idStore1');
+const [orderBy, setOrderBy] = React.useState<keyof Data>('time');
 const [selected, setSelected] = React.useState<readonly number[]>([]);
 const [page, setPage] = React.useState(0);
 const [dense, setDense] = React.useState(false);
