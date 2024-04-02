@@ -3,6 +3,7 @@ import { NextRequest } from 'next/server';
 import { getCookie } from 'cookies-next';
 import axios, { AxiosRequestConfig } from 'axios';
 import { CarLightFog } from "mdi-material-ui";
+import { getJwt } from "../jwtUtils";
 export interface StoreData {
     idStore: string,
     name: string,
@@ -17,13 +18,9 @@ export interface StoreData {
 export async function handleGet(req: NextRequest, res: NextApiResponse) {
     try {
 
-        const jwt = req.headers.authorization;
-        console.log('headers', jwt);
-
-
         const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/store/getAll`, {
             headers: {
-                Authorization: jwt
+                Authorization: getJwt(req)
             }
         });
 
