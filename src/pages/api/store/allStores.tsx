@@ -1,7 +1,8 @@
 import { NextApiResponse } from "next/types";
 import { NextRequest } from 'next/server';
-import axios from "axios";
-
+import { getCookie } from 'cookies-next';
+import axios, { AxiosRequestConfig } from 'axios';
+import { CarLightFog } from "mdi-material-ui";
 export interface StoreData {
     idStore: string,
     name: string,
@@ -15,11 +16,24 @@ export interface StoreData {
 
 export async function handleGet(req: NextRequest, res: NextApiResponse) {
     try {
-        const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/store/getAll`);
-        const data = await response.data;
+
+        const jwt = req.headers.authorization;
+        console.log('headers', jwt);
+
+
+        const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/store/getAll`, {
+            headers: {
+                Authorization: jwt
+            }
+        });
+
+        const data = response.data;
         return res.status(response.status).json(data);
-    } catch (error) {
+    } catch (error: any) {
         console.error(error);
+        if (error.response) {
+            return res.status(error.response.status).json(error.response.data);
+        }
         return res.status(501).json({ message: 'Error to get all stores' });
     }
 }
