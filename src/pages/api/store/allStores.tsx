@@ -18,6 +18,8 @@ export interface StoreData {
 export async function handleGet(req: NextRequest, res: NextApiResponse) {
     try {
 
+        console.log(`handleGet Jwt: ${getJwt(req)}`);
+
         const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/store/getAll`, {
             headers: {
                 Authorization: getJwt(req)
