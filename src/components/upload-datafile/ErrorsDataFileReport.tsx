@@ -1,3 +1,4 @@
+
 import * as React from 'react';
 
 // ** MUI Components
@@ -26,22 +27,21 @@ import EditIcon from '@mui/icons-material/Edit';
 import FilterListIcon from '@mui/icons-material/FilterList';
 
 import { useRouter } from 'next/router';
-
 interface Data {
-    idStore1: string,
-    idStore2: string,
-    time: string
+    line: number,
+    type: string,
+    description: string
 }
 
 function createData(
-    idStore1: string,
-    idStore2: string,
-    time: string
+    line: number,
+    type: string,
+    description: string
 ): Data {
     return {
-        idStore1,
-        idStore2,
-        time
+        line,
+        type,
+        description
     }
 }
 
@@ -90,22 +90,22 @@ interface HeadCell {
 
 const headCells: readonly HeadCell[] = [
     {
-        id: 'idStore1',
+        id: 'line',
         numeric: false,
         disablePadding: false,
-        label: 'Tienda Origen'
+        label: 'Linea'
     },
     {
-        id: 'idStore2',
+        id: 'type',
         numeric: false,
         disablePadding: false,
-        label: 'Tienda Destino'
+        label: 'Tipo'
     },
     {
-        id: 'time',
+        id: 'description',
         numeric: false,
         disablePadding: false,
-        label: 'Tiempo (en días)'
+        label: 'descripción'
     }
 ]
 
@@ -172,6 +172,7 @@ interface EnhancedTableToolbarProps {
     handleEdit: () => void; // Function to handle edit button click
 }
 
+
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     const { numSelected, handleEdit } = props;
 
@@ -209,7 +210,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
             id="tableTitle"
             component="div"
             >
-            Tiendas
+            Reporte de Errores
             </Typography>
         )}
         {numSelected > 0 ? (
@@ -229,16 +230,17 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
     );
 }
 
-export default function TableShippingTimes(props: any) {
+
+const ErrorsDataFileReport = (props: any) => {
     const rows = props.dataServer.map((store:Data) => {
         return createData(
-        store.idStore1,
-        store.idStore2,
-        store.time
+        store.line,
+        store.type,
+        store.description
         );
     });
     const [order, setOrder] = React.useState<Order>('asc');
-    const [orderBy, setOrderBy] = React.useState<keyof Data>('time');
+    const [orderBy, setOrderBy] = React.useState<keyof Data>('line');
     const [selected, setSelected] = React.useState<readonly number[]>([]);
     const [page, setPage] = React.useState(0);
     const [dense, setDense] = React.useState(false);
@@ -288,7 +290,7 @@ export default function TableShippingTimes(props: any) {
 
     const handleEdit = () => {
         console.log('user id', selected[0])
-        router.push(`/sipping-time/editShippingTime/${selected[0]}`);
+        router.push(`/verify-system/datafile/${selected[0]}`);
     }
 
     const isSelected = (id: number) => selected.indexOf(id) !== -1;
@@ -328,7 +330,7 @@ export default function TableShippingTimes(props: any) {
                 {visibleRows.map((row, index) => {
                     // if (typeof row.id_user === 'number') {
                     // }
-                    const row_id_user: number = row.idStore1 as number;
+                    const row_id_user: number = row.line as number;
                     const isItemSelected = isSelected(row_id_user);
                     const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -339,7 +341,7 @@ export default function TableShippingTimes(props: any) {
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={row.idStore1}
+                        key={row.line}
                         selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                     >
@@ -352,9 +354,9 @@ export default function TableShippingTimes(props: any) {
                             }}
                         />
                         </TableCell>
-                        <TableCell align="right">{row.idStore1}</TableCell>
-                        <TableCell align="right">{row.idStore2}</TableCell>
-                        <TableCell align="right">{row.time}</TableCell>
+                        <TableCell align="right">{row.line}</TableCell>
+                        <TableCell align="right">{row.type}</TableCell>
+                        <TableCell align="right">{row.description}</TableCell>
                     </TableRow>
                     );
                 })}
@@ -388,3 +390,4 @@ export default function TableShippingTimes(props: any) {
     );
 }
 
+export default ErrorsDataFileReport;

@@ -1,13 +1,18 @@
 import axios from "axios";
 import { NextApiResponse } from "next/types";
 import { NextRequest } from "next/server";
+import { getJwt } from "../jwtUtils";
 
 export async function handlePost(req: NextRequest, res: NextApiResponse) {
     try {
         const requestData = req.body;   
         console.log('Data');
         console.log(requestData);
-        const response = await axios.post(`${process.env.URL_API_BACKEND}/v1/datafile`, requestData);
+        const response = await axios.post(`${process.env.URL_API_BACKEND}/v1/datafile`, requestData, {
+            headers: {
+                Authorization: getJwt(req)
+            }
+        });
         return res.status(response.status).json(response.data);
     } catch (error: any) {
         console.error(error);
