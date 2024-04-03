@@ -3,9 +3,10 @@ import React, { useEffect, useState } from 'react'
 import { SearchBarCustomer } from 'src/components/customers/list-all-customers/SearchBarCustomer';
 import TableOrdersReceive from 'src/components/orders/list/TableOrdersReceive';
 import { OrdersListStructure, getListReceiveStore } from 'src/utils/apiUtils/order/listOrders';
+import { getCurrentStore } from 'src/utils/helpers/cookieStore';
 
 const OrdersReceive = () => {
-    const currentStore = 'STR-1'
+    const currentStore = getCurrentStore();
     const [orders, setOrders] = useState([]);
     const [data, setData] = useState([])
 

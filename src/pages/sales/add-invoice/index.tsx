@@ -20,6 +20,7 @@ import { Products_Stock } from "src/pages/api/sale/stockProducts";
 import { getAllProductsStockByStore } from "src/utils/apiUtils/sale/invoice/products";
 import { errorNotification, successNotification } from "src/utils/helpers/notification";
 import TableInvoicePayments from "src/components/sales/invoice/TableInvoicePayments";
+import { getCurrentStore } from "src/utils/helpers/cookieStore";
 
 
 export function priceInvoiceProduct(qty: number, unit: number) {
@@ -33,10 +34,10 @@ export function createInvoiceProduct(id_product: string, name:string, quantity: 
 
 const AddInvoice = () => {
 
+  const store = getCurrentStore();
   const [date, setDate] = useState<Date | null | undefined>(null)
   const [nit, setNit] = useState<string>('');
   const [credits, setcredits] = useState<number>(0);
-  const [store, setStore] = useState<string>('STR-1');
   const [invoiceProducts, setInvoiceProducts] = useState<InvoiceProduct[]>([]);
   const [products, setProducts] = useState<Products_Stock[]>([]);
   const [payments, setPayments] = useState<PaymentInfo[]>([]);

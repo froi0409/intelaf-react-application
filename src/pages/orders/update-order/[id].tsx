@@ -8,10 +8,11 @@ import { GridItemForm } from 'src/components/generic/forms/GridItemForm'
 import { UpdateOrderStatus } from 'src/components/orders/update/UpdateOrderStatus'
 import { UpdateOrderToSale } from 'src/components/orders/update/UpdateOrderToSale'
 import AddInvoice from 'src/pages/sales/add-invoice'
+import { getCurrentStore } from 'src/utils/helpers/cookieStore'
 import { errorNotification, successNotificationWithAction } from 'src/utils/helpers/notification'
 
 const UpdateOrder = ({ order }: any) => {
-    const currentStore = 'STR-1';
+    const currentStore = getCurrentStore();
     
     //verificar por el estatus
     const [selectedStatus, setSelectedStatus] = useState(order.status.toLocaleLowerCase());

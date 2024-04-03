@@ -1,5 +1,7 @@
 import { NextApiResponse } from "next/types";
 import { NextRequest } from 'next/server';
+//@ts-ignore
+import { getJwt } from "../jwtUtils";
 import axios from "axios";
 
 
@@ -18,7 +20,11 @@ export interface CustomerData {
 export async function handleGet(req: NextRequest, res: NextApiResponse) {
 
     try {
-        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/customer/all`)
+        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/customer/all`, {
+            headers: {
+                Authorization: getJwt(req)
+            }
+        });
         const data  = await response.data
         return res.status(200).json(data);
     }catch (err) {

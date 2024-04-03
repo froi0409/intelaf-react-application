@@ -16,10 +16,11 @@ import { OrderData, registerOrder } from 'src/utils/apiUtils/order/addOrder';
 import { getAllProductsStockByStore } from 'src/utils/apiUtils/sale/invoice/products';
 import { InvoiceProduct, PaymentInfo } from 'src/utils/apiUtils/sale/invoice/registerSale';
 import { getAllStores } from 'src/utils/apiUtils/store/allStores';
+import { getCurrentStore } from 'src/utils/helpers/cookieStore';
 import { errorNotification, successNotification } from 'src/utils/helpers/notification';
 
 const NewOrder = () => {
-  const currentStore = 'STR-1'
+  const currentStore = getCurrentStore();
   //header
   const [date, setDate] = useState<Date | null | undefined>(null)
   //customers

@@ -22,7 +22,11 @@ import WeeklyOverview from 'src/views/dashboard/WeeklyOverview'
 import DepositWithdraw from 'src/views/dashboard/DepositWithdraw'
 import SalesByCountries from 'src/views/dashboard/SalesByCountries'
 
+//@ts-ignore
+import { setCookie } from 'cookies-next';
+
 const Dashboard = () => {
+  setCookie('store', 'STR-1');
   return (
     <ApexChartWrapper>
       <Grid container spacing={6}>
