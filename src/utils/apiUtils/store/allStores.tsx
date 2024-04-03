@@ -1,7 +1,12 @@
 import axios from 'axios';
+import { getCookieJwt } from 'src/utils/helpers/cookieUtils';
 export async function getAllStores(): Promise<any> {
     try {
-        const response = await axios.get('/api/store/allStores')
+        const response = await axios.get('/api/store/allStores', {
+            headers: {
+                Authorization: getCookieJwt()
+            }
+        })
         console.log(response);
         return response;
     } catch (error) {

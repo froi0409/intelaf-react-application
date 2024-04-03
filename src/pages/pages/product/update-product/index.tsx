@@ -20,6 +20,7 @@ import { getProductById } from 'src/utils/apiUtils/product/findProductByIdUtil'
 import { getAllStores } from 'src/utils/apiUtils/store/allStoresUtil'
 import Error404Edited from 'src/pages/404Edited'
 import axios from 'axios'
+import { getCookieJwt } from 'src/utils/helpers/cookieUtils'
 
 const UpdateProductPage = () => {
   const router = useRouter();
@@ -44,6 +45,9 @@ const UpdateProductPage = () => {
         try {
           const response = await axios.get(`http://localhost:8080/v1/images/image-by-idProduct/${idProduct}`, {
             responseType: 'blob',
+            headers: {
+              Authorization: getCookieJwt()
+            }
           });
           const blob = new Blob([response.data], { type: response.headers['content-type'] });
           const imageUrl = URL.createObjectURL(blob);

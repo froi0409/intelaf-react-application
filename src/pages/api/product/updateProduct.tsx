@@ -1,6 +1,7 @@
 import { NextApiResponse } from "next/types";
 import { NextRequest } from 'next/server';
 import axios from "axios";
+import { getJwt } from "../jwtUtils";
 
 
 // Maneja las solicitudes PUT
@@ -13,7 +14,11 @@ export async function handlePut(req: NextRequest, res: NextApiResponse) {
         }
         const idProduct = requestData.idProduct;
     
-        const response = await axios.put(`${process.env.URL_API_BACKEND}/v1/products/update-product/${idProduct}`, requestData);
+        const response = await axios.put(`${process.env.URL_API_BACKEND}/v1/products/update-product/${idProduct}`, requestData, {
+          headers: {
+              Authorization: getJwt(req)
+          }
+      });
         const data = await response.data;
     
         return res.status(200).json(data);

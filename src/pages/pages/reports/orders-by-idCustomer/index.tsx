@@ -3,6 +3,7 @@ import Grid from '@mui/material/Grid'
 import { Card, Link, Typography, TextField, Button } from '@mui/material'
 import TableListOrdersByIdCustomer from 'src/views/reports/TableListOrdersByIdCustomer'
 import { useRouter } from 'next/router'
+import { getCookieJwt } from 'src/utils/helpers/cookieUtils'
 
 interface Payment {  
   type: string;
@@ -37,7 +38,11 @@ const ListSalesByIdCustomer: React.FC = () => {
   const fetchData = async () => {
     try {
       // Hacer la solicitud a la API con el id del cliente
-      const response = await fetch(`http://localhost:8080/v1/reports/orders-by-idCustomer/${idCustomer}`);
+      const response = await fetch(`http://localhost:8080/v1/reports/orders-by-idCustomer/${idCustomer}`, {
+        headers: {
+            Authorization: getCookieJwt()
+        }
+    });
 
       if (response.ok) {
         // Convertir la respuesta a formato JSON

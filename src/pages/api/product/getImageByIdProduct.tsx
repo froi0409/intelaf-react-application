@@ -1,5 +1,6 @@
 import { NextApiResponse,NextApiRequest } from "next/types";
 import axios from "axios";
+import { getJwt } from "../jwtUtils";
 
 
 export async function handleGet(req: NextApiRequest, res: NextApiResponse) {
@@ -7,6 +8,11 @@ export async function handleGet(req: NextApiRequest, res: NextApiResponse) {
         const { idProduct } = req.query;        
         const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/images/image-by-idProduct/${idProduct}`, {
             responseType: 'blob', // Indica que la respuesta es una imagen
+        
+            headers: {
+                Authorization: getJwt(req)
+            }
+        
           });
         const blob = new Blob([response.data], { type: response.headers['content-type'] });
         const imageUrl = URL.createObjectURL(blob);

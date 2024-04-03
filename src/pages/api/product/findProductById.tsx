@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next/types";
 import axios from "axios";
+import { getJwt } from "../jwtUtils";
 
 interface RequestData {
     idProduct: string;
@@ -9,7 +10,11 @@ export async function handleGet(req: NextApiRequest, res: NextApiResponse) {
 
     try {        
         const { idProduct } = req.query;
-        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/products/get-product-by-id/${idProduct}`)
+        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/products/get-product-by-id/${idProduct}`, {
+            headers: {
+                Authorization: getJwt(req)
+            }
+        })
         const data  = await response.data
         return res.status(200).json(data);
     }catch (err) {

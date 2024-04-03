@@ -1,13 +1,18 @@
 import { NextApiResponse } from "next/types";
 import { NextRequest } from 'next/server';
 import axios from "axios";
+import { getJwt } from "../jwtUtils";
 
 
 // Maneja las solicitudes GET
 export async function handleGet(req: NextRequest, res: NextApiResponse) {
 
     try {        
-        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/employee/list-all-employees`)
+        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/employee/list-all-employees`, {
+            headers: {
+                Authorization: getJwt(req)
+            }
+        })
         const data  = await response.data
         return res.status(200).json(data);
     }catch (err) {

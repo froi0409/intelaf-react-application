@@ -26,6 +26,7 @@ import { SearchBarProduct } from 'src/components/products/SearchBarProduct'
 import { DatePicker } from '@mui/lab'
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
+import { getCookieJwt } from 'src/utils/helpers/cookieUtils'
 
 //http://localhost:3000/pages/reports/best-selling-products/?date1=2024-01-01&date2=2024-01-02
 //<TableListOrdersByIdCustomer orders={orders}/>
@@ -78,7 +79,11 @@ const BestSellingProducts = () => {
       const url = `http://localhost:8080/v1/reports/best-selling-products?date1=${formattedStartDate}&date2=${formattedEndDate}`;
   
       // Realiza la solicitud
-      const response = await fetch(url);
+      const response = await fetch(url, {
+        headers: {
+            Authorization: getCookieJwt()
+        }
+    });
   
       if (response.ok) {
         // Convierte la respuesta a formato JSON
