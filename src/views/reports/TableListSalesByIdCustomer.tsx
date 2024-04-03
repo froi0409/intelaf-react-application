@@ -414,7 +414,7 @@ const TableListSalesByIdCustomer: React.FC<FormListSaleProps> = ({ sales }) => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    /*
+  
   const visibleRows = React.useMemo(
     () =>
     stableSort(rows, getComparator(order, orderBy)).slice(
@@ -422,7 +422,7 @@ const TableListSalesByIdCustomer: React.FC<FormListSaleProps> = ({ sales }) => {
         page * rowsPerPage + rowsPerPage,
       ),
     [order, rows, orderBy, page, rowsPerPage],
-  );*/
+  );
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -443,7 +443,7 @@ const TableListSalesByIdCustomer: React.FC<FormListSaleProps> = ({ sales }) => {
               rowCount={rows.length}
             />
             <TableBody>
-            {rows.map((row) => (
+            {visibleRows.map((row) => (
                 <TableRowWithExpansion
                   key={row.idSale} // Supongo que tienes una propiedad idProduct única para cada fila
                   row={row}

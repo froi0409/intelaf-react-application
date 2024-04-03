@@ -20,7 +20,7 @@ import Link from 'next/link';
 
 
 interface Column {
-  id: 'idOrder' | 'idStoreShipping' | 'idStoreRecieve' | 'dateDeparture'| 'dateEntry'| 'total'| 'status'
+  id: 'idOrder' | 'idStoreShipping' | 'idStoreReceive' | 'dateDeparture'| 'dateEntry'| 'total'| 'status'
   label: string
   minWidth?: number
   align?: 'right'
@@ -30,7 +30,7 @@ interface Column {
 const columns: readonly Column[] = [
   { id: 'idOrder', label: 'Codigo Orden'},
   { id: 'idStoreShipping', label: 'Codigo de tienda que envia'},
-  { id: 'idStoreRecieve', label: 'Codigo de tienda que recibe'},  
+  { id: 'idStoreReceive', label: 'Codigo de tienda que recibe'},  
   { id: 'dateDeparture', label: 'Fecha de salida'},  
   { id: 'dateEntry', label: 'Fecha de entrada'},  
   { id: 'total', label: 'Total'},  
@@ -52,7 +52,7 @@ interface Product{
 interface OrderInterface{
   idOrder: number;
   idStoreShipping: string;
-  idStoreRecieve: string;
+  idStoreReceive: string;
   dateDeparture: string;
   dateEntry: string;
   total: number;
@@ -123,7 +123,7 @@ const headCells: readonly HeadCell[] = [
   label: 'Codigo de tienda que envia',
 },
 {
-  id: 'idStoreRecieve',
+  id: 'idStoreReceive',
   numeric: false,
   disablePadding: false,
   label: 'Codigo de tienda que recibe',
@@ -273,7 +273,7 @@ interface Props {
     row: {
       idOrder: number;
       idStoreShipping: string;
-      idStoreRecieve: string;
+      idStoreReceive: string;
       dateDeparture: string;
       dateEntry: string;
       total: number;
@@ -318,7 +318,7 @@ const TableRowWithExpansion: React.FC<Props> = ({ row, isSelected, handleClick }
           </TableCell>
           <TableCell align="right">{row.idOrder}</TableCell>
           <TableCell align="right">{row.idStoreShipping}</TableCell>
-          <TableCell align="right">{row.idStoreRecieve}</TableCell>
+          <TableCell align="right">{row.idStoreReceive}</TableCell>
           <TableCell align="right">{row.dateDeparture}</TableCell>
           <TableCell align="right">{row.dateEntry}</TableCell>
           <TableCell align="right">{row.total}</TableCell>
@@ -450,7 +450,7 @@ const TableListSalesByIdCustomer: React.FC<FormListSaleProps> = ({ orders }) => 
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-    /*
+  
   const visibleRows = React.useMemo(
     () =>
     stableSort(rows, getComparator(order, orderBy)).slice(
@@ -459,7 +459,7 @@ const TableListSalesByIdCustomer: React.FC<FormListSaleProps> = ({ orders }) => 
       ),
     [order, rows, orderBy, page, rowsPerPage],
   );
-*/
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -479,7 +479,7 @@ const TableListSalesByIdCustomer: React.FC<FormListSaleProps> = ({ orders }) => 
               rowCount={rows.length}
             />
             <TableBody>
-            {rows.map((row) => (
+            {visibleRows.map((row) => (
                 <TableRowWithExpansion
                   key={row.idOrder} // Supongo que tienes una propiedad idProduct única para cada fila
                   row={row}

@@ -413,11 +413,11 @@ const TableCollapsible: React.FC<FormListProductProps> = ({ products }) => {
 
   const visibleRows = React.useMemo(
     () =>
-    stableSort(rows, getComparator(order, orderBy)).slice(
+      stableSort(rows, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage,
+        page * rowsPerPage + rowsPerPage
       ),
-    [order, rows ,orderBy, page, rowsPerPage],
+    [order, rows, orderBy, page, rowsPerPage]
   );
 
   return (
@@ -459,43 +459,16 @@ const TableCollapsible: React.FC<FormListProductProps> = ({ products }) => {
 
               {visibleRows.map((row, index) => {
                   const row_id_user: number = row.idProduct as number;
-                  const isItemSelected = isSelected(row_id_user);
-                  const labelId = `enhanced-table-checkbox-${index}`;
+                  //const isItemSelected = isSelected(row_id_user);
+                  //const labelId = `enhanced-table-checkbox-${index}`;
   
                   return (
-                    <TableRow
-                      hover
-                      onClick={(event) => handleClick(event, row_id_user)}
-                      role="checkbox"
-                      aria-checked={isItemSelected}
-                      tabIndex={-1}
-                      key={row.idProduct}
-                      selected={isItemSelected}
-                      sx={{ cursor: 'pointer' }}
-                    >
-                      <TableCell padding="checkbox">
-                        <Checkbox
-                          color="primary"
-                          checked={isItemSelected}
-                          inputProps={{
-                            'aria-labelledby': labelId,
-                          }}
-                        />
-                      </TableCell>
-                      <TableCell
-                        component="th"
-                        id={labelId}
-                        scope="row"
-                        padding="none"
-                      >
-                        {row.idProduct}
-                      </TableCell>
-                      <TableCell align="right">{row.name}</TableCell>
-                      <TableCell align="right">{row.manufacturer}</TableCell>
-                      <TableCell align="right">{row.price}</TableCell>
-                      <TableCell align="right">{row.description}</TableCell>
-                      <TableCell align="right">{row.guarantyMonths}</TableCell>
-                    </TableRow>
+                    <TableRowWithExpansion
+                    key={row.idProduct} // Supongo que tienes una propiedad idProduct única para cada fila
+                    row={row}
+                    isSelected={isSelected} // Supongamos que isSelected es una función que verifica si una fila está seleccionada
+                    handleClick={handleClick} // Supongamos que handleClick es una función de manejo de clics para seleccionar una fila
+                    />
                   );
                 })}
                 {emptyRows > 0 && (

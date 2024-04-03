@@ -19,7 +19,7 @@ interface Product {
 interface OrderInterface {
   idOrder: number;
   idStoreShipping: string;
-  idStoreRecieve: string;
+  idStoreReceive: string;
   dateDeparture: string;
   dateEntry: string;
   total: number;
