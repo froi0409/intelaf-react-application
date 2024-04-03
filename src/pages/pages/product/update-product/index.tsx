@@ -41,12 +41,16 @@ const UpdateProductPage = () => {
         setProduct(productData);
 
         /* Bring image*/
-        const response = await axios.get(`http://localhost:8080/v1/images/image-by-idProduct/${idProduct}`, {
-          responseType: 'blob',
-        });
-        const blob = new Blob([response.data], { type: response.headers['content-type'] });
-        const imageUrl = URL.createObjectURL(blob);
-        setImageSrc(imageUrl);
+        try {
+          const response = await axios.get(`http://localhost:8080/v1/images/image-by-idProduct/${idProduct}`, {
+            responseType: 'blob',
+          });
+          const blob = new Blob([response.data], { type: response.headers['content-type'] });
+          const imageUrl = URL.createObjectURL(blob);
+          setImageSrc(imageUrl);
+        } catch (error) {
+          console.log('No hay imagen')
+        }
 
       } catch (error) {
         console.log(error);

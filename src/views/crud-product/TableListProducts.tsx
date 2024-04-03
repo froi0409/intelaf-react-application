@@ -261,6 +261,7 @@ interface Props {
       price: string;
       description: string;
       guarantyMonths: number;
+      stores: StoreInfo[];
       // Agrega aquí cualquier otra propiedad necesaria
     };
     isSelected: (id: number) => boolean;
@@ -416,7 +417,7 @@ const TableCollapsible: React.FC<FormListProductProps> = ({ products }) => {
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage,
       ),
-    [order, orderBy, page, rowsPerPage],
+    [order, rows ,orderBy, page, rowsPerPage],
   );
 
   return (
@@ -438,7 +439,7 @@ const TableCollapsible: React.FC<FormListProductProps> = ({ products }) => {
               rowCount={rows.length}
             />
             <TableBody>
-            {rows.map((row) => (
+            {/*rows.map((row) => (
                 <TableRowWithExpansion
                   key={row.idProduct} // Supongo que tienes una propiedad idProduct única para cada fila
                   row={row}
@@ -454,7 +455,58 @@ const TableCollapsible: React.FC<FormListProductProps> = ({ products }) => {
                 >
                   <TableCell colSpan={6} />
                 </TableRow>
-              )}
+                )*/}
+
+              {visibleRows.map((row, index) => {
+                  const row_id_user: number = row.idProduct as number;
+                  const isItemSelected = isSelected(row_id_user);
+                  const labelId = `enhanced-table-checkbox-${index}`;
+  
+                  return (
+                    <TableRow
+                      hover
+                      onClick={(event) => handleClick(event, row_id_user)}
+                      role="checkbox"
+                      aria-checked={isItemSelected}
+                      tabIndex={-1}
+                      key={row.idProduct}
+                      selected={isItemSelected}
+                      sx={{ cursor: 'pointer' }}
+                    >
+                      <TableCell padding="checkbox">
+                        <Checkbox
+                          color="primary"
+                          checked={isItemSelected}
+                          inputProps={{
+                            'aria-labelledby': labelId,
+                          }}
+                        />
+                      </TableCell>
+                      <TableCell
+                        component="th"
+                        id={labelId}
+                        scope="row"
+                        padding="none"
+                      >
+                        {row.idProduct}
+                      </TableCell>
+                      <TableCell align="right">{row.name}</TableCell>
+                      <TableCell align="right">{row.manufacturer}</TableCell>
+                      <TableCell align="right">{row.price}</TableCell>
+                      <TableCell align="right">{row.description}</TableCell>
+                      <TableCell align="right">{row.guarantyMonths}</TableCell>
+                    </TableRow>
+                  );
+                })}
+                {emptyRows > 0 && (
+                  <TableRow
+                    style={{
+                      height: (dense ? 33 : 53) * emptyRows,
+                    }}
+                  >
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                  )}
             </TableBody>
           </Table>
         </TableContainer>

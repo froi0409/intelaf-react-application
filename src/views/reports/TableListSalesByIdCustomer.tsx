@@ -33,11 +33,26 @@ const columns: readonly Column[] = [
   { id: 'total', label: 'Total pagado'},  
 ]
 
-interface Sale{
+interface Product {
+  productId: string;
+  quantity: number;
+  name: string;
+  price: number;
+}
+
+interface Payment {
+  idPayment: number;
+  type: string;
+  amount: number;
+}
+
+interface Sale {
   idSale: number;
   date: string;
   total: number;
-  idCustomer: string;
+  idCustomer: number;
+  products: Product[];
+  payments: Payment[];
 }
 
 interface FormListSaleProps {
@@ -228,8 +243,9 @@ interface Props {
       idSale: number;
       date: string;
       total: number;
-      idCustomer: string;
-      // Agrega aquí cualquier otra propiedad necesaria
+      idCustomer: number;
+      products: Product[];
+      payments: Payment[];
     };
     isSelected: (id: number) => boolean;
     handleClick: (event: React.MouseEvent<HTMLButtonElement>, id: number) => void;
@@ -283,19 +299,23 @@ const TableRowWithExpansion: React.FC<Props> = ({ row, isSelected, handleClick }
                 <Table size='small' aria-label='purchases'>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Codigos de producto</TableCell>                                     
+                      <TableCell>Codigos de producto</TableCell>
+                      <TableCell align='right'>Nombre</TableCell>
+                      <TableCell align='right'>Precio</TableCell>
                       <TableCell align='right'>Cantidad</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {/*row.stores.map(historyRow => (
-                      <TableRow key={historyRow.storeCode}>
+                    {row.products.map(historyRow => (
+                      <TableRow key={historyRow.productId}>
                         <TableCell component='th' scope='row'>
-                          {historyRow.storeCode}
+                          {historyRow.productId}
                         </TableCell>                        
-                        <TableCell align='right'>{historyRow.stock}</TableCell>                          
+                        <TableCell align='right'>{historyRow.name}</TableCell>
+                        <TableCell align='right'>{historyRow.price}</TableCell>
+                        <TableCell align='right'>{historyRow.quantity}</TableCell>
                       </TableRow>
-                    ))*/}
+                    ))}
                   </TableBody>
                 </Table>
                 <Typography variant='h6' gutterBottom component='div'>
@@ -305,18 +325,18 @@ const TableRowWithExpansion: React.FC<Props> = ({ row, isSelected, handleClick }
                   <TableHead>
                     <TableRow>
                       <TableCell>Tipo de pago</TableCell>                                     
-                      <TableCell align='right'>Cantidad</TableCell>
+                      <TableCell align='right'>Cantidad del pago</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {/*row.stores.map(historyRow => (
-                      <TableRow key={historyRow.storeCode}>
+                    {row.payments.map(historyRow => (
+                      <TableRow key={historyRow.type}>
                         <TableCell component='th' scope='row'>
-                          {historyRow.storeCode}
-                        </TableCell>                        
-                        <TableCell align='right'>{historyRow.stock}</TableCell>                          
+                          {historyRow.type}
+                        </TableCell>
+                        <TableCell align='right'>{historyRow.amount}</TableCell>                          
                       </TableRow>
-                    ))*/}
+                    ))}
                   </TableBody>
                 </Table>
               </Box>
@@ -394,6 +414,7 @@ const TableListSalesByIdCustomer: React.FC<FormListSaleProps> = ({ sales }) => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+    /*
   const visibleRows = React.useMemo(
     () =>
     stableSort(rows, getComparator(order, orderBy)).slice(
@@ -401,7 +422,7 @@ const TableListSalesByIdCustomer: React.FC<FormListSaleProps> = ({ sales }) => {
         page * rowsPerPage + rowsPerPage,
       ),
     [order, rows, orderBy, page, rowsPerPage],
-  );
+  );*/
 
   return (
     <Box sx={{ width: '100%' }}>
