@@ -1,6 +1,5 @@
 import axios from "axios";
 import { NextApiRequest, NextApiResponse } from "next/types";
-import { NextRequest } from "next/server";
 import { setCookie } from 'cookies-next';
 
 export async function handlePost(req: NextApiRequest, res: NextApiResponse) {

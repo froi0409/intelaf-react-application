@@ -3,7 +3,7 @@ import { Button, Card, CardContent, CardHeader, Grid } from "@mui/material";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import { styled } from '@mui/material/styles';
 import axios from 'axios';
-import { uploadDataFile } from 'src/utils/apiUtils/data-file/UploadDataFileUtil';
+import { uploadDataFile } from 'src/utils/apiUtils/data-file/uploadDataFileUtil';
 import { useState } from 'react';
 import ErrorsDataFileReport from './ErrorsDataFileReport';
 

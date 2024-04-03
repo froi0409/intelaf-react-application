@@ -26,6 +26,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import FilterListIcon from '@mui/icons-material/FilterList';
 
 import { useRouter } from 'next/router';
+// @ts-ignore
+import { v4 as uuidv4 } from "uuid"; 
 
 interface Data {
     idStore1: string,
@@ -328,7 +330,9 @@ export default function TableShippingTimes(props: any) {
                 {visibleRows.map((row, index) => {
                     // if (typeof row.id_user === 'number') {
                     // }
-                    const row_id_user: number = row.idStore1 as number;
+                    const idStore = row.idStore1 as string;
+                    // @ts-ignore
+                    const row_id_user: number = idStore.concat(row.idStore2 as string) as string;
                     const isItemSelected = isSelected(row_id_user);
                     const labelId = `enhanced-table-checkbox-${index}`;
 
@@ -339,7 +343,7 @@ export default function TableShippingTimes(props: any) {
                         role="checkbox"
                         aria-checked={isItemSelected}
                         tabIndex={-1}
-                        key={row.idStore1}
+                        key={uuidv4()}
                         selected={isItemSelected}
                         sx={{ cursor: 'pointer' }}
                     >
