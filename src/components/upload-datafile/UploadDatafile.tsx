@@ -49,8 +49,9 @@ export const UploadDataFileForm = () => {
     }
 
     return (
-        <Grid>
-                <Card>
+        <Grid container spacing={5}>
+            <Grid item xs={12}>
+            <Card>
                 <CardHeader title='Subir Archivo de Datos' titleTypographyProps={{ variant: 'h6' }} />
                 <CardContent sx={{ minHeight: 100, alignItems: 'center', justifyContent: 'center' }}>
                     <form onSubmit={handleSubmit}>
@@ -83,17 +84,17 @@ export const UploadDataFileForm = () => {
                         </Grid>
                     </form>
                 </CardContent>
-            </Card>
-            <Grid container spacing={5}  style={{ marginTop: '20px' }}>
-                <Grid item xs={12}>
-                    {errorsReportData.length > 0 && (
-                        <Grid>
-                            <ErrorsDataFileReport dataServer={errorsReportData} />
-                        </Grid>
-                            
-                    )}
+                </Card>
+            </Grid>
+            <Grid item xs={12}  >
+                {errorsReportData && errorsReportData.length > 0 && (
+                    <Grid>
+                        <ErrorsDataFileReport dataServer={errorsReportData} />
                     </Grid>
-                </Grid>
+                        
+                )}
+                
+            </Grid>
         </Grid>
     );
 }
