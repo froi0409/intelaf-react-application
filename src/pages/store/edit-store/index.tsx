@@ -273,11 +273,15 @@ const EditStoreLayout = () => {
                             value={storePhone1}
                             onChange={(e) => { setStorePhone1(e.target.value) }}
                             InputProps={{
-                            startAdornment: (
-                                <InputAdornment position='start'>
-                                <Phone />
-                                </InputAdornment>
-                            )
+                                inputProps: {
+                                    min: 0,
+                                    max: 99999999
+                                },
+                                startAdornment: (
+                                    <InputAdornment position='start'>
+                                    <Phone />
+                                    </InputAdornment>
+                                )
                             }}
                         />
                         </Grid>
@@ -291,11 +295,15 @@ const EditStoreLayout = () => {
                             value={storePhone2}
                             onChange={(e) => { setStorePhone2(e.target.value) }}
                             InputProps={{
-                            startAdornment: (
-                                <InputAdornment position='start'>
-                                <Phone />
-                                </InputAdornment>
-                            )
+                                inputProps: {
+                                    min: 0,
+                                    max: 99999999
+                                },
+                                startAdornment: (
+                                    <InputAdornment position='start'>
+                                    <Phone />
+                                    </InputAdornment>
+                                )
                             }}
                         />
                         </Grid>

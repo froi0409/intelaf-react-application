@@ -169,12 +169,13 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
     numSelected: number;
+    totalRecords: number;
     handleEdit: () => void; // Function to handle edit button click
 }
 
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-    const { numSelected, handleEdit } = props;
+    const { numSelected, handleEdit, totalRecords } = props;
 
     const handleClickEdit = () => {
         if (numSelected !== null) {
@@ -210,7 +211,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
             id="tableTitle"
             component="div"
             >
-            Reporte de Errores
+            Reporte de Errores (Registros: {totalRecords})
             </Typography>
         )}
         {numSelected > 0 ? (
@@ -232,6 +233,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 
 
 const ErrorsDataFileReport = (props: any) => {
+    
     const rows = props.dataServer.map((store:Data) => {
         return createData(
         store.line,
@@ -239,6 +241,10 @@ const ErrorsDataFileReport = (props: any) => {
         store.description
         );
     });
+
+    const records = props.records;
+    console.log(records);
+
     const [order, setOrder] = React.useState<Order>('asc');
     const [orderBy, setOrderBy] = React.useState<keyof Data>('line');
     const [selected, setSelected] = React.useState<readonly number[]>([]);
@@ -311,7 +317,7 @@ const ErrorsDataFileReport = (props: any) => {
     return (
         <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length > 0 ? selected[0] : 0} handleEdit={handleEdit} />
+        <EnhancedTableToolbar numSelected={selected.length > 0 ? selected[0] : 0} handleEdit={handleEdit} totalRecords={records} />
             <TableContainer>
             <Table
                 sx={{ minWidth: 750 }}
