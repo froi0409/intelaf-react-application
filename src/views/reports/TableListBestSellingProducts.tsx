@@ -31,6 +31,7 @@ const TableListBestSellingProducts: React.FC<FormListProductProps> = ({ products
 
   /** GENERATE HTML **/
   const [htmlContent, setHtmlContent] = useState('');
+  const [downloadOn, setDownloadOn] = useState(false);
 
 const generateHtmlContent = () => {
   // Genera el contenido HTML basado en los datos de los productos
@@ -73,11 +74,12 @@ const generateHtmlContent = () => {
 
 const openHtmlAsDownload = () => {
   generateHtmlContent();
+  setDownloadOn(true);
 };
 
 useEffect(() => {
   // Descarga el HTML cuando htmlContent se actualice
-  if (htmlContent !== '') {
+  if (htmlContent !== '' && downloadOn == true) {
     // Crea un Blob con el contenido HTML
     const blob = new Blob([htmlContent], { type: 'text/html' });
   
@@ -95,8 +97,9 @@ useEffect(() => {
     // Limpia el enlace del DOM y libera el Blob
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+    setDownloadOn(false);
   }
-}, [htmlContent]);
+}, [htmlContent,downloadOn]);
 
   return (
     <TableContainer component={Paper}>

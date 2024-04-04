@@ -139,7 +139,7 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       icon: SummarizeOutlinedIcon,
-      title: 'Ventas realizadas por Usuario',
+      title: 'Compras realizadas por Usuario',
       path: '/pages/reports/sales-by-idCustomer'
     },
     {
