@@ -73,5 +73,8 @@ const TrackingOrder = () => {
         </Grid>
     )
 }
+import UserLayout from 'src/layouts/UserLayout'
+import { ReactNode} from 'react'
+TrackingOrder.getLayout = (page: ReactNode) => <UserLayout>{page}</UserLayout>
 
 export default TrackingOrder

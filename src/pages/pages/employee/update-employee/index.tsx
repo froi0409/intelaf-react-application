@@ -84,6 +84,7 @@ const UpdateEmployeePage = () => {
   )
 }
 
-
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+UpdateEmployeePage.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
 
 export default UpdateEmployeePage

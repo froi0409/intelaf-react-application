@@ -239,5 +239,8 @@ const NewOrder = () => {
     </DatePickerWrapper>
   )
 }
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+import { ReactNode} from 'react'
+NewOrder.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
 
 export default NewOrder;

@@ -48,4 +48,8 @@ const CreateProductPage = () => {
   )
 }
 
+
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+CreateProductPage.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
+
 export default CreateProductPage

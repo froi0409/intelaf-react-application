@@ -22,6 +22,7 @@ const VisuallyHiddenInput = styled('input')({
 export const UploadDataFileForm = () => {
     const [selectedFile, setSelectedFile] = React.useState<File | null>(null);
     const [errorsReportData, setErrorsReportData] = useState([]);
+    const [records, setRecords] = useState(0);
     const [data, setData] = useState([]);
 
     const handleSubmit = async (e: React.FormEvent) => {
@@ -37,7 +38,7 @@ export const UploadDataFileForm = () => {
             console.log(res);
             
             setErrorsReportData(res.data.errors);
-
+            setRecords(res.data.records);
         } catch (error) {
             console.error('Error uploading file:', error);
         }
@@ -89,7 +90,7 @@ export const UploadDataFileForm = () => {
             <Grid item xs={12}  >
                 {errorsReportData && errorsReportData.length > 0 && (
                     <Grid>
-                        <ErrorsDataFileReport dataServer={errorsReportData} />
+                        <ErrorsDataFileReport records={records} dataServer={errorsReportData} />
                     </Grid>
                         
                 )}

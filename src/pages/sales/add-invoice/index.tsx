@@ -230,4 +230,8 @@ const AddInvoice = () => {
   );
 };
 
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+import { ReactNode} from 'react'
+AddInvoice.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
+
 export default AddInvoice;

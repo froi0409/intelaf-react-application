@@ -93,4 +93,7 @@ const DashboardConsumer = () => {
   )
 }
 
+import UserLayout from 'src/layouts/UserLayout'
+DashboardConsumer.getLayout = (page: ReactNode) => <UserLayout>{page}</UserLayout>
+
 export default DashboardConsumer

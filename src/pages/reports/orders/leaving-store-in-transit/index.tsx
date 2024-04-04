@@ -70,5 +70,9 @@ export async function getServerSideProps(context: any) {
     }
 }
 
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+import { ReactNode} from 'react'
+LeavingStoreInTransit.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
+
 
 export default LeavingStoreInTransit;

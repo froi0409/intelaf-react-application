@@ -65,4 +65,8 @@ const AllStoresTable = () => {
 
 }
 
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+import { ReactNode} from 'react'
+AllStoresTable.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
+
 export default AllStoresTable;

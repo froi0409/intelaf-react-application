@@ -156,4 +156,7 @@ const BestSellingProducts = () => {
   )
 }
 
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+BestSellingProducts.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
+
 export default BestSellingProducts

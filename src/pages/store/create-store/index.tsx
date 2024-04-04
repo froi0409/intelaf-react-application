@@ -5,6 +5,7 @@ import { styled } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 
 import axios from 'axios';
+import { createStore } from 'src/utils/apiUtils/store/createStoreUtil';
 
 
 
@@ -45,7 +46,7 @@ const CreateStoreLayout = () => {
         };
         
         try {
-            const res = await axios.post('http://localhost:8080/v1/store', formData);
+            const res = await createStore(formData);
 
             console.log(res);
 
@@ -54,6 +55,9 @@ const CreateStoreLayout = () => {
             if (res.status === 201) {
                 setResponse('La tienda fue creada con éxito');
                 setMessageType('OK')
+            } else if (res.status === 400) {
+                setResponse('El código ya está asociado a otra tienda, intenta con otro código');
+                setMessageType('ERR')
             } else {
                 setResponse('la tienda no pudo ser creada');
                 setMessageType('ERR')
@@ -191,11 +195,15 @@ const CreateStoreLayout = () => {
                             value={storePhone2}
                             onChange={(e) => { setStorePhone2(e.target.value) }}
                             InputProps={{
-                            startAdornment: (
-                                <InputAdornment position='start'>
-                                <Phone />
-                                </InputAdornment>
-                            )
+                                inputProps: {
+                                    min: 0,
+                                    max: 99999999
+                                },
+                                startAdornment: (
+                                    <InputAdornment position='start'>
+                                    <Phone />
+                                    </InputAdornment>
+                                )
                             }}
                         />
                         </Grid>
@@ -255,6 +263,10 @@ const CreateStoreLayout = () => {
         </Card>
     )
 }
+
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+import { ReactNode} from 'react'
+CreateStoreLayout.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
 
 export default CreateStoreLayout
 

@@ -91,5 +91,7 @@ const ProductDetail: React.FC = () => {
     </div>
   )
 }
+import UserLayout from 'src/layouts/UserLayout'
+ProductDetail.getLayout = (page: ReactNode) => <UserLayout>{page}</UserLayout>
 
 export default ProductDetail

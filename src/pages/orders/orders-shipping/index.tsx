@@ -59,5 +59,8 @@ const OrdersShipping = () => {
     </Grid>
   )
 }
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+import { ReactNode} from 'react'
+OrdersShipping.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
 
 export default OrdersShipping;
