@@ -13,6 +13,7 @@ import { FormOrderToSaleCustomer } from './updateForms/FormOrderToSaleCustomer'
 import { RegisterSale } from 'src/components/sales/invoice/RegisterSale'
 import { SaleDataBackend, registerOrderToSale } from 'src/utils/apiUtils/sale/order/registerOrderToSale'
 import { StatusOrderDateData, updateStatusOrder } from 'src/utils/apiUtils/order/updateStatusOrder'
+import { getCurrentStore } from 'src/utils/helpers/cookieStore'
 
 
 interface GetProduct {
@@ -37,7 +38,7 @@ export function createInvoiceProduct(id_product: string, name: string, quantity:
 }
 
 export const UpdateOrderToSale = (props: any) => {
-    const currentStore = 'STR-1'
+    const currentStore = getCurrentStore();
 
     //header
     const [date, setDate] = useState<Date | null | undefined>(null)
