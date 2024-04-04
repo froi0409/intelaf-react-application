@@ -7,7 +7,7 @@ interface CDefault {
     handleSearch: (searchValue: string | null) => void
 }
 
-export const SearchBarStores = ({handleSearch}: CDefault) => {
+export const SearchBarShippingTimes = ({handleSearch}: CDefault) => {
     const [inputValue, setInputValue] = useState('');
     const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
         const inputValue = e.target.value;
@@ -22,11 +22,11 @@ export const SearchBarStores = ({handleSearch}: CDefault) => {
         <Box sx={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <Box className='actions-left' sx={{ mr: 2, display: 'flex', alignItems: 'center' }}>
                 <TextField
-                    id='searchIdcustomer'
+                    id='searchIdShippingTime'
                     value={inputValue ?? ""}
                     onChange={handleChange}
                     onKeyDown={handleEnterKey}
-                    placeholder='Buscar por código de tienda'
+                    placeholder='Buscar por tienda de origen'
                     size='small'
                     sx={{ '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
                     InputProps={{
