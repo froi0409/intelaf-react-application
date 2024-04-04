@@ -6,7 +6,7 @@ import TableHead from '@mui/material/TableHead'
 import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Button } from '@mui/material'
 
 interface Product{
@@ -21,53 +21,63 @@ interface Product{
 
 interface FormListProductProps {
   products: Product[];
-  
+  startDate: Date | null;
+  endDate: Date | null;
 }
 
-const TableListBestSellingProducts: React.FC<FormListProductProps> = ({ products }) => {
+const TableListBestSellingProducts: React.FC<FormListProductProps> = ({ products,startDate,endDate }) => {
 
   const rows = products;
 
   /** GENERATE HTML **/
   const [htmlContent, setHtmlContent] = useState('');
 
-  const generateHtmlContent = () => {
-    // Genera el contenido HTML basado en los datos de los productos
-    const tableHtml = `      
-      <table style="width:100%; border-collapse: collapse;">
-        <thead>
-          <tr style="background-color: #f2f2f2;">
-            <th style="padding: 10px; border: 1px solid #ddd; font-weight: bold; text-align: left;">ID</th>
-            <th style="padding: 10px; border: 1px solid #ddd; font-weight: bold; text-align: left;">Nombre</th>
-            <th style="padding: 10px; border: 1px solid #ddd; font-weight: bold; text-align: left;">Fabricante</th>
-            <th style="padding: 10px; border: 1px solid #ddd; font-weight: bold; text-align: left;">Precio</th>
-            <th style="padding: 10px; border: 1px solid #ddd; font-weight: bold; text-align: left;">Descripción</th>
-            <th style="padding: 10px; border: 1px solid #ddd; font-weight: bold; text-align: left;">Meses de garantía</th>
-            <th style="padding: 10px; border: 1px solid #ddd; font-weight: bold; text-align: left;">Cantidad</th>
+const generateHtmlContent = () => {
+  // Genera el contenido HTML basado en los datos de los productos
+  const tableHtml = `          
+    <table style="width:100%; border-collapse: collapse;">
+      <thead>
+        <tr style="background-color: #f2f2f2;">
+          <th colspan="7" style="padding: 10px; border: 1px solid #ddd; font-size: 20px; text-align: center;">Listado de los 10 productos más vendidos</th>
+        </tr>
+        <tr style="background-color: #f2f2f2;">
+          <th colspan="7" style="padding: 10px; border: 1px solid #ddd; font-size: 16px; text-align: center;">Intervalo de tiempo entre: ${startDate} y ${endDate}</th>
+        </tr>
+        <tr style="background-color: #f2f2f2;">
+          <th style="padding: 10px; border: 1px solid #ddd; font-weight: bold; text-align: left;">ID</th>
+          <th style="padding: 10px; border: 1px solid #ddd; font-weight: bold; text-align: left;">Nombre</th>
+          <th style="padding: 10px; border: 1px solid #ddd; font-weight: bold; text-align: left;">Fabricante</th>
+          <th style="padding: 10px; border: 1px solid #ddd; font-weight: bold; text-align: left;">Precio</th>
+          <th style="padding: 10px; border: 1px solid #ddd; font-weight: bold; text-align: left;">Descripción</th>
+          <th style="padding: 10px; border: 1px solid #ddd; font-weight: bold; text-align: left;">Meses de garantía</th>
+          <th style="padding: 10px; border: 1px solid #ddd; font-weight: bold; text-align: left;">Cantidad</th>
+        </tr>
+      </thead>
+      <tbody>
+        ${products.map(product => `
+          <tr style="background-color: ${products.indexOf(product) % 2 === 0 ? '#f2f2f2' : 'white'};">
+            <td style="padding: 10px; border: 1px solid #ddd;">${product.id}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">${product.name}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">${product.manufacturer}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">${product.price}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">${product.description}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">${product.guarantyMonths}</td>
+            <td style="padding: 10px; border: 1px solid #ddd;">${product.quantity}</td>
           </tr>
-        </thead>
-        <tbody>
-          ${products.map(product => `
-            <tr style="background-color: ${products.indexOf(product) % 2 === 0 ? '#f2f2f2' : 'white'};">
-              <td style="padding: 10px; border: 1px solid #ddd;">${product.id}</td>
-              <td style="padding: 10px; border: 1px solid #ddd;">${product.name}</td>
-              <td style="padding: 10px; border: 1px solid #ddd;">${product.manufacturer}</td>
-              <td style="padding: 10px; border: 1px solid #ddd;">${product.price}</td>
-              <td style="padding: 10px; border: 1px solid #ddd;">${product.description}</td>
-              <td style="padding: 10px; border: 1px solid #ddd;">${product.guarantyMonths}</td>
-              <td style="padding: 10px; border: 1px solid #ddd;">${product.quantity}</td>
-            </tr>
-          `).join('')}
-        </tbody>
-      </table>
-    `;
-    // Asigna el contenido HTML generado al estado
-    setHtmlContent(tableHtml);
-  };
+        `).join('')}
+      </tbody>
+    </table>
+  `;  
+  setHtmlContent(tableHtml);
+};
 
-  const openHtmlAsDownload = () => {
-    generateHtmlContent();
-  
+const openHtmlAsDownload = () => {
+  generateHtmlContent();
+};
+
+useEffect(() => {
+  // Descarga el HTML cuando htmlContent se actualice
+  if (htmlContent !== '') {
     // Crea un Blob con el contenido HTML
     const blob = new Blob([htmlContent], { type: 'text/html' });
   
@@ -85,7 +95,8 @@ const TableListBestSellingProducts: React.FC<FormListProductProps> = ({ products
     // Limpia el enlace del DOM y libera el Blob
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-  };
+  }
+}, [htmlContent]);
 
   return (
     <TableContainer component={Paper}>
