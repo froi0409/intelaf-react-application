@@ -120,7 +120,7 @@ export const UpdateOrderToSale = (props: any) => {
         const currentTotalPayments: number = payments.reduce((acc, payment) => Number(acc) + payment.amount, 0);
         const leftPay = total - currentTotalPayments;
         setStillPay(Number(leftPay))
-        // setTotal(total);
+        setTotal(total);
     }
 
     const isValid = () => {

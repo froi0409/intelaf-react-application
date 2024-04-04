@@ -2,6 +2,9 @@
 import { getCookie } from "cookies-next";
 
 export const getCookieJwt = () => {
-    console.log(`cookie jwt: ${getCookie('jwt')}`);
     return `Bearer ${getCookie('jwt')}`;
+}
+
+export const getCookieJwtGetServerSideProps = (context: any) => {
+    return `Bearer ${context.req.cookies['jwt']}`
 }

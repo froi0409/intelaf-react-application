@@ -2,6 +2,7 @@ import axios from 'axios';
 import { NextRequest } from 'next/server';
 import { NextApiResponse } from "next/types";
 import { InvoiceProduct, SaleData } from 'src/utils/apiUtils/sale/invoice/registerSale';
+import { getJwt } from '../jwtUtils';
 
 
  interface Product {
@@ -74,7 +75,11 @@ export async function handlePost(req: NextRequest, res: NextApiResponse) {
     //   products
     // });
 
-    const response = await axios.post(`${process.env.URL_API_BACKEND}/v1/sale/register`, transformedSaleData);
+    const response = await axios.post(`${process.env.URL_API_BACKEND}/v1/sale/register`, transformedSaleData, {
+      headers: {
+          Authorization: getJwt(req)
+      }
+  });
 
     // Devuelve una respuesta JSON con el mensaje de éxito y los datos de respuesta
     return res.status(response.status).json({ message: 'Venta Registrada satisfactoriamente', data: response.data });

@@ -7,7 +7,7 @@ export async function getTrakingsOrders(): Promise<any> {
     try {
       const response = await axios.get('/api/order/trakingOrders/', {
         headers: {
-            // Authorization: getCookieJwt()
+            Authorization: getCookieJwt()
         }
     })
       return response.data;

@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from "next/types";
+import { getJwt } from '../jwtUtils';
 
 interface FormCustomer {
     nit: string;
@@ -32,12 +33,16 @@ export async function handlePost (req: NextApiRequest, res: NextApiResponse) {
             password, 
             username,
             credit
+        }, {
+            headers: {
+                Authorization: getJwt(req)
+            }
         });
         const data  = await response.data
-        return res.status(201).json(data);
-    }catch (err: any) {
-        // console.error(err.response.status, err.response.data);
-        return res.status(err.response.status).json({ message: err.response.data });
+        return res.status(response.status).json(data);
+    }catch (error: any) {
+        return res.status(error.response.status).json(error.response.data);
+
     }  
 }
 

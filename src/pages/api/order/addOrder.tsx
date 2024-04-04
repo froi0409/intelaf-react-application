@@ -2,6 +2,7 @@ import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from "next/types";
 import { OrderData } from 'src/utils/apiUtils/order/addOrder';
 import { InvoiceProduct } from 'src/utils/apiUtils/sale/invoice/registerSale';
+import { getJwt } from '../jwtUtils';
 
 interface Product {
     productId: string; // Assuming a unique identifier for each product
@@ -52,7 +53,11 @@ export async function handlePost(req: NextApiRequest, res: NextApiResponse) {
     const body = req.body as unknown as OrderData;
     const transformedSaleData = transformSaleData(body);
     try {
-        const response = await axios.post(`${process.env.URL_API_BACKEND}/v1/order/create-order`, transformedSaleData);
+        const response = await axios.post(`${process.env.URL_API_BACKEND}/v1/order/create-order`, transformedSaleData, {
+            headers: {
+                Authorization: getJwt(req)
+            }
+        });
         return res.status(response.status).json({ message: 'Orden Realizdo correctamente', data: response.data });
     } catch (error : any) {
         return res.status(error.response.status).json({ message: error.response.data });

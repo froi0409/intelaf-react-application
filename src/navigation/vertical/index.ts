@@ -13,6 +13,8 @@ import InvoicePlus from 'mdi-material-ui/InvoicePlus'
 import ListBoxOutline from 'mdi-material-ui/ListBoxOutline'
 import AccountPlus from 'mdi-material-ui/AccountPlus'
 import FileDocumentPlusOutline from 'mdi-material-ui/FileDocumentPlusOutline'
+import FileChartOutline from 'mdi-material-ui/FileChartOutline'
+import FileDocumentOutline from 'mdi-material-ui/FileDocumentOutline'
 
 
 // ** Type import
@@ -144,12 +146,12 @@ const navigation = (): VerticalNavItemsType => {
     {
       title: 'Ordenes enviadas',
       path: '/orders/orders-shipping',
-      icon: FileDocumentPlusOutline
+      icon: FileDocumentOutline
     },
     {
       title: 'Ordenes para recibir',
       path: '/orders/orders-receive',
-      icon: FileDocumentPlusOutline
+      icon: FileDocumentOutline
     },
     {
       sectionTitle: 'Compradores'
@@ -161,8 +163,26 @@ const navigation = (): VerticalNavItemsType => {
     },
     {
       title: 'Agregar un comprador',
-      path: '/customers/register-customer/',
+      path: '/customers/register-customer',
       icon: AccountPlus
+    },
+    {
+      sectionTitle : 'Reportes'
+    },
+    {
+      title: '2. tiempo de estar en tienda sin Verificacion',
+      path: '/reports/orders/in-time-pending-verify',
+      icon: FileChartOutline
+    },
+    {
+      title: '3. Pedidos atrasados',
+      path: '/reports/orders/overdue-arriving-store',
+      icon: FileChartOutline
+    },
+    {
+      title: '4. Salida y transito',
+      path: '/reports/orders/leaving-store-in-transit',
+      icon: FileChartOutline
     },
   ]
 }

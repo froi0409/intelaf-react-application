@@ -2,6 +2,7 @@ import { Card, Grid, Link, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect } from 'react'
 import { TableReportInTime } from 'src/components/reports/orders/TableReportInTime';
+import { getCookieJwtGetServerSideProps } from 'src/utils/cookieUtils';
 
 export interface InTimePendingVerifyStructure {
     idOrder: number;
@@ -38,8 +39,8 @@ const InTimePendingVerify = ({report}: any) => {
 
 export async function getServerSideProps(context: any) {
     try {
-        const jwt = context.req.cookies['jwt']
-        const currentStore = context.req.cookies['store']
+        const jwt = getCookieJwtGetServerSideProps(context)
+        const currentStore = context.req.cookies['idStore']
         if(currentStore == undefined) {
             throw new Error('not store')
         }

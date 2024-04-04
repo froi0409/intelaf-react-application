@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from "next/types";
+import { getJwt } from '../jwtUtils';
 
 interface StatusOrderDateData {
     idOrder: number;
@@ -10,7 +11,11 @@ interface StatusOrderDateData {
 export async function handlePut(req: NextApiRequest, res: NextApiResponse) {
     try {
         const body = req.body as unknown as StatusOrderDateData;
-        const response  =  await axios.put(`${process.env.URL_API_BACKEND}/v1/order/updateStatus`, body);
+        const response  =  await axios.put(`${process.env.URL_API_BACKEND}/v1/order/updateStatus`, body, {
+            headers: {
+                Authorization: getJwt(req)
+            }
+        });
         const data  = await response.data
         return res.status(response.status).json({ message: response.data.status, data: response.data });
     }catch (err: any) {

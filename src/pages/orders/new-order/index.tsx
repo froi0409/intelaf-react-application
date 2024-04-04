@@ -171,7 +171,7 @@ const NewOrder = () => {
         idStoreReceive: currentStore,
         dateDeparture : date,
         total,
-        status : 'in process',
+        status : 'pending',
         payments,
         products : invoiceProducts
       }

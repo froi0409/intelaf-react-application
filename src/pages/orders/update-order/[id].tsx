@@ -8,6 +8,7 @@ import { GridItemForm } from 'src/components/generic/forms/GridItemForm'
 import { UpdateOrderStatus } from 'src/components/orders/update/UpdateOrderStatus'
 import { UpdateOrderToSale } from 'src/components/orders/update/UpdateOrderToSale'
 import AddInvoice from 'src/pages/sales/add-invoice'
+import { getCookieJwtGetServerSideProps } from 'src/utils/cookieUtils'
 import { getCurrentStore } from 'src/utils/helpers/cookieStore'
 import { errorNotification, successNotificationWithAction } from 'src/utils/helpers/notification'
 
@@ -87,8 +88,12 @@ const UpdateOrder = ({ order }: any) => {
 
 export async function getServerSideProps(context: any) {
     try {
-
-        const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/order/find-all-feature-id/${context.params.id}`)
+        const jwt = getCookieJwtGetServerSideProps(context)
+        const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/order/find-all-feature-id/${context.params.id}`, {
+            headers: {
+              Authorization: jwt
+            }
+          });
         const data = await response.data
 
         return {

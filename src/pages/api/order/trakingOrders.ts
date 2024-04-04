@@ -9,7 +9,7 @@ export async function handleGet(req: NextApiRequest, res: NextApiResponse) {
         const username  = 'user9' //change for jwt
         const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/order/find-order-customer-username/${username}`, {
             headers: {
-                // Authorization: getJwt(req)
+                Authorization: getJwt(req)
             }
         });
         const data  = await response.data
