@@ -115,6 +115,16 @@ const navigation = (): VerticalNavItemsType => {
       path: '/pages/customer/dashboard'
     },
     {
+      icon: CubeOutline,
+      title: 'ReportBestSelling',
+      path: '/pages/reports/best-selling-products'
+    },
+    {
+      icon: CubeOutline,
+      title: 'ReportOrdersByIdCustomer',
+      path: '/pages/reports/orders-by-idCustomer'
+    },
+    {
       title: 'Ventas',      
       sectionTitle: 'Ventas'
     },

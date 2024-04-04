@@ -1,6 +1,7 @@
 import { NextApiResponse } from "next/types";
 import { NextRequest } from 'next/server';
 import axios from "axios";
+import { getJwt } from "../jwtUtils";
 
 
 // Maneja las solicitudes POST
@@ -8,7 +9,11 @@ export async function handlePost(req: NextRequest, res: NextApiResponse) {
 
     try {        
         const requestData = req.body;
-        const response  =  await axios.post(`${process.env.URL_API_BACKEND}/v1/employee/create-employee`,requestData)
+        const response  =  await axios.post(`${process.env.URL_API_BACKEND}/v1/employee/create-employee`,requestData, {
+            headers: {
+                Authorization: getJwt(req)
+            }
+        })
         const data  = await response.data
         return res.status(200).json(data);
     }catch (err) {

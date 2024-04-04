@@ -1,8 +1,8 @@
 import axios from 'axios';
 import { getCookieJwt } from 'src/utils/helpers/cookieUtils';
-export async function postCreateEmployeePath(path: string,data:any): Promise<any> {
+export async function postUploadImageProduct(data:any): Promise<any> {
+    const url = 'http://localhost:3000/api/image/uploadImage/'
     try {
-      const url = 'http://' + path + '/api/user/createEmployee/'
       const response = await axios.post(url,data, {
         headers: {
             Authorization: getCookieJwt()
@@ -11,6 +11,6 @@ export async function postCreateEmployeePath(path: string,data:any): Promise<any
       return response.data;
     } catch (error) {
         console.log(error);
-      throw new Error('Error to get all employees from the path domain');
+      throw new Error('Error creating the product from' + url);
     }
 }

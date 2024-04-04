@@ -20,7 +20,7 @@ import Link from 'next/link';
 
 
 interface Column {
-  id: 'idProduct' | 'name' | 'manufacturer' | 'price' | 'description' | 'guarantyMonths'
+  id: 'idOrder' | 'idStoreShipping' | 'idStoreReceive' | 'dateDeparture'| 'dateEntry'| 'total'| 'status'
   label: string
   minWidth?: number
   align?: 'right'
@@ -28,32 +28,42 @@ interface Column {
 }
 
 const columns: readonly Column[] = [
-  { id: 'idProduct', label: 'Codigo Producto'},
-  { id: 'name', label: 'Nombre'},
-  { id: 'manufacturer', label: 'Fabricante'},
-  { id: 'price', label: 'Precio'},
-  { id: 'description', label: 'Descripcion'},
-  { id: 'guarantyMonths', label: 'Garantia (Meses)'},  
-  
+  { id: 'idOrder', label: 'Codigo Orden'},
+  { id: 'idStoreShipping', label: 'Codigo de tienda que envia'},
+  { id: 'idStoreReceive', label: 'Codigo de tienda que recibe'},  
+  { id: 'dateDeparture', label: 'Fecha de salida'},  
+  { id: 'dateEntry', label: 'Fecha de entrada'},  
+  { id: 'total', label: 'Total'},  
+  { id: 'status', label: 'Estado'},  
 ]
 
-interface StoreInfo {
-  storeCode: string;
-  stock: number;
-}
-  
-interface Product{
-  idProduct: string;
-  name: string;
-  manufacturer: string;
-  price: number;
-  description: string;
-  guarantyMonths: number;
-  stores:StoreInfo[];
+interface Payment{  
+  type: string;
+  amount: number;
 }
 
-interface FormListProductProps {
+interface Product{
+  productId: string;
+  quantity: number;
+  name: string;
+  price: number;
+}
+  
+interface OrderInterface{
+  idOrder: number;
+  idStoreShipping: string;
+  idStoreReceive: string;
+  dateDeparture: string;
+  dateEntry: string;
+  total: number;
+  status: string;
+  nit: string;
   products: Product[];
+  payments: Payment[];
+}
+
+interface FormListSaleProps {
+  orders: OrderInterface[];
 }
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -94,53 +104,59 @@ function stableSort<T>(array: T[], comparator: (a: T, b: T) => number) {
 
 interface HeadCell {
   disablePadding: boolean;
-  id: keyof Product;
+  id: keyof OrderInterface;
   label: string;
   numeric: boolean;
 }
 
 const headCells: readonly HeadCell[] = [
   {
-  id: 'idProduct',
+  id: 'idOrder',
   numeric: false,
   disablePadding: true,
-  label: 'Codigo Producto',
+  label: 'Codigo Orden',
 },
 {
-  id: 'name',
+  id: 'idStoreShipping',
   numeric: false,
   disablePadding: false,
-  label: 'Nombre',
+  label: 'Codigo de tienda que envia',
 },
 {
-  id: 'manufacturer',
+  id: 'idStoreReceive',
   numeric: false,
   disablePadding: false,
-  label: 'Fabricante',
+  label: 'Codigo de tienda que recibe',
 },
 {
-  id: 'price',
-  numeric: true,
-  disablePadding: false,
-  label: 'Precio',
-},
-{
-  id: 'description',
+  id: 'dateDeparture',
   numeric: false,
   disablePadding: false,
-  label: 'Descripcion',
+  label: 'Fecha de salida',
 },
 {
-  id: 'guarantyMonths',
+  id: 'dateEntry',
   numeric: false,
   disablePadding: false,
-  label: 'Garantia (Meses)',
+  label: 'Fecha de entrada',
+},
+{
+  id: 'total',
+  numeric: false,
+  disablePadding: false,
+  label: 'Total',
+},
+{
+  id: 'status',
+  numeric: false,
+  disablePadding: false,
+  label: 'Estado',
 },
 ];
 
 interface EnhancedTableProps {
   numSelected: number;
-  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof Product) => void;
+  onRequestSort: (event: React.MouseEvent<unknown>, property: keyof OrderInterface) => void;
   onSelectAllClick: (event: React.ChangeEvent<HTMLInputElement>) => void;
   order: Order;
   orderBy: string;
@@ -151,7 +167,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   const { onSelectAllClick, order, orderBy, numSelected, rowCount, onRequestSort } =
     props;
   const createSortHandler =
-    (property: keyof Product) => (event: React.MouseEvent<unknown>) => {
+    (property: keyof OrderInterface) => (event: React.MouseEvent<unknown>) => {
       onRequestSort(event, property);
     };
 
@@ -255,13 +271,16 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
 
 interface Props {
     row: {
-      idProduct: number;
-      name: string;
-      manufacturer: string;
-      price: string;
-      description: string;
-      guarantyMonths: number;
-      stores: StoreInfo[];
+      idOrder: number;
+      idStoreShipping: string;
+      idStoreReceive: string;
+      dateDeparture: string;
+      dateEntry: string;
+      total: number;
+      status: string;
+      nit: string;
+      products: Product[];
+      payments: Payment[];
       // Agrega aquí cualquier otra propiedad necesaria
     };
     isSelected: (id: number) => boolean;
@@ -275,36 +294,35 @@ const TableRowWithExpansion: React.FC<Props> = ({ row, isSelected, handleClick }
       setOpen(!open);
     };
   
-    const labelId = `enhanced-table-checkbox-${row.idProduct}`;
+    const labelId = `enhanced-table-checkbox-${row.idOrder}`;
   
     return (
       <>
         <TableRow
           hover
           role="checkbox"
-          aria-checked={isSelected(row.idProduct)}
+          aria-checked={isSelected(row.idOrder)}
           tabIndex={-1}
-          selected={isSelected(row.idProduct)}
+          selected={isSelected(row.idOrder)}
           sx={{ cursor: 'pointer' }}
         >
           <TableCell padding="checkbox">
             <Checkbox
-              onClick={(event) => handleClick(event, row.idProduct)}
+              onClick={(event) => handleClick(event, row.idOrder)}
               color="primary"
-              checked={isSelected(row.idProduct)}
+              checked={isSelected(row.idOrder)}
               inputProps={{
                 'aria-labelledby': labelId,
               }}
             />
           </TableCell>
-          <TableCell component="th" id={labelId} scope="row" padding="none">
-            {row.idProduct}
-          </TableCell>
-          <TableCell align="right">{row.name}</TableCell>
-          <TableCell align="right">{row.manufacturer}</TableCell>
-          <TableCell align="right">{row.price}</TableCell>
-          <TableCell align="right">{row.description}</TableCell>
-          <TableCell align="right">{row.guarantyMonths}</TableCell>
+          <TableCell align="right">{row.idOrder}</TableCell>
+          <TableCell align="right">{row.idStoreShipping}</TableCell>
+          <TableCell align="right">{row.idStoreReceive}</TableCell>
+          <TableCell align="right">{row.dateDeparture}</TableCell>
+          <TableCell align="right">{row.dateEntry}</TableCell>
+          <TableCell align="right">{row.total}</TableCell>
+          <TableCell align="right">{row.status}</TableCell>
           <TableCell>
             <IconButton aria-label="expand row" size="small" onClick={handleExpandClick}>
               {open ? <ChevronUp /> : <ChevronDown />}
@@ -316,22 +334,43 @@ const TableRowWithExpansion: React.FC<Props> = ({ row, isSelected, handleClick }
             <Collapse in={open} timeout='auto' unmountOnExit>
               <Box sx={{ m: 2 }}>
                 <Typography variant='h6' gutterBottom component='div'>
-                  Stock en Tiendas
+                  Productos
                 </Typography>
                 <Table size='small' aria-label='purchases'>
                   <TableHead>
                     <TableRow>
-                      <TableCell>Codigo de la Tienda</TableCell>                                     
-                      <TableCell align='right'>Cantidad</TableCell>
+                      <TableCell>Codigos de producto</TableCell>                                     
+                      <TableCell align='right'>Cantidad de productos</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {row.stores.map(historyRow => (
-                      <TableRow key={historyRow.storeCode}>
+                    {row.products.map(historyRow => (
+                      <TableRow key={historyRow.productId}>
                         <TableCell component='th' scope='row'>
-                          {historyRow.storeCode}
+                          {historyRow.name}
                         </TableCell>                        
-                        <TableCell align='right'>{historyRow.stock}</TableCell>                          
+                        <TableCell align='right'>{historyRow.quantity}</TableCell>                          
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                <Typography variant='h6' gutterBottom component='div'>
+                  Tipo de pago
+                </Typography>
+                <Table size='small' aria-label='purchases'>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>Tipo de pago</TableCell>                                     
+                      <TableCell align='right'>Cantidad del pago</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {row.payments.map(historyRow => (
+                      <TableRow key={historyRow.type}>
+                        <TableCell component='th' scope='row'>
+                          {historyRow.type}
+                        </TableCell>
+                        <TableCell align='right'>{historyRow.amount}</TableCell>                          
                       </TableRow>
                     ))}
                   </TableBody>
@@ -345,11 +384,11 @@ const TableRowWithExpansion: React.FC<Props> = ({ row, isSelected, handleClick }
   };
 
 
-const TableCollapsible: React.FC<FormListProductProps> = ({ products }) => {
+const TableListSalesByIdCustomer: React.FC<FormListSaleProps> = ({ orders }) => {
     // console.log(props.dataServer);
-  const rows = products;
+  const rows = orders;
   const [order, setOrder] = React.useState<Order>('asc');
-  const [orderBy, setOrderBy] = React.useState<keyof Product>('idProduct');
+  const [orderBy, setOrderBy] = React.useState<keyof OrderInterface>('idOrder');
   const [selected, setSelected] = React.useState<readonly number[]>([]);
   const [page, setPage] = React.useState(0);
   const [dense, setDense] = React.useState(false);
@@ -357,7 +396,7 @@ const TableCollapsible: React.FC<FormListProductProps> = ({ products }) => {
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
-    property: keyof Product,
+    property: keyof OrderInterface,
   ) => {
     const isAsc = orderBy === property && order === 'asc';
     setOrder(isAsc ? 'desc' : 'asc');
@@ -366,7 +405,7 @@ const TableCollapsible: React.FC<FormListProductProps> = ({ products }) => {
 
   const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
-      const newSelected = rows.map((n: { idProduct: any; }) => n.idProduct);
+      const newSelected = rows.map((n: { idOrder: any; }) => n.idOrder);
       setSelected(newSelected);
       return;
     }
@@ -411,13 +450,14 @@ const TableCollapsible: React.FC<FormListProductProps> = ({ products }) => {
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
+  
   const visibleRows = React.useMemo(
     () =>
-      stableSort(rows, getComparator(order, orderBy)).slice(
+    stableSort(rows, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage
+        page * rowsPerPage + rowsPerPage,
       ),
-    [order, rows, orderBy, page, rowsPerPage]
+    [order, rows, orderBy, page, rowsPerPage],
   );
 
   return (
@@ -439,9 +479,9 @@ const TableCollapsible: React.FC<FormListProductProps> = ({ products }) => {
               rowCount={rows.length}
             />
             <TableBody>
-            {/*rows.map((row) => (
+            {visibleRows.map((row) => (
                 <TableRowWithExpansion
-                  key={row.idProduct} // Supongo que tienes una propiedad idProduct única para cada fila
+                  key={row.idOrder} // Supongo que tienes una propiedad idProduct única para cada fila
                   row={row}
                   isSelected={isSelected} // Supongamos que isSelected es una función que verifica si una fila está seleccionada
                   handleClick={handleClick} // Supongamos que handleClick es una función de manejo de clics para seleccionar una fila
@@ -455,31 +495,7 @@ const TableCollapsible: React.FC<FormListProductProps> = ({ products }) => {
                 >
                   <TableCell colSpan={6} />
                 </TableRow>
-                )*/}
-
-              {visibleRows.map((row, index) => {
-                  const row_id_user: number = row.idProduct as number;
-                  //const isItemSelected = isSelected(row_id_user);
-                  //const labelId = `enhanced-table-checkbox-${index}`;
-  
-                  return (
-                    <TableRowWithExpansion
-                    key={row.idProduct} // Supongo que tienes una propiedad idProduct única para cada fila
-                    row={row}
-                    isSelected={isSelected} // Supongamos que isSelected es una función que verifica si una fila está seleccionada
-                    handleClick={handleClick} // Supongamos que handleClick es una función de manejo de clics para seleccionar una fila
-                    />
-                  );
-                })}
-                {emptyRows > 0 && (
-                  <TableRow
-                    style={{
-                      height: (dense ? 33 : 53) * emptyRows,
-                    }}
-                  >
-                    <TableCell colSpan={6} />
-                  </TableRow>
-                  )}
+              )}
             </TableBody>
           </Table>
         </TableContainer>
@@ -500,4 +516,4 @@ const TableCollapsible: React.FC<FormListProductProps> = ({ products }) => {
     </Box>
   );
 }
-export default TableCollapsible
+export default TableListSalesByIdCustomer

@@ -14,7 +14,7 @@ import CustomerCatalog from 'src/views/customer-dashboard/CustomerCatalog'
 import 'react-datepicker/dist/react-datepicker.css'
 import { Card, CardHeader, Link, Typography } from '@mui/material'
 import { getAllProducts } from 'src/utils/apiUtils/product/allProductsUtil'
-import { SearchBarProduct } from 'src/components/products/SearchBarProduct'
+import { SearchBarProductDashboard } from 'src/components/customers/dashboard/SearchBarProductDashboard'
 
 
 
@@ -73,22 +73,22 @@ const DashboardConsumer = () => {
 
   return (
     <Grid container spacing={6}>
-    <Grid item xs={12} md={4}>
-      <Typography variant='h5'>
-        <Link target='_blank'>
-          Listado de Productos
-        </Link>
-      </Typography>
-      <Typography variant='body2'>Listado general de todos los productos</Typography>
-    </Grid>
-    <Grid item xs={12} md={8} >
-      <SearchBarProduct handleSearch={handleSearch} />
-    </Grid>
-    <Grid item xs={12}>
-      <Card>
-      <CustomerCatalog products={productsData}/>
-      </Card>
-    </Grid>
+      <Grid item xs={12} md={4}>
+        <Typography variant='h5'>
+          <Link target='_blank'>
+            Listado de Productos
+          </Link>
+        </Typography>
+        <Typography variant='body2'>Listado general de todos los productos</Typography>
+      </Grid>
+      <Grid item xs={12} md={8} >
+        <SearchBarProductDashboard handleSearch={handleSearch} />
+      </Grid>
+      <Grid item xs={12} md={12}>
+        <Card>
+        <CustomerCatalog products={productsData}/>
+        </Card>
+      </Grid>
     </Grid>
   )
 }

@@ -8,41 +8,12 @@ import CardContent from '@mui/material/CardContent'
 import CardActions from '@mui/material/CardActions'
 import Grid, { GridProps } from '@mui/material/Grid'
 import { Divider } from '@mui/material'
+import GppGoodOutlinedIcon from '@mui/icons-material/GppGoodOutlined';
+import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
+import FactoryOutlinedIcon from '@mui/icons-material/FactoryOutlined';
+import ImageComponentDetail from 'src/components/customers/dashboard/ImageComponent'
 
-// Styled Grid component
-const StyledGrid1 = styled(Grid)<GridProps>(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'flex-start',
-  [theme.breakpoints.down('md')]: {
-    paddingTop: '0 !important'
-  },
-  '& .MuiCardContent-root': {
-    padding: theme.spacing(3, 4.75),
-    [theme.breakpoints.down('md')]: {
-      paddingTop: 0
-    }
-  }
-}))
 
-// Styled Grid component
-const StyledGrid2 = styled(Grid)<GridProps>(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  [theme.breakpoints.up('md')]: {
-    paddingLeft: '0 !important'
-  },
-  [theme.breakpoints.down('md')]: {
-    order: -1
-  }
-}))
-
-// Styled component for the image
-const Img = styled('img')(({ theme }) => ({
-  height: '11rem',
-  borderRadius: theme.shape.borderRadius
-}))
 
 interface StoreInfo {
   storeCode: string;
@@ -62,17 +33,17 @@ interface Product{
 interface ProductDetailCardProps {
   product: Product;  
 }
-
+//<Img alt='Stumptown Roasters' src='/images/cards/analog-clock.jpg' />
 const ProductDetailCard : React.FC<ProductDetailCardProps> = ({ product }) => {
   return (
     <Card>
       <Grid container spacing={6}>
-        <StyledGrid1 item xs={4} md={4} lg={4}>
+        <Grid item xs={12} md={4}>
           <CardContent sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Img alt='Stumptown Roasters' src='/images/cards/analog-clock.jpg' />
+            <ImageComponentDetail idProduct={product.idProduct}/>
           </CardContent>
-        </StyledGrid1>
-        <StyledGrid1 item xs={8} md={8} lg={8}>
+        </Grid>
+        <Grid item xs={12} md={8}>
           <CardContent>
             <Typography variant='h5' sx={{ marginBottom: 2 }}>
               {product.name}
@@ -81,14 +52,24 @@ const ProductDetailCard : React.FC<ProductDetailCardProps> = ({ product }) => {
               {product.description}
             </Typography>
             <Typography variant='body1' sx={{ marginBottom: 4 }}>
-              Q.{product.price}
+              Precio: Q.{product.price}
             </Typography>
-            <Divider></Divider>
-            <Typography variant='body1' sx={{ marginBottom: 4 }}>
-              Q.{product.price}
+            <Divider variant="middle"/>
+            <Typography variant='caption' sx={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
+              <FactoryOutlinedIcon sx={{ marginRight: 1 }}/>Fabricante: {product.manufacturer}
             </Typography>
+            <Typography variant='caption' sx={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
+              <StorefrontOutlinedIcon sx={{ marginRight: 1 }} />Codigo Intelaf: {product.idProduct}
+            </Typography>
+            {product.guarantyMonths != null ? (
+              <Typography variant='caption' sx={{ display: 'flex', alignItems: 'center', marginBottom: 4 }}>
+                <GppGoodOutlinedIcon sx={{ marginRight: 1 }} /> Garantia: {product.guarantyMonths} Meses
+              </Typography>
+            ) : (
+              <div></div>
+            )}
           </CardContent>          
-        </StyledGrid1>
+        </Grid>
       </Grid>
     </Card>
   )

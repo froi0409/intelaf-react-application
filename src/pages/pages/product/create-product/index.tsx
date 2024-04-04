@@ -23,7 +23,6 @@ const CreateProductPage = () => {
   
   const [stores, setStores] = useState([]);  
 
-
   useEffect(() => {
     const fetchData = async () => {
       try {

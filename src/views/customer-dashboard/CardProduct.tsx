@@ -5,6 +5,7 @@ import CardMedia from '@mui/material/CardMedia'
 import Typography from '@mui/material/Typography'
 import CardContent from '@mui/material/CardContent'
 import { useRouter } from 'next/router'
+import CardImageDashboard from 'src/components/customers/dashboard/CardImageDashboard'
 
 interface StoreInfo {
   storeCode: string;
@@ -26,7 +27,7 @@ interface CardProductProps {
 }
 
 
-
+//<CardMedia sx={{ height: '10rem' }} image='/images/cards/watch-on-hand.jpg' />
 const CardProduct: React.FC<CardProductProps> = ({ product }) => {
   const router = useRouter();
   
@@ -36,7 +37,7 @@ const CardProduct: React.FC<CardProductProps> = ({ product }) => {
 
   return (
     <Card>
-      <CardMedia sx={{ height: '9.375rem' }} image='/images/cards/watch-on-hand.jpg' />
+      <CardImageDashboard idProduct={product.idProduct}/>
       <CardContent sx={{ padding: theme => `${theme.spacing(3, 5.25, 4)} !important` }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
           <Typography variant='h6' sx={{ marginBottom: 2 }}>
