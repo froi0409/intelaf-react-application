@@ -1,18 +1,14 @@
 import React, { Fragment, useEffect, useState } from 'react';
-import TableStores from 'src/components/list-all-stores/TableStores';
+import TableShippingTimes from 'src/components/shipping-time/TableShippingTimes';
+import { getAllShippingTimes } from 'src/utils/apiUtils/shipping-time/allShippingTimesUtil';
 
-import axios from 'axios';
-import { getAllStores } from 'src/utils/apiUtils/store/allStores';
-
-const AllStoresTable = () => {
+const AllShippingTimesTable = () => {
     const [data, setData] = useState([]);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                console.log(process.env.URL_API_BACKEND_COMPLETE);
-                const response = await getAllStores();
-                
+                const response = await getAllShippingTimes();
                 setData(response.data);
             } catch (error) {
                 console.error(`Error: ${error}`);
@@ -24,10 +20,11 @@ const AllStoresTable = () => {
 
     return (
         <>
-            <TableStores dataServer={data} />
+            <TableShippingTimes dataServer={data}></TableShippingTimes>
         </>
     )
 
 }
 
-export default AllStoresTable;
+export default AllShippingTimesTable;
+
