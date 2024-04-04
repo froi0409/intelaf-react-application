@@ -28,6 +28,8 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import { useRouter } from 'next/router';
 // @ts-ignore
 import { v4 as uuidv4 } from "uuid"; 
+import Link from 'next/link';
+import { useState } from 'react';
 
 interface Data {
     idStore1: string,
@@ -171,18 +173,15 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
     numSelected: number;
-    handleEdit: () => void; // Function to handle edit button click
+    store1Selected: readonly number[],
+    store2Selected: readonly number[]
 }
 
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-    const { numSelected, handleEdit } = props;
+    const { numSelected, store1Selected, store2Selected } = props;
 
-    const handleClickEdit = () => {
-        if (numSelected !== null) {
-        // Only trigger edit if a row is selected
-        handleEdit();
-        }
-    };
+    const [idStore1S, setIdStore1S] = useState('');
+    const [idStore2S, setIdStore2S] = useState('')
 
     return (
         <Toolbar
@@ -202,7 +201,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
             variant="subtitle1"
             component="div"
             >
-            Usuario {numSelected}
+            {numSelected} selected
             </Typography>
         ) : (
             <Typography
@@ -214,11 +213,13 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
             Tiendas
             </Typography>
         )}
-        {numSelected > 0 ? (
-            <Tooltip title="Editar">
-            <IconButton onClick={handleClickEdit} disabled={numSelected === null}>
-            <EditIcon />
-            </IconButton>
+        {numSelected === 1 ? (
+        <Tooltip title="Editar">
+            <Link href={{ pathname: '/shipping-time/edit-shipping-time', query: { idStore1: store1Selected, idStore2: store2Selected } }}>
+                <IconButton>
+                <EditIcon />
+                </IconButton>
+            </Link>    
         </Tooltip>
         ) : (
             <Tooltip title="filtrar">
@@ -246,6 +247,10 @@ export default function TableShippingTimes(props: any) {
     const [dense, setDense] = React.useState(false);
     const [rowsPerPage, setRowsPerPage] = React.useState(10);
     const router = useRouter();
+
+    const [setselectedStore1, setSetselectedStore1] = useState<readonly number[]>([])
+    const [setselectedStore2, setSetselectedStore2] = useState<readonly number[]>([])
+    
 
     const handleRequestSort = (
         event: React.MouseEvent<unknown>,
@@ -288,11 +293,6 @@ export default function TableShippingTimes(props: any) {
         setDense(event.target.checked);
     };
 
-    const handleEdit = () => {
-        console.log('user id', selected[0])
-        router.push(`/sipping-time/editShippingTime/${selected[0]}`);
-    }
-
     const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
     // Avoid a layout jump when reaching the last page with empty rows.
@@ -311,7 +311,7 @@ export default function TableShippingTimes(props: any) {
     return (
         <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length > 0 ? selected[0] : 0} handleEdit={handleEdit} />
+        <EnhancedTableToolbar numSelected={selected.length} store1Selected={selected} store2Selected={selected} />
             <TableContainer>
             <Table
                 sx={{ minWidth: 750 }}
@@ -332,7 +332,7 @@ export default function TableShippingTimes(props: any) {
                     // }
                     const idStore = row.idStore1 as string;
                     // @ts-ignore
-                    const row_id_user: number = idStore.concat(row.idStore2 as string) as string;
+                    const row_id_user: number = idStore.concat(',' + row.idStore2 as string) as string;
                     const isItemSelected = isSelected(row_id_user);
                     const labelId = `enhanced-table-checkbox-${index}`;
 

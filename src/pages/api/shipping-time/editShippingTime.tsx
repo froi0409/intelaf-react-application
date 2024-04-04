@@ -1,11 +1,16 @@
 import { NextApiResponse } from "next/types";
 import { NextRequest } from "next/server";
 import axios from "axios";
+import { getJwt } from "../jwtUtils";
 
 export async function handlePut(req: NextRequest, res: NextApiResponse) {
     try {
         const requestData = req.body;
-        const response = await axios.put(`${process.env.URL_API_BACKEND}/v1/shippingtime`, requestData);
+        const response = await axios.put(`${process.env.URL_API_BACKEND}/v1/shippingtime`, requestData, {
+            headers: {
+                Authorization: getJwt(req)
+            }
+        });
         return res.status(response.status).json(response.data);
     } catch (error: any) {
         console.error(error);

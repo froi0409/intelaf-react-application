@@ -3,23 +3,34 @@ import { Card, CardHeader, CardContent, Grid, Button, TextField, InputAdornment 
 import { CardAccountDetailsOutline, StorefrontOutline, MapMarkerOutline, Phone, ClockTimeThreeOutline, EmailOutline } from 'mdi-material-ui';
 import Alert from '@mui/material/Alert';
 import { editShippingTime } from 'src/utils/apiUtils/shipping-time/editShippingTimeUtil';
+import { useRouter } from 'next/router';
 
 const EditShippingTime = () => {
+
+    const router = useRouter();
+    const { idStore1, idStore2 } = router.query;
 
     const [response, setResponse] = useState('');
     const [messageType, setMessageType] = useState('');
     const [submitted, setSubmitted] = useState(false);
+    
 
-    const [idStore1, setIdStore1] = useState('');
-    const [idStore2, setIdStore2] = useState('');
     const [time, setTime] = useState('');
 
+    console.log('asdf',  idStore1);
+
+    // @ts-ignore
+    const ids = idStore1.split(',');
+    const idStore1S = ids[0];
+    const idStore2S = ids[1];
+    
+    
     const handleSubmit =async (e: React.FormEvent) => {
         e.preventDefault();
 
         const formData = {
-            idStore1,
-            idStore2,
+            idStore1: idStore1S,
+            idStore2: idStore2S,
             time
         }
 
@@ -65,12 +76,12 @@ const EditShippingTime = () => {
                             <Grid container spacing={5}>
                                 <Grid item xs={6}>
                                 <TextField
+                                    disabled
                                     fullWidth
                                     label='Código: Tienda de Origen'
                                     placeholder='STR-#'
                                     required
-                                    value={idStore1}
-                                    onChange={(e) => setIdStore1(e.target.value)}
+                                    value={idStore1S}
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position='start'>
@@ -82,12 +93,12 @@ const EditShippingTime = () => {
                                 </Grid>
                                 <Grid item xs={6}>
                                 <TextField
+                                disabled
                                     fullWidth
                                     label='Código: Tienda de Destino'
                                     placeholder='STR-#'
                                     required
-                                    value={idStore2}
-                                    onChange={(e) => setIdStore2(e.target.value)}
+                                    value={idStore2S}
                                     InputProps={{
                                         startAdornment: (
                                             <InputAdornment position='start'>
