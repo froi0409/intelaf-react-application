@@ -126,25 +126,6 @@ const navigation = (): VerticalNavItemsType => {
       path: '/pages/employee/list-employees',      
     },
     {
-      title: 'Reportes',      
-      sectionTitle: 'Reportes'
-    },
-    {
-      icon: SummarizeOutlinedIcon,
-      title: '10 Productos mas vendidos en un intervalo de tiempo',
-      path: '/pages/reports/best-selling-products'
-    },
-    {
-      icon: SummarizeOutlinedIcon,
-      title: 'Ordenes en ruta por Usuario',
-      path: '/pages/reports/orders-by-idCustomer'
-    },
-    {
-      icon: SummarizeOutlinedIcon,
-      title: 'Compras realizadas por Usuario',
-      path: '/pages/reports/sales-by-idCustomer'
-    },
-    {
       title: 'Ventas',      
       sectionTitle: 'Ventas'
     },
@@ -197,17 +178,32 @@ const navigation = (): VerticalNavItemsType => {
       sectionTitle : 'Reportes'
     },
     {
-      title: '2. tiempo de estar en tienda sin Verificacion',
+      icon: SummarizeOutlinedIcon,
+      title: '10 Productos mas vendidos en un intervalo de tiempo',
+      path: '/pages/reports/best-selling-products'
+    },
+    {
+      icon: SummarizeOutlinedIcon,
+      title: 'Ordenes en ruta por Usuario',
+      path: '/pages/reports/orders-by-idCustomer'
+    },
+    {
+      icon: SummarizeOutlinedIcon,
+      title: 'Compras realizadas por Usuario',
+      path: '/pages/reports/sales-by-idCustomer'
+    },
+    {
+      title: 'Tiempo de estar en tienda sin Verificacion',
       path: '/reports/orders/in-time-pending-verify',
       icon: FileChartOutline
     },
     {
-      title: '3. Pedidos atrasados',
+      title: 'Pedidos atrasados',
       path: '/reports/orders/overdue-arriving-store',
       icon: FileChartOutline
     },
     {
-      title: '4. Salida y transito',
+      title: 'Salida y transito',
       path: '/reports/orders/leaving-store-in-transit',
       icon: FileChartOutline
     },
