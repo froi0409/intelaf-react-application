@@ -1,7 +1,14 @@
 import axios from 'axios';
+//@ts-ignore
+import { getCookieJwt } from 'src/utils/cookieUtils';
+
 export async function getAllCustomer(): Promise<any> {
     try {
-      const response = await axios.get('/api/customer/allCustomers/');
+      const response = await axios.get('/api/customer/allCustomers/', {
+        headers: {
+            Authorization: getCookieJwt()
+        }
+    })
       return response.data;
     } catch (error) {
         console.log(error);

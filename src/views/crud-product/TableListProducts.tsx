@@ -261,6 +261,7 @@ interface Props {
       price: string;
       description: string;
       guarantyMonths: number;
+      stores: StoreInfo[];
       // Agrega aquí cualquier otra propiedad necesaria
     };
     isSelected: (id: number) => boolean;
@@ -412,11 +413,11 @@ const TableCollapsible: React.FC<FormListProductProps> = ({ products }) => {
 
   const visibleRows = React.useMemo(
     () =>
-    stableSort(rows, getComparator(order, orderBy)).slice(
+      stableSort(rows, getComparator(order, orderBy)).slice(
         page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage,
+        page * rowsPerPage + rowsPerPage
       ),
-    [order, orderBy, page, rowsPerPage],
+    [order, rows, orderBy, page, rowsPerPage]
   );
 
   return (
@@ -438,7 +439,7 @@ const TableCollapsible: React.FC<FormListProductProps> = ({ products }) => {
               rowCount={rows.length}
             />
             <TableBody>
-            {rows.map((row) => (
+            {/*rows.map((row) => (
                 <TableRowWithExpansion
                   key={row.idProduct} // Supongo que tienes una propiedad idProduct única para cada fila
                   row={row}
@@ -454,7 +455,31 @@ const TableCollapsible: React.FC<FormListProductProps> = ({ products }) => {
                 >
                   <TableCell colSpan={6} />
                 </TableRow>
-              )}
+                )*/}
+
+              {visibleRows.map((row, index) => {
+                  const row_id_user: number = row.idProduct as number;
+                  //const isItemSelected = isSelected(row_id_user);
+                  //const labelId = `enhanced-table-checkbox-${index}`;
+  
+                  return (
+                    <TableRowWithExpansion
+                    key={row.idProduct} // Supongo que tienes una propiedad idProduct única para cada fila
+                    row={row}
+                    isSelected={isSelected} // Supongamos que isSelected es una función que verifica si una fila está seleccionada
+                    handleClick={handleClick} // Supongamos que handleClick es una función de manejo de clics para seleccionar una fila
+                    />
+                  );
+                })}
+                {emptyRows > 0 && (
+                  <TableRow
+                    style={{
+                      height: (dense ? 33 : 53) * emptyRows,
+                    }}
+                  >
+                    <TableCell colSpan={6} />
+                  </TableRow>
+                  )}
             </TableBody>
           </Table>
         </TableContainer>

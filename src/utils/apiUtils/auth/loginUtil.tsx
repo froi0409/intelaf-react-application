@@ -1,4 +1,5 @@
 import axios from "axios";
+import { getCookie } from 'cookies-next';
 
 export async function login(data: any): Promise<any> {
     try {

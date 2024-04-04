@@ -26,6 +26,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import FilterListIcon from '@mui/icons-material/FilterList';
 
 import { useRouter } from 'next/router';
+// @ts-ignore
+import { v4 as uuidv4 } from "uuid"; 
 
 interface Data {
     idStore1: string,
@@ -237,154 +239,156 @@ export default function TableShippingTimes(props: any) {
         store.time
         );
     });
-const [order, setOrder] = React.useState<Order>('asc');
-const [orderBy, setOrderBy] = React.useState<keyof Data>('time');
-const [selected, setSelected] = React.useState<readonly number[]>([]);
-const [page, setPage] = React.useState(0);
-const [dense, setDense] = React.useState(false);
-const [rowsPerPage, setRowsPerPage] = React.useState(10);
-const router = useRouter();
+    const [order, setOrder] = React.useState<Order>('asc');
+    const [orderBy, setOrderBy] = React.useState<keyof Data>('time');
+    const [selected, setSelected] = React.useState<readonly number[]>([]);
+    const [page, setPage] = React.useState(0);
+    const [dense, setDense] = React.useState(false);
+    const [rowsPerPage, setRowsPerPage] = React.useState(10);
+    const router = useRouter();
 
-const handleRequestSort = (
-    event: React.MouseEvent<unknown>,
-    property: keyof Data,
-) => {
-    const isAsc = orderBy === property && order === 'asc';
-    setOrder(isAsc ? 'desc' : 'asc');
-    setOrderBy(property);
-};
+    const handleRequestSort = (
+        event: React.MouseEvent<unknown>,
+        property: keyof Data,
+    ) => {
+        const isAsc = orderBy === property && order === 'asc';
+        setOrder(isAsc ? 'desc' : 'asc');
+        setOrderBy(property);
+    };
 
-const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked) {
-    const newSelected = rows.map((n: { id_user: any; }) => n.id_user);
-    setSelected(newSelected);
-    return;
+    const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+        if (event.target.checked) {
+        const newSelected = rows.map((n: { id_user: any; }) => n.id_user);
+        setSelected(newSelected);
+        return;
+        }
+        setSelected([]);
+    };
+
+    const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
+        const selectedIndex = selected.indexOf(id);
+        let newSelected: readonly number[] = [];
+
+        if (selectedIndex === -1) {
+        newSelected = [id]; // Clear existing selection (optional)
+        }
+        setSelected(newSelected);
+    };
+
+    const handleChangePage = (event: unknown, newPage: number) => {
+        setPage(newPage);
+    };
+
+    const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setRowsPerPage(parseInt(event.target.value, 10));
+        setPage(0);
+    };
+
+    const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setDense(event.target.checked);
+    };
+
+    const handleEdit = () => {
+        console.log('user id', selected[0])
+        router.push(`/sipping-time/editShippingTime/${selected[0]}`);
     }
-    setSelected([]);
-};
 
-const handleClick = (event: React.MouseEvent<unknown>, id: number) => {
-    const selectedIndex = selected.indexOf(id);
-    let newSelected: readonly number[] = [];
+    const isSelected = (id: number) => selected.indexOf(id) !== -1;
 
-    if (selectedIndex === -1) {
-    newSelected = [id]; // Clear existing selection (optional)
-    }
-    setSelected(newSelected);
-};
+    // Avoid a layout jump when reaching the last page with empty rows.
+    const emptyRows =
+        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
-const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-};
+    const visibleRows = React.useMemo(
+        () =>
+        stableSort(rows, getComparator(order, orderBy)).slice(
+            page * rowsPerPage,
+            page * rowsPerPage + rowsPerPage,
+        ),
+        [order, rows, orderBy, page, rowsPerPage],
+    );
 
-const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-};
+    return (
+        <Box sx={{ width: '100%' }}>
+        <Paper sx={{ width: '100%', mb: 2 }}>
+        <EnhancedTableToolbar numSelected={selected.length > 0 ? selected[0] : 0} handleEdit={handleEdit} />
+            <TableContainer>
+            <Table
+                sx={{ minWidth: 750 }}
+                aria-labelledby="tableTitle"
+                size={dense ? 'small' : 'medium'}
+            >
+                <EnhancedTableHead
+                numSelected={selected.length}
+                order={order}
+                orderBy={orderBy}
+                onSelectAllClick={handleSelectAllClick}
+                onRequestSort={handleRequestSort}
+                rowCount={rows.length}
+                />
+                <TableBody>
+                {visibleRows.map((row, index) => {
+                    // if (typeof row.id_user === 'number') {
+                    // }
+                    const idStore = row.idStore1 as string;
+                    // @ts-ignore
+                    const row_id_user: number = idStore.concat(row.idStore2 as string) as string;
+                    const isItemSelected = isSelected(row_id_user);
+                    const labelId = `enhanced-table-checkbox-${index}`;
 
-const handleChangeDense = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setDense(event.target.checked);
-};
-
-const handleEdit = () => {
-    console.log('user id', selected[0])
-    router.push(`/sipping-time/editShippingTime/${selected[0]}`);
-}
-
-const isSelected = (id: number) => selected.indexOf(id) !== -1;
-
-// Avoid a layout jump when reaching the last page with empty rows.
-const emptyRows =
-    page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
-const visibleRows = React.useMemo(
-    () =>
-    stableSort(rows, getComparator(order, orderBy)).slice(
-        page * rowsPerPage,
-        page * rowsPerPage + rowsPerPage,
-    ),
-    [order, rows, orderBy, page, rowsPerPage],
-);
-
-return (
-    <Box sx={{ width: '100%' }}>
-    <Paper sx={{ width: '100%', mb: 2 }}>
-    <EnhancedTableToolbar numSelected={selected.length > 0 ? selected[0] : 0} handleEdit={handleEdit} />
-        <TableContainer>
-        <Table
-            sx={{ minWidth: 750 }}
-            aria-labelledby="tableTitle"
-            size={dense ? 'small' : 'medium'}
-        >
-            <EnhancedTableHead
-            numSelected={selected.length}
-            order={order}
-            orderBy={orderBy}
-            onSelectAllClick={handleSelectAllClick}
-            onRequestSort={handleRequestSort}
-            rowCount={rows.length}
+                    return (
+                    <TableRow
+                        hover
+                        onClick={(event) => handleClick(event, row_id_user)}
+                        role="checkbox"
+                        aria-checked={isItemSelected}
+                        tabIndex={-1}
+                        key={uuidv4()}
+                        selected={isItemSelected}
+                        sx={{ cursor: 'pointer' }}
+                    >
+                        <TableCell padding="checkbox">
+                        <Checkbox
+                            color="primary"
+                            checked={isItemSelected}
+                            inputProps={{
+                            'aria-labelledby': labelId,
+                            }}
+                        />
+                        </TableCell>
+                        <TableCell align="right">{row.idStore1}</TableCell>
+                        <TableCell align="right">{row.idStore2}</TableCell>
+                        <TableCell align="right">{row.time}</TableCell>
+                    </TableRow>
+                    );
+                })}
+                {emptyRows > 0 && (
+                    <TableRow
+                    style={{
+                        height: (dense ? 33 : 53) * emptyRows,
+                    }}
+                    >
+                    <TableCell colSpan={6} />
+                    </TableRow>
+                )}
+                </TableBody>
+            </Table>
+            </TableContainer>
+            <TablePagination
+            rowsPerPageOptions={[10, 25, 50]}
+            component="div"
+            count={rows.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={handleChangePage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
             />
-            <TableBody>
-            {visibleRows.map((row, index) => {
-                // if (typeof row.id_user === 'number') {
-                // }
-                const row_id_user: number = row.idStore1 as number;
-                const isItemSelected = isSelected(row_id_user);
-                const labelId = `enhanced-table-checkbox-${index}`;
-
-                return (
-                <TableRow
-                    hover
-                    onClick={(event) => handleClick(event, row_id_user)}
-                    role="checkbox"
-                    aria-checked={isItemSelected}
-                    tabIndex={-1}
-                    key={row.idStore1}
-                    selected={isItemSelected}
-                    sx={{ cursor: 'pointer' }}
-                >
-                    <TableCell padding="checkbox">
-                    <Checkbox
-                        color="primary"
-                        checked={isItemSelected}
-                        inputProps={{
-                        'aria-labelledby': labelId,
-                        }}
-                    />
-                    </TableCell>
-                    <TableCell align="right">{row.idStore1}</TableCell>
-                    <TableCell align="right">{row.idStore2}</TableCell>
-                    <TableCell align="right">{row.time}</TableCell>
-                </TableRow>
-                );
-            })}
-            {emptyRows > 0 && (
-                <TableRow
-                style={{
-                    height: (dense ? 33 : 53) * emptyRows,
-                }}
-                >
-                <TableCell colSpan={6} />
-                </TableRow>
-            )}
-            </TableBody>
-        </Table>
-        </TableContainer>
-        <TablePagination
-        rowsPerPageOptions={[10, 25, 50]}
-        component="div"
-        count={rows.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
+        </Paper>
+        <FormControlLabel
+            control={<Switch checked={dense} onChange={handleChangeDense} />}
+            label="Sin espaciado"
         />
-    </Paper>
-    <FormControlLabel
-        control={<Switch checked={dense} onChange={handleChangeDense} />}
-        label="Sin espaciado"
-    />
-    </Box>
-);
+        </Box>
+    );
 }
 

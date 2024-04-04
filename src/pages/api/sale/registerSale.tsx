@@ -22,6 +22,7 @@ interface SaleDataBackend {
   total: number;
   payments: PaymentInfo[];
   products: Product[];
+  storeCode : string;
 }
 
 // Función para transformar InvoiceProduct a Product
@@ -40,7 +41,8 @@ function transformSaleData(saleData: SaleData): SaleDataBackend {
     nit: saleData.nit,
     total: saleData.total,
     payments: saleData.payments,
-    products: transformedProducts
+    products: transformedProducts,
+    storeCode : saleData.storeCode
   };
 }
 

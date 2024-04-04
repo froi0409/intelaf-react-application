@@ -347,7 +347,7 @@ export default function TableListEmployees(props: any) {
         page * rowsPerPage,
         page * rowsPerPage + rowsPerPage,
       ),
-    [order, orderBy, page, rowsPerPage],
+    [order, rows, orderBy, page, rowsPerPage],
   );
 
   return (

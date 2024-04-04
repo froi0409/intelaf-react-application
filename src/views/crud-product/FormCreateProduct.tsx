@@ -1,10 +1,10 @@
 // ** React Imports
-import { ChangeEvent, forwardRef, MouseEvent, useState } from 'react'
+import { ChangeEvent, ElementType, forwardRef, MouseEvent, useState } from 'react'
 
 // ** MUI Imports
 import Card from '@mui/material/Card'
 import Grid from '@mui/material/Grid'
-import Button from '@mui/material/Button'
+import Button, { ButtonProps } from '@mui/material/Button'
 import Divider from '@mui/material/Divider'
 import MenuItem from '@mui/material/MenuItem'
 import TextField from '@mui/material/TextField'
@@ -18,10 +18,13 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import TableContainer from '@mui/material/TableContainer'
 import Table from '@mui/material/Table'
 import { Alert, InputAdornment, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
-import { AccountHardHat, BadgeAccountOutline, Cash, LabelOutline, Numeric, PencilOutline, ShieldLockOutline, Text } from 'mdi-material-ui'
+import { AccountHardHat, BadgeAccountOutline, Box, Cash, LabelOutline, Numeric, PencilOutline, ShieldLockOutline, Text } from 'mdi-material-ui'
 import React from 'react'
 import { postCreateProduct } from 'src/utils/apiUtils/product/createProductUtil'
 //import {createProductHandler} from '../../api/product/createProduct'
+
+import { styled } from '@mui/material/styles'
+import axios from 'axios'
 
 
 interface StoreInfo {
@@ -50,8 +53,32 @@ interface Product{
   price: number;
   description: string;
   guarantyMonths: number;
-  stores:StoreInfo[];
+  stores:StoreInfo[];  
 }
+
+const ImgStyled = styled('img')(({ theme }) => ({
+  width: 100,
+  height: 100,
+  marginRight: theme.spacing(6.25),
+  borderRadius: theme.shape.borderRadius
+}))
+
+const ButtonStyled = styled(Button)<ButtonProps & { component?: ElementType; htmlFor?: string }>(({ theme }) => ({
+  [theme.breakpoints.down('sm')]: {
+    width: '100%',
+    textAlign: 'center'
+  }
+}))
+
+const ResetButtonStyled = styled(Button)<ButtonProps>(({ theme }) => ({
+  marginLeft: theme.spacing(4.5),
+  [theme.breakpoints.down('sm')]: {
+    width: '100%',
+    marginLeft: 0,
+    textAlign: 'center',
+    marginTop: theme.spacing(4)
+  }
+}))
 
 const FormCreateProduct:React.FC<Props> = ({ stores }) => {
   // ** States
@@ -62,6 +89,11 @@ const FormCreateProduct:React.FC<Props> = ({ stores }) => {
   const [messageType, setMessageType] = useState('')
   const [messageResponse, setMessageResponse] = useState('')
   const [submitted, setSubmitted] = useState(false);
+
+  // ** Image uploadre settings
+  const [imgSrc, setImgSrc] = useState<string>('/images/imagotipo.png')
+  const [imgUpload, setImgUpload] = useState<File | null>(null);
+
 
   const [values, setValues] = useState<Product>({
     idProduct: '',
@@ -108,22 +140,58 @@ const FormCreateProduct:React.FC<Props> = ({ stores }) => {
 
   const handlePost = async () => {
     setSubmitted(true);
+    let isOk = true;
     try {
       const productData = await postCreateProduct(values);  
       setMessageType('OK')    
       setMessageResponse('Producto agregado con exito');
     } catch (error) {
+      isOk = false;
       console.log(error);      
       setMessageType('ERR')    
       setMessageResponse('Producto no agregado ya existe un producto con Codigo: '+ values.idProduct);
+    }finally {
+      console.log(values);      
+      if(isOk){
+        handlePostImage();      
+      }
+    }    
+    
+  };
+
+  const handlePostImage = async () => {    
+    const formData = new FormData();
+    console.log("asdfasdfasfdasfsafsa")
+    if (imgUpload) {
+      formData.append('image', imgUpload);
+      formData.append('idProduct', values.idProduct);
+      try {
+        await axios.post(`http://localhost:8080/v1/images/upload`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        });
+        //alert('Image uploaded successfully');
+      } catch (error) {
+        //alert('Failed to upload image');
+      }
     }
-    console.log(values);
   };
 
   const handleSubmit = (e:any) => {    
     e.preventDefault();
     handlePost();
   };
+
+  const handleImageChange = (file: ChangeEvent) => {
+    const reader = new FileReader()
+    const { files } = file.target as HTMLInputElement
+    if (files && files.length !== 0) {
+      reader.onload = () => setImgSrc(reader.result as string)
+      setImgUpload(files[0]);
+      reader.readAsDataURL(files[0])
+    }
+  }
 
   return (
     <Card>
@@ -212,7 +280,34 @@ const FormCreateProduct:React.FC<Props> = ({ stores }) => {
             </Grid>
             <Grid item xs={12}>
               <Typography variant='body2' sx={{ fontWeight: 600 }}>
-                2. Informacion de las tiendas
+                2. Extras del producto
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>        
+              <Typography variant='body1' sx={{ marginTop: 5 }}>
+                Subir imagen del producto
+              </Typography>        
+              <ImgStyled src={imgSrc} alt='Profile Pic' />                
+              <ButtonStyled component='label' variant='contained' htmlFor='account-settings-upload-image'>
+                Subir foto
+                <input
+                  hidden
+                  type='file'
+                  onChange={handleImageChange}
+                  accept='image/png, image/jpeg'
+                  id='account-settings-upload-image'
+                />
+              </ButtonStyled>
+              <Typography variant='body2' sx={{ marginTop: 5 }}>
+                Tipo aceptado: PNG or JPEG. Max 800K.
+              </Typography>                
+            </Grid>
+            <Grid item xs={12}>
+              <Divider sx={{ marginBottom: 0 }} />
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant='body2' sx={{ fontWeight: 600 }}>
+                3. Informacion de las tiendas
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>

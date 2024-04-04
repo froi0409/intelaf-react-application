@@ -20,23 +20,24 @@ import { Products_Stock } from "src/pages/api/sale/stockProducts";
 import { getAllProductsStockByStore } from "src/utils/apiUtils/sale/invoice/products";
 import { errorNotification, successNotification } from "src/utils/helpers/notification";
 import TableInvoicePayments from "src/components/sales/invoice/TableInvoicePayments";
+import { getCurrentStore } from "src/utils/helpers/cookieStore";
 
 
-function priceInvoiceProduct(qty: number, unit: number) {
+export function priceInvoiceProduct(qty: number, unit: number) {
   return qty * unit;
 }
 
-function createInvoiceProduct(id_product: string, name:string, quantity: number, unit_price: number) {
+export function createInvoiceProduct(id_product: string, name:string, quantity: number, unit_price: number) {
   const price = priceInvoiceProduct(quantity, unit_price);
   return { id_product, name, quantity,unit_price, price };
 }
 
 const AddInvoice = () => {
 
+  const store = getCurrentStore();
   const [date, setDate] = useState<Date | null | undefined>(null)
   const [nit, setNit] = useState<string>('');
   const [credits, setcredits] = useState<number>(0);
-  const [store, setStore] = useState<string>('STR-1');
   const [invoiceProducts, setInvoiceProducts] = useState<InvoiceProduct[]>([]);
   const [products, setProducts] = useState<Products_Stock[]>([]);
   const [payments, setPayments] = useState<PaymentInfo[]>([]);
@@ -61,10 +62,11 @@ const AddInvoice = () => {
     setNit('')
     setcredits(0)
     setInvoiceProducts([])
+    setProducts([])
     setPayments([])
-    fetchProducts();
     setStillPay(0);
     setTotal(0);
+    fetchProducts();
   }
 
 
@@ -182,7 +184,8 @@ const AddInvoice = () => {
         nit: nit.toString(), // Convierte nit a cadena usando .toString()
         total: total || 0, // Si total es undefined o null, asigna 0
         payments: payments,
-        products : invoiceProducts
+        products : invoiceProducts,
+        storeCode : store
       };
 
       // console.log(saleData, invoiceProducts, payments)

@@ -6,9 +6,9 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { PaymentInfo } from 'src/pages/sales/add-invoice';
 // @ts-ignore
 import { v4 as uuidv4 } from "uuid"; 
+import { PaymentInfo } from 'src/utils/apiUtils/sale/invoice/registerSale';
 
 
 function createData(

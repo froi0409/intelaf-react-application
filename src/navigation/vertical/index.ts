@@ -12,6 +12,7 @@ import GoogleCirclesExtended from 'mdi-material-ui/GoogleCirclesExtended'
 import InvoicePlus from 'mdi-material-ui/InvoicePlus'
 import ListBoxOutline from 'mdi-material-ui/ListBoxOutline'
 import AccountPlus from 'mdi-material-ui/AccountPlus'
+import FileDocumentPlusOutline from 'mdi-material-ui/FileDocumentPlusOutline'
 
 
 // ** Type import
@@ -106,13 +107,49 @@ const navigation = (): VerticalNavItemsType => {
     {
       icon: CubeOutline,
       title: 'ListEmployees',
-      path: '/pages/employee/list-employees',
+      path: '/pages/employee/list-employees',      
+    },
+    {
+      icon: CubeOutline,
+      title: 'DashboardCustomer',
+      path: '/pages/customer/dashboard'
+    },
+    {
+      icon: CubeOutline,
+      title: 'ReportBestSelling',
+      path: '/pages/reports/best-selling-products'
+    },
+    {
+      icon: CubeOutline,
+      title: 'ReportOrdersByIdCustomer',
+      path: '/pages/reports/orders-by-idCustomer'
+    },
+    {
+      title: 'Ventas',      
       sectionTitle: 'Ventas'
     },
     {
       title: 'Realizar una Factura',
       path: '/sales/add-invoice',
       icon: InvoicePlus
+    },
+    {
+      sectionTitle: 'Ordenes'
+    },
+    {
+      title: 'Nueva orden',
+      path: '/orders/new-order',
+      icon: FileDocumentPlusOutline
+    },
+    {
+      title: 'Ordenes enviadas',
+      path: '/orders/orders-shipping',
+      icon: FileDocumentPlusOutline
+    },
+    {
+      title: 'Ordenes para recibir',
+      path: '/orders/orders-receive',
+      icon: FileDocumentPlusOutline
     },
     {
       sectionTitle: 'Compradores'

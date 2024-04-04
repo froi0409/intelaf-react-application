@@ -20,6 +20,7 @@ export interface SaleData {
   total: number;
   payments: PaymentInfo[]; 
   products: InvoiceProduct[];
+  storeCode : string;
 }
 
 export async function registerSale(saleData: SaleData): Promise<any> {
