@@ -26,7 +26,7 @@ export const SearchBarStores = ({handleSearch}: CDefault) => {
                     value={inputValue ?? ""}
                     onChange={handleChange}
                     onKeyDown={handleEnterKey}
-                    placeholder='Buscar por tienda de origen'
+                    placeholder='Buscar por código de tienda'
                     size='small'
                     sx={{ '& .MuiOutlinedInput-root': { borderRadius: 4 } }}
                     InputProps={{

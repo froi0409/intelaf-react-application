@@ -1,7 +1,9 @@
-import { Card, Grid, Link, Typography } from '@mui/material';
+import { Button, Card, Grid, Link, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect } from 'react'
+import { ExportHtmlInTime } from 'src/components/reports/orders/ExportHtmlInTime';
 import { TableReportInTime } from 'src/components/reports/orders/TableReportInTime';
+import { getCookieJwtGetServerSideProps } from 'src/utils/cookieUtils';
 
 export interface InTimePendingVerifyStructure {
     idOrder: number;
@@ -13,7 +15,7 @@ export interface InTimePendingVerifyStructure {
     status: string;
 }
 
-const InTimePendingVerify = ({report}: any) => {
+const InTimePendingVerify = ({ report }: any) => {
     useEffect(() => {
         //fecthData()
     }, [])
@@ -32,19 +34,22 @@ const InTimePendingVerify = ({report}: any) => {
                     <TableReportInTime dataServer={report} />
                 </Card>
             </Grid>
+            <Grid item xs={12}>
+                <ExportHtmlInTime data={report} title={'Reporte a tiempo de estar en tienda sin Verificacion'} subtitle={'Listado de pedido que están en tiempo de estar en la tienda pero debe verificarse su ingreso'} nameDownload={'time_pending_verify'} />
+            </Grid>
         </Grid>
     )
 }
 
 export async function getServerSideProps(context: any) {
     try {
-        const jwt = context.req.cookies['jwt']
-        const currentStore = context.req.cookies['store']
-        if(currentStore == undefined) {
+        const jwt = getCookieJwtGetServerSideProps(context)
+        const currentStore = context.req.cookies['idStore']
+        if (currentStore == undefined) {
             throw new Error('not store')
         }
 
-        const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/order/reportInTimeWithPendingVerification/${currentStore}`,{
+        const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/reports/reportInTimeWithPendingVerification/${currentStore}`, {
             headers: {
                 Authorization: jwt
             }

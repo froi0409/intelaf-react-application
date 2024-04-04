@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getCookieJwt } from 'src/utils/cookieUtils';
 
 export interface InvoiceProduct {
   id_product : string; // Assuming a unique identifier for each product
@@ -25,7 +26,11 @@ export interface SaleData {
 
 export async function registerSale(saleData: SaleData): Promise<any> {
   try {
-    const response = await axios.post('/api/sale/registerSale', saleData);
+    const response = await axios.post('/api/sale/registerSale', saleData, {
+      headers: {
+        Authorization: getCookieJwt()
+      }
+    });
     return response.data;
   } catch (error) {
     throw new Error('Error registering sale');

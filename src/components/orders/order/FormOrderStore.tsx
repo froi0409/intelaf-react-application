@@ -47,9 +47,6 @@ export const FormOrderStore = (props: any) => {
                     renderInput={(params) => <TextField {...params} label="Tienda" />}
                 />  
             </GridItemForm>
-            <GridItemForm >
-                {value && `LLEGADA ESTIMADA : '00/00/204'`}
-            </GridItemForm>
         </CardForm>
     )
 }

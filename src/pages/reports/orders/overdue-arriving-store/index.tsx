@@ -1,7 +1,9 @@
 import { Card, Grid, Link, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect } from 'react'
+import { ExportHtmlInTime } from 'src/components/reports/orders/ExportHtmlInTime';
 import { TableReportInTime } from 'src/components/reports/orders/TableReportInTime';
+import { getCookieJwtGetServerSideProps } from 'src/utils/cookieUtils';
 
 export interface InTimePendingVerifyStructure {
     idOrder: number;
@@ -13,7 +15,7 @@ export interface InTimePendingVerifyStructure {
     status: string;
 }
 
-const OverdueArrivingStore = ({report}: any) => {
+const OverdueArrivingStore = ({ report }: any) => {
     useEffect(() => {
         //fecthData()
     }, [])
@@ -32,19 +34,25 @@ const OverdueArrivingStore = ({report}: any) => {
                     <TableReportInTime dataServer={report} />
                 </Card>
             </Grid>
+            <Grid item xs={12}>
+                <ExportHtmlInTime data={report} title={'Reporte pedidos atrasados'}
+                    subtitle={'Listado de todos los pedidos atrasados que llegarán a la tienda'}
+                    nameDownload={'overdue_arriving_store'}
+                />
+            </Grid>
         </Grid>
     )
 }
 
 export async function getServerSideProps(context: any) {
     try {
-        const jwt = context.req.cookies['jwt']
-        const currentStore = context.req.cookies['store']
-        if(currentStore == undefined) {
+        const jwt = getCookieJwtGetServerSideProps(context)
+        const currentStore = context.req.cookies['idStore']
+        if (currentStore == undefined) {
             throw new Error('not store')
         }
 
-        const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/order/reportOverdueArrivingStore/${currentStore}`,{
+        const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/reports/reportOverdueArrivingStore/${currentStore}`, {
             headers: {
                 Authorization: jwt
             }

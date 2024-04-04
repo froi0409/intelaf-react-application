@@ -26,6 +26,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import FilterListIcon from '@mui/icons-material/FilterList';
 
 import { useRouter } from 'next/router';
+import { FileEdit, Filter } from 'mdi-material-ui';
+import Link from 'next/link';
 
 interface Data {
     idStore: string,
@@ -176,7 +178,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
     <TableHead>
         <TableRow>
         <TableCell padding="checkbox">
-            {/* <Checkbox
+            {/*<Checkbox
             color="primary"
             indeterminate={numSelected > 0 && numSelected < rowCount}
             checked={rowCount > 0 && numSelected === rowCount}
@@ -184,7 +186,7 @@ function EnhancedTableHead(props: EnhancedTableProps) {
             inputProps={{
                 'aria-label': 'selecciona todos los usuarios',
             }}
-            /> */}
+        />*/}
         </TableCell>
         {headCells.map((headCell) => (
             <TableCell
@@ -214,18 +216,12 @@ function EnhancedTableHead(props: EnhancedTableProps) {
 
 interface EnhancedTableToolbarProps {
     numSelected: number;
-    handleEdit: () => void; // Function to handle edit button click
+    storeSelected: readonly number[]
   }
   
 function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
-    const { numSelected, handleEdit } = props;
+    const { numSelected, storeSelected } = props;
 
-    const handleClickEdit = () => {
-        if (numSelected !== null) {
-        // Only trigger edit if a row is selected
-        handleEdit();
-        }
-    };
 
     return (
         <Toolbar
@@ -245,7 +241,7 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
             variant="subtitle1"
             component="div"
             >
-            Usuario {numSelected}
+            {numSelected} selected
             </Typography>
         ) : (
             <Typography
@@ -257,16 +253,18 @@ function EnhancedTableToolbar(props: EnhancedTableToolbarProps) {
             Tiendas
             </Typography>
         )}
-        {numSelected > 0 ? (
-            <Tooltip title="Editar">
-            <IconButton onClick={handleClickEdit} disabled={numSelected === null}>
-            <EditIcon />
-            </IconButton>
+        {numSelected == 1 ? (
+        <Tooltip title="Editar">
+            <Link href={{ pathname: '/store/edit-store', query: { idStore: storeSelected } }}>
+                <IconButton>
+                    <FileEdit />
+                </IconButton>
+            </Link>
         </Tooltip>
         ) : (
             <Tooltip title="filtrar">
             <IconButton>
-                <FilterListIcon />
+                <Filter />
             </IconButton>
             </Tooltip>
         )}
@@ -372,7 +370,7 @@ export default function TableStores(props: any) {
     return (
         <Box sx={{ width: '100%' }}>
         <Paper sx={{ width: '100%', mb: 2 }}>
-        <EnhancedTableToolbar numSelected={selected.length > 0 ? selected[0] : 0} handleEdit={handleEdit} />
+        <EnhancedTableToolbar numSelected={selected.length} storeSelected={selected} />
             <TableContainer>
             <Table
                 sx={{ minWidth: 750 }}
@@ -420,6 +418,7 @@ export default function TableStores(props: any) {
                         id={labelId}
                         scope="row"
                         padding="none"
+                        align='right'
                         >
                         {row.idStore}
                         </TableCell>

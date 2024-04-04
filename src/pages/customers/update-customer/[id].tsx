@@ -10,6 +10,7 @@ import { FormButtons } from 'src/components/customers/update-customer/FormButton
 import { useRouter } from 'next/router';
 import { errorNotification, successNotification, successNotificationWithAction } from 'src/utils/helpers/notification';
 import { updateCustomer } from 'src/utils/apiUtils/customer/updateCustomer';
+import { getCookieJwtGetServerSideProps } from 'src/utils/cookieUtils';
 
 const UpdateCustomer = ({ customer }: any) => {
   const router = useRouter();
@@ -20,7 +21,7 @@ const UpdateCustomer = ({ customer }: any) => {
     dpi: customer.dpi,
     email: customer.email,
     address: customer.address,
-    password: customer.password, // Optional
+    password: '', // Optional
     username: customer.username, // Optional
     credit: customer.credit,
   });
@@ -34,7 +35,7 @@ const UpdateCustomer = ({ customer }: any) => {
   };
 
   const handleConfirmationFormButtons = async () => {
-    const isFormFilled = Object.values(formData).every(value => value !== '');
+    const isFormFilled = Object.entries(formData).filter(([key, value]) => key !== 'password').every(([key, value]) => value !== '');
     if (isFormFilled) {
       //send to the backend
       try {
@@ -51,7 +52,7 @@ const UpdateCustomer = ({ customer }: any) => {
   }
 
   const handleCancelFormButtons = () => {
-    router.push(`/customers/list-all-customers/`);    
+    router.push(`/customers/list-all-customers/`);
   }
 
   return (
@@ -61,9 +62,9 @@ const UpdateCustomer = ({ customer }: any) => {
           <FormCustomerU formData={formData} handleChange={handleChange} />
         </Grid>
         <Grid item xs={12} md={12}>
-          <FormButtons 
-          handleConfirmationFormButtons={handleConfirmationFormButtons} 
-          handleCancelFormButtons= {handleCancelFormButtons}
+          <FormButtons
+            handleConfirmationFormButtons={handleConfirmationFormButtons}
+            handleCancelFormButtons={handleCancelFormButtons}
           />
         </Grid>
       </Grid>
@@ -73,8 +74,12 @@ const UpdateCustomer = ({ customer }: any) => {
 
 export async function getServerSideProps(context: any) {
   try {
-
-    const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/customer/findUpdate/${context.params.id}`)
+    const jwt = getCookieJwtGetServerSideProps(context)
+    const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/customer/findUpdate/${context.params.id}`, {
+      headers: {
+        Authorization: jwt
+      }
+    });
     const data = await response.data
 
     return {
@@ -84,7 +89,7 @@ export async function getServerSideProps(context: any) {
     };
   } catch (error) {
     // Maneja cualquier error
-    console.error('Error fetching data:', error);
+    // console.error('Error fetching data:', error);
 
     // Retorna un objeto vacío si hay un error
     return {

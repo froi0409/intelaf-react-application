@@ -13,11 +13,10 @@ export async function handleGet (req: NextApiRequest, res: NextApiResponse) {
                 Authorization: getJwt(req)
             }
          });
-        const data  = await response.data
-        return res.status(200).json(data);
-    }catch (err) {
-        console.error('AUTOCOMPLETE', err);
-        return res.status(404).json({ message: 'Error to get the customer by nit' });
+         const data  = await response.data
+         return res.status(response.status).json(data);
+    }catch (error: any) {
+        return res.status(error.response.status).json(error.response.data);
     }  
 }
 

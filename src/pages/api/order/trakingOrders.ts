@@ -6,10 +6,10 @@ import { getJwt } from "../jwtUtils";
 export async function handleGet(req: NextApiRequest, res: NextApiResponse) {
     try {
         // Obtén el ID del path
-        const username  = 'user9' //change for jwt
-        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/order/find-order-customer-username/${username}`, {
+        const { sub } = req.query;
+        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/order/find-order-customer-username/${sub}`, {
             headers: {
-                // Authorization: getJwt(req)
+                Authorization: getJwt(req)
             }
         });
         const data  = await response.data

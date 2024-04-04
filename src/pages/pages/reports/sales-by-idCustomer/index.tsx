@@ -105,17 +105,17 @@ const ListSalesByIdCustomer: React.FC = () => {
       <Grid item xs={12} md={6}>
         <Typography variant='h5'>
           <Link target='_blank'>
-            Listado de Ordenes en curso por codigo de usuario
+            Listado de todas las compras realizadas por un usuario
           </Link>
         </Typography>
-        <Typography variant='body2'>Listado de todas las ordenes en curso de un usuario</Typography>
+        <Typography variant='body2'>Listado de todas las compras realizadas por un usuario</Typography>
       </Grid>
       <Grid item xs={12} md={6} >
       
       </Grid>
       <Grid item xs={12}>
         <Card>
-          <TableListSalesByIdCustomer sales={sales}/>
+          <TableListSalesByIdCustomer sales={sales} idCustomer={idCustomer}/>
         </Card>
       </Grid>
     </Grid>

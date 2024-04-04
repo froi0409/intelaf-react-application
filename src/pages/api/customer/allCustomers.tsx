@@ -20,16 +20,16 @@ export interface CustomerData {
 export async function handleGet(req: NextRequest, res: NextApiResponse) {
 
     try {
-        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/customer/all`, {
+        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/customer/all`
+        , {
             headers: {
                 Authorization: getJwt(req)
             }
         });
         const data  = await response.data
-        return res.status(200).json(data);
-    }catch (err) {
-        console.error(err);
-        return res.status(500).json({ message: 'Error to get all customers' });
+        return res.status(response.status).json(data);
+    }catch (error : any) {
+        return res.status(error.response.status).json(error.response.data);
     }    
 }  
 

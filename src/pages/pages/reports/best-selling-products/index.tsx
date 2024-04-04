@@ -148,7 +148,7 @@ const BestSellingProducts = () => {
     </Grid>
     <Grid item xs={12}>
       <Card>
-        <TableListBestSellingProducts products={productsData}/>
+        <TableListBestSellingProducts products={productsData} startDate={startDate} endDate={endDate}/>
       </Card>
     </Grid>
     </Grid>

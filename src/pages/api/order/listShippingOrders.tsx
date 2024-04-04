@@ -1,11 +1,16 @@
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from "next/types";
+import { getJwt } from '../jwtUtils';
 
 export async function handleGet(req: NextApiRequest, res: NextApiResponse) {
     try {
         // Obtén el ID del path
         const { id } = req.query;
-        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/order/shippingStore/${id}`)
+        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/order/shippingStore/${id}`, {
+            headers: {
+                Authorization: getJwt(req)
+            }
+        });
         const data  = await response.data
         return res.status(response.status).json(data);
     }catch (err: any) {

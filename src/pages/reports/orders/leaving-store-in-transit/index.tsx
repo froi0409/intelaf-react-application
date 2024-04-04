@@ -1,7 +1,9 @@
 import { Card, Grid, Link, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect } from 'react'
+import { ExportHtmlInTime } from 'src/components/reports/orders/ExportHtmlInTime';
 import { TableReportInTime } from 'src/components/reports/orders/TableReportInTime';
+import { getCookieJwtGetServerSideProps } from 'src/utils/cookieUtils';
 
 export interface InTimePendingVerifyStructure {
     idOrder: number;
@@ -32,19 +34,22 @@ const LeavingStoreInTransit = ({report}: any) => {
                     <TableReportInTime dataServer={report} />
                 </Card>
             </Grid>
+            <Grid item xs={12}>
+                <ExportHtmlInTime data={report} title={'Reporte de salida de tienda y en transito'} subtitle={'Listado de todos los pedidos que salieron de la tienda y están en tránsito'} nameDownload={'leaving_store_transit'} />
+            </Grid>
         </Grid>
     )
 }
 
 export async function getServerSideProps(context: any) {
     try {
-        const jwt = context.req.cookies['jwt']
-        const currentStore = context.req.cookies['store']
+        const jwt = getCookieJwtGetServerSideProps(context)
+        const currentStore = context.req.cookies['idStore']
         if(currentStore == undefined) {
             throw new Error('not store')
         }
 
-        const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/order/reportLeavingStoreInTransit/${currentStore}`,{
+        const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/reports/reportLeavingStoreInTransit/${currentStore}`,{
             headers: {
                 Authorization: jwt
             }

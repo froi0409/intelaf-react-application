@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from "next/types";
+import { getJwt } from '../jwtUtils';
 
 
 export interface Stock_Store {
@@ -21,10 +22,14 @@ export interface Products_Stock {
 export async function handleGet (req: NextApiRequest, res: NextApiResponse) {
 
     try {
-        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/products/get-all-products-stock`)
+        const response  =  await axios.get(`${process.env.URL_API_BACKEND}/v1/products/get-all-products-stock`, {
+            headers: {
+                Authorization: getJwt(req)
+            }
+        });
         const data  = await response.data
         // const products = data as unknown as products_stock;
-        return res.status(200).json(data);
+        return res.status(response.status).json(data);
     }catch (err: any) {
         return res.status(err.response.status).json({ message: err.response.data });
     } 

@@ -17,9 +17,9 @@ export async function handlePut(req: NextRequest, res: NextApiResponse) {
         })
         const data  = await response.data
         return res.status(200).json(data);
-    }catch (err) {
+    } catch (err : any) {
         console.error(err);
-        return res.status(500).json({ message: 'Error creating the employee' });
+        return res.status(err.response.status).json(err.response.data);
     }    
 }  
 

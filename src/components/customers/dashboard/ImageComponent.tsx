@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { styled } from '@mui/material';
+import { getCookieJwt } from 'src/utils/cookieUtils';
 
 // Styled component for the image
 const Img = styled('img')(({ theme }) => ({
@@ -16,6 +17,9 @@ const ImageComponentDetail: React.FC<{ idProduct: string }> = ({ idProduct }) =>
       try {
         const response = await axios.get(`http://localhost:8080/v1/images/image-by-idProduct/${idProduct}`, {
           responseType: 'blob', // Indica que la respuesta es una imagen
+          headers: {
+            Authorization: getCookieJwt()
+          }
         });
         const blob = new Blob([response.data], { type: response.headers['content-type'] });
         const imageUrl = URL.createObjectURL(blob);

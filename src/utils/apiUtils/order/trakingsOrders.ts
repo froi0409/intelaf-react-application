@@ -1,13 +1,15 @@
 import axios from 'axios';
 //@ts-ignore
 import { getCookieJwt } from 'src/utils/cookieUtils';
+import { decodeJWT } from 'src/utils/helpers/jwtHelper';
 
 
 export async function getTrakingsOrders(): Promise<any> {
     try {
-      const response = await axios.get('/api/order/trakingOrders/', {
+      const sub = decodeJWT('sub');
+      const response = await axios.get(`/api/order/trakingOrders?sub=${sub}` , {
         headers: {
-            // Authorization: getCookieJwt()
+            Authorization: getCookieJwt()
         }
     })
       return response.data;

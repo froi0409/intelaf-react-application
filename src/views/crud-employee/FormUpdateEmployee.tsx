@@ -16,7 +16,7 @@ import CardContent from '@mui/material/CardContent'
 import CardActions from '@mui/material/CardActions'
 import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
-import { IconButton, InputAdornment, OutlinedInput } from '@mui/material'
+import { Alert, IconButton, InputAdornment, OutlinedInput } from '@mui/material'
 import { AccountOutline, BadgeAccountOutline, EmailOutline, EyeOffOutline, EyeOutline, FormTextboxPassword, MapMarker, MapMarkerOutline, Numeric, PhoneOutline } from 'mdi-material-ui'
 import { putUpdateEmployee } from 'src/utils/apiUtils/employee/updateEmployeeUtil';
 
@@ -44,6 +44,10 @@ interface FormUpdateEmployeeProps {
 
 const FormUpdateEmployee : React.FC<FormUpdateEmployeeProps> = ({ employee }) => {
 
+  const [messageType, setMessageType] = useState('')
+  const [messageResponse, setMessageResponse] = useState('')
+  const [submitted, setSubmitted] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -57,10 +61,10 @@ const FormUpdateEmployee : React.FC<FormUpdateEmployeeProps> = ({ employee }) =>
           dpi: dpi,
           email: email,
           address: address,
-          password: password,
+          password: '',
           role: role 
         });
-        setValuesPass({ ...valuesPass, password: password });
+        setValuesPass({ ...valuesPass, password: '' });
       } catch (error) {
         console.log(error);
         // Aquí puedes manejar el error si es necesario
@@ -113,7 +117,15 @@ const FormUpdateEmployee : React.FC<FormUpdateEmployeeProps> = ({ employee }) =>
 
   const handlePut = async () => {
     try {
-      const employeeData = await putUpdateEmployee(values);      
+      const employeeData = await putUpdateEmployee(values);     
+      setSubmitted(true);
+      if(employeeData instanceof Error){
+        setMessageType('ERR')
+        setMessageResponse(employeeData.message);
+      }else{
+        setMessageType('OK')
+        setMessageResponse('Empleado Actualizado con exito');
+      } 
     } catch (error) {
       console.log(error);
       // Aquí puedes manejar el error si es necesario
@@ -133,6 +145,18 @@ const FormUpdateEmployee : React.FC<FormUpdateEmployeeProps> = ({ employee }) =>
       <Divider sx={{ margin: 0 }} />
       <form onSubmit={handleSubmit}>
         <CardContent>
+          <Grid>
+              {submitted && messageResponse != '' && (
+                <div>
+                    {messageType === 'OK' ? (
+                        <Alert severity="success">{messageResponse}</Alert>
+                    ) : (
+                        <Alert severity="error">{messageResponse}</Alert>
+                    )
+                    }
+                </div>
+              )}
+          </Grid>
           <Grid container spacing={5}>
             <Grid item xs={12}>
               <Typography variant='body2' sx={{ fontWeight: 600 }}>

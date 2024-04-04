@@ -5,6 +5,9 @@ import { styled } from '@mui/material/styles';
 import Alert from '@mui/material/Alert';
 
 import axios from 'axios';
+import { useRouter } from 'next/router';
+import { findStoreById } from 'src/utils/apiUtils/store/findStoreByIdUtil';
+import { editStore } from 'src/utils/apiUtils/store/editStoreUtil';
 
 const Form = styled('form')(({ theme }) => ({
     maxWidth: 400,
@@ -13,6 +16,9 @@ const Form = styled('form')(({ theme }) => ({
     border: `1px solid ${theme.palette.divider}`
 }))
 const EditStoreLayout = () => { 
+
+    const router = useRouter();
+    const { idStore } = router.query;
 
     const [response, setResponse] = useState('');
 
@@ -23,7 +29,7 @@ const EditStoreLayout = () => {
 
     const [isDisabled, setIsDisabled] = useState(true)
 
-    const [storeCode, setStoreCode] = useState('');
+    const [storeCode, setStoreCode] = useState(idStore);
     const [storeName, setStoreName] = useState('');
     const [storeAddress, setStoreAddress] = useState('');
     const [storeEmail, setStoreEmail] = useState('');
@@ -49,7 +55,7 @@ const EditStoreLayout = () => {
         };
 
         try {
-            const res = await axios.put('http://localhost:8080/v1/store', formData);
+            const res = await editStore(formData);
 
             setSubmitted(true);
             setFindSubmitted(false);
@@ -59,6 +65,8 @@ const EditStoreLayout = () => {
                 setMessageType('OK');
                 setIsDisabled(true);
                 setResponse(`Los datos de la tienda ${storeCode} fueron actualizados con éxito`)
+            } else if (res.status === 404) {
+                setResponse('No existe ninguna tienda con el código especificado');
             } else {
                 setMessageType('ERR');
                 setResponse('La tienda no pudo ser actualizada');
@@ -79,7 +87,7 @@ const EditStoreLayout = () => {
 
     const handleSearch = async () => {
         try {
-            const res = await axios.get(`http://localhost:8080/v1/store/${storeCode}`);
+            const res = await findStoreById(idStore);
 
             setFindSubmitted(true);
             setSubmitted(false);
@@ -109,6 +117,9 @@ const EditStoreLayout = () => {
                 } else {
                     setClosingHour('');
                 }
+            } else if (res.status === 404) {
+                setFindMessageType('ERR');
+                setResponse('No existe ninguna tienda con el código especificado');
             } else {
                 setResponse('No se pudo encontrar información de la tienda')
             }

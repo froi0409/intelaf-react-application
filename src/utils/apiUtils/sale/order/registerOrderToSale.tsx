@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { getCookieJwt } from 'src/utils/cookieUtils';
 
 interface GetProduct {
   productId: string;
@@ -26,7 +27,11 @@ export interface SaleDataBackend {
 
 export async function registerOrderToSale(saleData: SaleDataBackend): Promise<any> {
     try {
-      const response = await axios.post('/api/sale/registerOrderToSale', saleData);
+      const response = await axios.post('/api/sale/registerOrderToSale', saleData, {
+        headers: {
+          Authorization: getCookieJwt()
+        }
+      });
       return response.data;
     } catch (error) {
       throw new Error('Error registering sale');
