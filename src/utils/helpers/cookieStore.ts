@@ -2,5 +2,5 @@
 import { getCookie } from "cookies-next";
 
 export const getCurrentStore = () => {
-    return `${getCookie('store')}`;
+    return `${getCookie('idStore')}`;
 }

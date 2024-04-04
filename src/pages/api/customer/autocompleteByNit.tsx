@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { NextApiRequest, NextApiResponse } from "next/types";
+import { getJwt } from '../jwtUtils';
 
 export async function handleGet (req: NextApiRequest, res: NextApiResponse) {
     try {
@@ -7,11 +8,15 @@ export async function handleGet (req: NextApiRequest, res: NextApiResponse) {
          const { id } = req.query;
         
          // Hacer la solicitud GET con el ID
-         const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/customer/findById/${id}`);
+         const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/customer/findById/${id}`, {
+            headers: {
+                Authorization: getJwt(req)
+            }
+         });
         const data  = await response.data
         return res.status(200).json(data);
     }catch (err) {
-        console.error(err);
+        console.error('AUTOCOMPLETE', err);
         return res.status(404).json({ message: 'Error to get the customer by nit' });
     }  
 }

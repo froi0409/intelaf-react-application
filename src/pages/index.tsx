@@ -26,7 +26,6 @@ import SalesByCountries from 'src/views/dashboard/SalesByCountries'
 import { setCookie } from 'cookies-next';
 
 const Dashboard = () => {
-  setCookie('store', 'STR-1');
   return (
     <ApexChartWrapper>
       <Grid container spacing={6}>
