@@ -1,6 +1,7 @@
 import { Card, Grid, Link, Typography } from '@mui/material';
 import axios from 'axios';
 import React, { useEffect } from 'react'
+import { ExportHtmlInTime } from 'src/components/reports/orders/ExportHtmlInTime';
 import { TableReportInTime } from 'src/components/reports/orders/TableReportInTime';
 import { getCookieJwtGetServerSideProps } from 'src/utils/cookieUtils';
 
@@ -32,6 +33,9 @@ const LeavingStoreInTransit = ({report}: any) => {
                 <Card>
                     <TableReportInTime dataServer={report} />
                 </Card>
+            </Grid>
+            <Grid item xs={12}>
+                <ExportHtmlInTime data={report} title={'Reporte de salida de tienda y en transito'} subtitle={'Listado de todos los pedidos que salieron de la tienda y están en tránsito'} nameDownload={'leaving_store_transit'} />
             </Grid>
         </Grid>
     )
