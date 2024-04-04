@@ -21,7 +21,7 @@ const UpdateCustomer = ({ customer }: any) => {
     dpi: customer.dpi,
     email: customer.email,
     address: customer.address,
-    password: customer.password, // Optional
+    password: '', // Optional
     username: customer.username, // Optional
     credit: customer.credit,
   });
@@ -35,7 +35,7 @@ const UpdateCustomer = ({ customer }: any) => {
   };
 
   const handleConfirmationFormButtons = async () => {
-    const isFormFilled = Object.values(formData).every(value => value !== '');
+    const isFormFilled = Object.entries(formData).filter(([key, value]) => key !== 'password').every(([key, value]) => value !== '');
     if (isFormFilled) {
       //send to the backend
       try {
