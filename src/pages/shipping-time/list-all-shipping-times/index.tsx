@@ -68,5 +68,9 @@ const AllShippingTimesTable = () => {
 
 }
 
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+import { ReactNode} from 'react'
+AllShippingTimesTable.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
+
 export default AllShippingTimesTable;
 

@@ -96,4 +96,7 @@ const RegisterCustomer = (props: any) => {
   )
 }
 
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+import { ReactNode} from 'react'
+RegisterCustomer.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
 export default RegisterCustomer;

@@ -99,5 +99,8 @@ const ListAllCustomer = () => {
 //     };
 //   }
 // }
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+import { ReactNode} from 'react'
+ListAllCustomer.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
 
 export default ListAllCustomer

@@ -92,4 +92,7 @@ const ListProductsPage = () => {
   )
 }
 
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+ListProductsPage.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
+
 export default ListProductsPage

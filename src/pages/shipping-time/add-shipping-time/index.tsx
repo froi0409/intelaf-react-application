@@ -146,4 +146,8 @@ const AddShippingTimeLayout = () => {
     )
 }
 
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+import { ReactNode} from 'react'
+AddShippingTimeLayout.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
+
 export default AddShippingTimeLayout;

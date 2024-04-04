@@ -359,4 +359,8 @@ const EditStoreLayout = () => {
     )
 }
 
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+import { ReactNode} from 'react'
+EditStoreLayout.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
+
 export default EditStoreLayout

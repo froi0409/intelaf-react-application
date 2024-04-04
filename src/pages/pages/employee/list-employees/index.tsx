@@ -85,6 +85,7 @@ const ListEmployeesPage = () => {
     </Grid>
   )
 }
-
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+ListEmployeesPage.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
 
 export default ListEmployeesPage

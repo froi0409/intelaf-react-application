@@ -151,4 +151,8 @@ const EditShippingTime = () => {
     );
 }
 
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+import { ReactNode} from 'react'
+EditShippingTime.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
+
 export default EditShippingTime;

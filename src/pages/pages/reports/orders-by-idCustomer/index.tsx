@@ -105,4 +105,7 @@ const ListSalesByIdCustomer: React.FC = () => {
   )
 }
 
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+ListSalesByIdCustomer.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
+
 export default ListSalesByIdCustomer

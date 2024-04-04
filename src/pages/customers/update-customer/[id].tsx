@@ -99,6 +99,8 @@ export async function getServerSideProps(context: any) {
     };
   }
 }
-
+import EmployeeLayout from 'src/layouts/EmployeeLayout'
+import { ReactNode} from 'react'
+UpdateCustomer.getLayout = (page: ReactNode) => <EmployeeLayout>{page}</EmployeeLayout>
 
 export default UpdateCustomer;

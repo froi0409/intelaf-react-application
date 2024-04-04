@@ -14,7 +14,9 @@ import ListBoxOutline from 'mdi-material-ui/ListBoxOutline'
 import AccountPlus from 'mdi-material-ui/AccountPlus'
 import FileDocumentPlusOutline from 'mdi-material-ui/FileDocumentPlusOutline'
 import SummarizeOutlinedIcon from '@mui/icons-material/SummarizeOutlined';
-
+import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
+import MoreTimeOutlinedIcon from '@mui/icons-material/MoreTimeOutlined';
+import FileChartOutline from 'mdi-material-ui/FileChartOutline'
 
 // ** Type import
 import { VerticalNavItemsType } from 'src/@core/layouts/types'
@@ -50,23 +52,32 @@ const navigation = (): VerticalNavItemsType => {
       path: '/pages/employee/list-employees',      
     },
     {
-      title: 'Reportes',      
-      sectionTitle: 'Reportes'
+      title: 'Tiendas',      
+      sectionTitle: 'Tiendas'
     },
     {
-      icon: SummarizeOutlinedIcon,
-      title: '10 Productos mas vendidos en un intervalo de tiempo',
-      path: '/pages/reports/best-selling-products'
+      icon: StorefrontOutlinedIcon,
+      title: 'Crear tienda',
+      path: '/stores/create-store'
     },
     {
-      icon: SummarizeOutlinedIcon,
-      title: 'Ordenes en ruta por Usuario',
-      path: '/pages/reports/orders-by-idCustomer'
+      icon: ListBoxOutline,
+      title: 'Listar tiendas',
+      path: '/stores/list-all-stores',      
     },
     {
-      icon: SummarizeOutlinedIcon,
-      title: 'Compras realizadas por Usuario',
-      path: '/pages/reports/sales-by-idCustomer'
+      title: 'Tiempo entre Tiendas',      
+      sectionTitle: 'Tiempo entre Tiendas'
+    },
+    {
+      icon: MoreTimeOutlinedIcon,
+      title: 'Agregar Tiempo entre tiendas',
+      path: '/shipping-time/add-shipping-time'
+    },
+    {
+      icon: ListBoxOutline,
+      title: 'Listar tiempos',
+      path: '/shipping-time/list-all-shipping-time',      
     },
     {
       title: 'Ventas',      
@@ -107,6 +118,40 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Agregar un comprador',
       path: '/customers/register-customer/',
       icon: AccountPlus
+    },
+    {
+      title: 'Reportes',      
+      sectionTitle: 'Reportes'
+    },
+    {
+      icon: SummarizeOutlinedIcon,
+      title: '10 Productos mas vendidos en un intervalo de tiempo',
+      path: '/pages/reports/best-selling-products'
+    },
+    {
+      icon: SummarizeOutlinedIcon,
+      title: 'Ordenes en ruta por Usuario',
+      path: '/pages/reports/orders-by-idCustomer'
+    },
+    {
+      icon: SummarizeOutlinedIcon,
+      title: 'Compras realizadas por Usuario',
+      path: '/pages/reports/sales-by-idCustomer'
+    },
+    {
+      title: 'Tiempo de estar en tienda sin Verificacion',
+      path: '/reports/orders/in-time-pending-verify',
+      icon: FileChartOutline
+    },
+    {
+      title: 'Pedidos atrasados',
+      path: '/reports/orders/overdue-arriving-store',
+      icon: FileChartOutline
+    },
+    {
+      title: 'Salida y transito',
+      path: '/reports/orders/leaving-store-in-transit',
+      icon: FileChartOutline
     },
     {
       title: 'Solo usuarios',      
