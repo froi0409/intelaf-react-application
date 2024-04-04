@@ -15,6 +15,7 @@ import AccountPlus from 'mdi-material-ui/AccountPlus'
 import FileDocumentPlusOutline from 'mdi-material-ui/FileDocumentPlusOutline'
 import FileChartOutline from 'mdi-material-ui/FileChartOutline'
 import FileDocumentOutline from 'mdi-material-ui/FileDocumentOutline'
+import SummarizeOutlinedIcon from '@mui/icons-material/SummarizeOutlined';
 
 
 // ** Type import
@@ -22,7 +23,7 @@ import { VerticalNavItemsType } from 'src/@core/layouts/types'
 
 const navigation = (): VerticalNavItemsType => {
   return [
-    {
+    /*{
       title: 'Dashboard',
       icon: HomeOutline,
       path: '/'
@@ -81,50 +82,67 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Form Layouts',
       path: '/form-layouts'
     },
+    */
+    {
+      title: 'Productos',      
+      sectionTitle: 'Productos'
+    },
     {
       icon: CubeOutline,
-      title: 'CreateProduct',
+      title: 'Crear Producto',
       path: '/pages/product/create-product'
     },
     {
-      icon: CubeOutline,
-      title: 'ListProducts',
+      icon: ListBoxOutline,
+      title: 'Listar Productos',
       path: '/pages/product/list-products'
     },
+    /*
     {
       icon: CubeOutline,
       title: 'UpdateProduct',
       path: '/pages/product/update-product'
     },
+    */
     {
-      icon: CubeOutline,
-      title: 'CreateEmployee',
+      title: 'Empleados',      
+      sectionTitle: 'Empleados'
+    },
+    {
+      icon: AccountPlus,
+      title: 'Crear empleado',
       path: '/pages/employee/create-employee'
     },
+    /*
     {
       icon: CubeOutline,
-      title: 'UpdateEmployee',
+      title: 'Actualizar Empleado',
       path: '/pages/employee/update-employee'
     },
+    */
     {
-      icon: CubeOutline,
-      title: 'ListEmployees',
+      icon: ListBoxOutline,
+      title: 'Listar empleados',
       path: '/pages/employee/list-employees',      
     },
     {
-      icon: CubeOutline,
-      title: 'DashboardCustomer',
-      path: '/pages/customer/dashboard'
+      title: 'Reportes',      
+      sectionTitle: 'Reportes'
     },
     {
-      icon: CubeOutline,
-      title: 'ReportBestSelling',
+      icon: SummarizeOutlinedIcon,
+      title: '10 Productos mas vendidos en un intervalo de tiempo',
       path: '/pages/reports/best-selling-products'
     },
     {
-      icon: CubeOutline,
-      title: 'ReportOrdersByIdCustomer',
+      icon: SummarizeOutlinedIcon,
+      title: 'Ordenes en ruta por Usuario',
       path: '/pages/reports/orders-by-idCustomer'
+    },
+    {
+      icon: SummarizeOutlinedIcon,
+      title: 'Compras realizadas por Usuario',
+      path: '/pages/reports/sales-by-idCustomer'
     },
     {
       title: 'Ventas',      
@@ -165,6 +183,15 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Agregar un comprador',
       path: '/customers/register-customer',
       icon: AccountPlus
+    },
+    {
+      title: 'Solo usuarios',      
+      sectionTitle: 'Solo usuarios'
+    },
+    {
+      icon: CubeOutline,
+      title: 'Dashboard Customer',
+      path: '/pages/customer/dashboard'
     },
     {
       sectionTitle : 'Reportes'

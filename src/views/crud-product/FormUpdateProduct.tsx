@@ -21,6 +21,7 @@ import { Alert, InputAdornment,styled,TableBody, TableCell, TableHead, TableRow 
 import { AccountHardHat, BadgeAccountOutline, Cash, LabelOutline, Numeric, PencilOutline, ShieldLockOutline, Text } from 'mdi-material-ui'
 import { putUpdateProduct } from 'src/utils/apiUtils/product/updateProductUtil'
 import axios from 'axios'
+import { getCookieJwt } from 'src/utils/cookieUtils'
 
 
 interface StoreInfo {
@@ -185,7 +186,8 @@ const FormUpdateProduct : React.FC<FormUpdateProductProps> = ({ product,stores,i
       try {
         await axios.post(`http://localhost:8080/v1/images/upload`, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: getCookieJwt()
           }
         });
         //alert('Image uploaded successfully');

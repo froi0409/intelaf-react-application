@@ -12,7 +12,7 @@ import TableBody from '@mui/material/TableBody'
 import TableCell from '@mui/material/TableCell'
 import TableContainer from '@mui/material/TableContainer'
 import TablePagination from '@mui/material/TablePagination'
-import { Box, Checkbox, Collapse, FormControlLabel, IconButton, Switch, TableSortLabel, Toolbar, Tooltip, Typography } from '@mui/material'
+import { Box, Button, Checkbox, Collapse, FormControlLabel, IconButton, Switch, TableSortLabel, Toolbar, Tooltip, Typography } from '@mui/material'
 import { alpha } from '@mui/material/styles';
 import { visuallyHidden } from '@mui/utils';
 import { ChevronDown, ChevronUp, FileEdit, Filter } from 'mdi-material-ui';
@@ -57,6 +57,7 @@ interface Sale {
 
 interface FormListSaleProps {
   sales: Sale[];
+  idCustomer:string;
 }
 
 function descendingComparator<T>(a: T, b: T, orderBy: keyof T) {
@@ -348,7 +349,7 @@ const TableRowWithExpansion: React.FC<Props> = ({ row, isSelected, handleClick }
   };
 
 
-const TableListSalesByIdCustomer: React.FC<FormListSaleProps> = ({ sales }) => {
+const TableListSalesByIdCustomer: React.FC<FormListSaleProps> = ({ sales,idCustomer }) => {
     // console.log(props.dataServer);
   const rows = sales;
   const [order, setOrder] = React.useState<Order>('asc');
@@ -424,6 +425,140 @@ const TableListSalesByIdCustomer: React.FC<FormListSaleProps> = ({ sales }) => {
     [order, rows, orderBy, page, rowsPerPage],
   );
 
+  /**GENARATE HTML */
+  const [htmlContent, setHtmlContent] = useState('');
+  const [downloadOn, setDownloadOn] = useState(false);
+  
+  const generateHtmlContent = () => {
+    // Genera el contenido HTML basado en los datos de las ventas
+    let tableHtml = `
+      <html>
+        <head>
+          <title>Listado de todas las compras realizadas por un usuario</title>
+          <style>
+            body {
+              font-family: Arial, sans-serif;
+              margin: 0;
+              padding: 0;
+            }
+            h1 {
+              text-align: center;
+            }
+            table {
+              width: 100%;
+              border-collapse: collapse;
+              margin: 0 auto;
+            }
+            th, td {
+              padding: 8px;
+              border: 1px solid #ddd;
+              text-align: left;
+            }
+            th {
+              background-color: #f2f2f2;
+              font-weight: bold;
+            }
+            ul {
+              list-style-type: none;
+              padding: 0;
+              margin: 0;
+            }
+            ul li {
+              margin-bottom: 5px;
+            }
+          </style>
+        </head>
+        <body>
+          <h1>Listado de todas las compras realizadas por un usuario</h1>
+          <h3>Codigo de usuario: ${idCustomer}</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>Código Compra</th>
+                <th>Fecha de compra</th>
+                <th>Total de compra</th>
+                <th>Productos</th>
+                <th>Tipo de pago</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+
+    sales.forEach(sale => {
+      tableHtml += `
+        <tr>
+          <td>${sale.idSale}</td>
+          <td>${sale.date}</td>
+          <td>${sale.total}</td>          
+          <td>
+            <ul>
+    `;
+  
+    sale.products.forEach(product => {
+      tableHtml += `
+        <li>${product.name} - Cantidad: ${product.quantity}</li>
+      `;
+    });
+  
+    tableHtml += `
+          </ul>
+        </td>
+        <td>
+          <ul>
+    `;
+  
+    sale.payments.forEach(payment => {
+      tableHtml += `
+        <li>${payment.type} - Cantidad: ${payment.amount}</li>
+      `;
+    });
+  
+    tableHtml += `
+          </ul>
+        </td>
+      </tr>
+    `;
+  });
+
+  tableHtml += `
+          </tbody>
+        </table>
+      </body>
+    </html>
+  `;
+    
+    setHtmlContent(tableHtml);
+  };
+
+  const openHtmlAsDownload = () => {
+    generateHtmlContent();
+    setDownloadOn(true);
+  };
+
+  React.useEffect(() => {
+    // Descarga el HTML cuando htmlContent se actualice
+    if (htmlContent !== '' && downloadOn == true) {
+      // Crea un Blob con el contenido HTML
+      const blob = new Blob([htmlContent], { type: 'text/html' });
+    
+      // Crea un enlace para descargar el Blob
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'compras_Id_'+idCustomer+'.html'; // Nombre del archivo de descarga
+      a.style.display = 'none';
+    
+      // Añade el enlace al DOM y haz clic automáticamente
+      document.body.appendChild(a);
+      a.click();
+    
+      // Limpia el enlace del DOM y libera el Blob
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      setDownloadOn(false);
+    }
+  }, [htmlContent,downloadOn]);
+
   return (
     <Box sx={{ width: '100%' }}>
       <Paper sx={{ width: '100%', mb: 2 }}>
@@ -463,6 +598,10 @@ const TableListSalesByIdCustomer: React.FC<FormListSaleProps> = ({ sales }) => {
             </TableBody>
           </Table>
         </TableContainer>
+        <br/>
+        <Button variant="contained" color="primary" onClick={openHtmlAsDownload}>
+          Exportar a HTML
+        </Button>
         <TablePagination
           rowsPerPageOptions={[10, 25, 50]}
           component="div"

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import CardMedia from '@mui/material/CardMedia';
+import { getCookieJwt } from 'src/utils/cookieUtils';
 
 const CardImageDashboard: React.FC<{ idProduct: string }> = ({ idProduct }) => {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -10,6 +11,9 @@ const CardImageDashboard: React.FC<{ idProduct: string }> = ({ idProduct }) => {
       try {
         const response = await axios.get(`http://localhost:8080/v1/images/image-by-idProduct/${idProduct}`, {
           responseType: 'blob',
+          headers: {
+            Authorization: getCookieJwt()
+          }
         });
         const blob = new Blob([response.data], { type: response.headers['content-type'] });
         const imageUrl = URL.createObjectURL(blob);

@@ -98,7 +98,7 @@ const ListSalesByIdCustomer: React.FC = () => {
       </Grid>
       <Grid item xs={12}>
         <Card>        
-          <TableListOrdersByIdCustomer orders={orders}/>
+          <TableListOrdersByIdCustomer orders={orders} idCustomer={idCustomer}/>
         </Card>
       </Grid>
     </Grid>

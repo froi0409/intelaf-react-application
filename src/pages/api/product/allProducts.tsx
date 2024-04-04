@@ -15,10 +15,10 @@ export async function handleGet(req: NextRequest, res: NextApiResponse) {
         })
         const data  = await response.data
         return res.status(200).json(data);
-    }catch (err) {
+    } catch (err : any) {
         console.error(err);
-        return res.status(500).json({ message: 'Error to get all products' });
-    }    
+        return res.status(err.response.status).json(err.response.data);
+      }      
 }  
 
 export default async function handler(req: NextRequest, res: NextApiResponse) {

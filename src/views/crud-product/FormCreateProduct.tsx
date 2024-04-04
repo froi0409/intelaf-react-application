@@ -25,6 +25,7 @@ import { postCreateProduct } from 'src/utils/apiUtils/product/createProductUtil'
 
 import { styled } from '@mui/material/styles'
 import axios from 'axios'
+import { getCookieJwt } from 'src/utils/cookieUtils'
 
 
 interface StoreInfo {
@@ -168,7 +169,8 @@ const FormCreateProduct:React.FC<Props> = ({ stores }) => {
       try {
         await axios.post(`http://localhost:8080/v1/images/upload`, formData, {
           headers: {
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
+            Authorization: getCookieJwt()
           }
         });
         //alert('Image uploaded successfully');
