@@ -9,7 +9,7 @@ import DatePicker from 'react-datepicker'
 import { errorNotification, successNotification, successNotificationWithAction } from 'src/utils/helpers/notification'
 
 const CustomInput = forwardRef((props, ref) => {
-    return <TextField fullWidth {...props} inputRef={ref} label='Fecha de Arrivo' autoComplete='off' />
+    return <TextField fullWidth {...props} inputRef={ref} label='Fecha de Arribo' autoComplete='off' />
 })
 
 export interface StatusOrderDateDataA {

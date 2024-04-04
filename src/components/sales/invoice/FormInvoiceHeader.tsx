@@ -11,6 +11,7 @@ import CardContent from '@mui/material/CardContent'
 
 // ** Third Party Imports
 import DatePicker from 'react-datepicker'
+import { decodeJWT } from 'src/utils/helpers/jwtHelper'
 
 const CustomInput = forwardRef((props, ref) => {
   return <TextField fullWidth {...props} inputRef={ref} label='Fecha de la factura' autoComplete='off' />
@@ -31,7 +32,7 @@ const FormInvoiceHeader = (props : any) => {
         <CardContent>
           <Grid container spacing={5}>
             <Grid item xs={12} sm={6}>
-              <TextField fullWidth disabled defaultValue="NOMBRE DEL EMPLEADO" />
+              <TextField fullWidth disabled defaultValue={decodeJWT('sub')} />
             </Grid>
             <Grid item xs={12} sm={6}>
               <DatePicker
