@@ -22,9 +22,9 @@ export async function handlePut(req: NextRequest, res: NextApiResponse) {
         const data = await response.data;
     
         return res.status(200).json(data);
-      } catch (err) {
+      } catch (err : any) {
         console.error(err);
-        return res.status(400).json({ message: 'Error update the product' });
+        return res.status(err.response.status).json(err.response.data);
       }   
 }  
 

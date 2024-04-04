@@ -17,9 +17,10 @@ import FormControl from '@mui/material/FormControl'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import TableContainer from '@mui/material/TableContainer'
 import Table from '@mui/material/Table'
-import { IconButton, InputAdornment, OutlinedInput, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
+import { Alert, IconButton, InputAdornment, OutlinedInput, TableBody, TableCell, TableHead, TableRow } from '@mui/material'
 import { AccountOutline, BadgeAccountOutline, EmailOutline, EyeOffOutline, EyeOutline, FormTextboxPassword, MapMarker, MapMarkerOutline, Numeric, PhoneOutline } from 'mdi-material-ui'
 import { postCreateEmployeePath } from 'src/utils/apiUtils/employee/createEmployeeUtil'
+import { getCookieJwt } from 'src/utils/cookieUtils'
 
 interface StatePass {
   password: string
@@ -39,7 +40,10 @@ interface FormData {
 }
 
 const FormCreateEmployee = () => {
-  // ** States
+  /**HANDLE ERROR */
+  const [messageType, setMessageType] = useState('')
+  const [messageResponse, setMessageResponse] = useState('')
+  const [submitted, setSubmitted] = useState(false);
 
 
   const [valuesPass, setValuesPass] = useState<StatePass>({
@@ -87,12 +91,14 @@ const FormCreateEmployee = () => {
   const handlePost = async () => {
     const url = '/api/user/createEmployee/';
     try {
+      setSubmitted(true);
       console.log('valores a enviar');
       console.log(values);
       const respuesta = await fetch(url, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: getCookieJwt()
         },
         body: JSON.stringify(values),
       });
@@ -100,8 +106,12 @@ const FormCreateEmployee = () => {
       if (respuesta.ok) {
         const datosRespuesta = await respuesta.json();
         console.log('Respuesta del servidor:', datosRespuesta);
+        setMessageType('OK')    
+        setMessageResponse('Empleado agregado con exito');
       } else {
         console.error('Error en la solicitud:', respuesta.statusText);
+        setMessageType('ERR')    
+        setMessageResponse('Empleado no agregado, Estado:' + respuesta.statusText);
       }
     } catch (error) {
       console.error('Error al realizar la solicitud:', error);
@@ -120,6 +130,18 @@ const FormCreateEmployee = () => {
       <Divider sx={{ margin: 0 }} />
       <form onSubmit={handleSubmit}>
         <CardContent>
+          <Grid>
+              {submitted && messageResponse != '' && (
+                <div>
+                    {messageType === 'OK' ? (
+                        <Alert severity="success">{messageResponse}</Alert>
+                    ) : (
+                        <Alert severity="error">{messageResponse}</Alert>
+                    )
+                    }
+                </div>
+              )}
+          </Grid>
           <Grid container spacing={5}>
             <Grid item xs={12}>
               <Typography variant='body2' sx={{ fontWeight: 600 }}>
