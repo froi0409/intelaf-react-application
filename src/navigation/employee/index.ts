@@ -58,12 +58,12 @@ const navigation = (): VerticalNavItemsType => {
     {
       icon: StorefrontOutlinedIcon,
       title: 'Crear tienda',
-      path: '/stores/create-store'
+      path: '/store/create-store'
     },
     {
       icon: ListBoxOutline,
       title: 'Listar tiendas',
-      path: '/stores/list-all-stores',      
+      path: '/store/list-all-stores',      
     },
     {
       title: 'Tiempo entre Tiendas',      
@@ -77,7 +77,7 @@ const navigation = (): VerticalNavItemsType => {
     {
       icon: ListBoxOutline,
       title: 'Listar tiempos',
-      path: '/shipping-time/list-all-shipping-time',      
+      path: '/shipping-time/list-all-shipping-times',      
     },
     {
       title: 'Ventas',      
@@ -152,15 +152,6 @@ const navigation = (): VerticalNavItemsType => {
       title: 'Salida y transito',
       path: '/reports/orders/leaving-store-in-transit',
       icon: FileChartOutline
-    },
-    {
-      title: 'Solo usuarios',      
-      sectionTitle: 'Solo usuarios'
-    },
-    {
-      icon: CubeOutline,
-      title: 'Dashboard Customer',
-      path: '/pages/customer/dashboard'
     },
   ]
 }
