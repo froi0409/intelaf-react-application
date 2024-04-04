@@ -144,7 +144,7 @@ const LoginPage = () => {
           } else if (role === 'EMPLOYEE') {
             setIsEmployee(true);
           } else { // CUSTOMER
-            router.push('/');
+            router.push('/pages/customer/dashboard');
           }
           
 
@@ -163,7 +163,7 @@ const LoginPage = () => {
 
         if (res.status === 200) {
           setCookie('idStore', storeId);
-          router.push('/');
+          router.push('/pages/product/create-product');
         } else {
           setFormMessage('El código de la tienda ingresada no existe');
         }
