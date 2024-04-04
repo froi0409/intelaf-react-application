@@ -52,7 +52,7 @@ export async function getServerSideProps(context: any) {
             throw new Error('not store')
         }
 
-        const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/order/reportOverdueArrivingStore/${currentStore}`, {
+        const response = await axios.get(`${process.env.URL_API_BACKEND}/v1/reports/reportOverdueArrivingStore/${currentStore}`, {
             headers: {
                 Authorization: jwt
             }
