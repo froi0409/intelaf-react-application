@@ -61,10 +61,10 @@ const FormUpdateEmployee : React.FC<FormUpdateEmployeeProps> = ({ employee }) =>
           dpi: dpi,
           email: email,
           address: address,
-          password: password,
+          password: '',
           role: role 
         });
-        setValuesPass({ ...valuesPass, password: password });
+        setValuesPass({ ...valuesPass, password: '' });
       } catch (error) {
         console.log(error);
         // Aquí puedes manejar el error si es necesario
